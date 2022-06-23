@@ -37,7 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         try {
-            DecodedJWT jwt = jwtService.verifyAndReturnDecodedToken(auth.replace(TOKEN_PREFIX, ""));
+            DecodedJWT jwt = jwtService.verifyAndReturnDecodedToken(auth.substring(TOKEN_PREFIX.length()));
 
             if (!SecurityFinals.ACCESS.equals(jwt.getClaim(TYPE).asString()))
                 throw new InvalidTokenException();

@@ -10,19 +10,16 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Table(name = "app_role")
 public class Role {
-    public static final String USER = "USER";
-    public static final String ADMIN = "ADMIN";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+    private RoleType roleType;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private User user;
 
-    public Role(String name) {
-        this.name = name;
+    public Role(RoleType role) {
+        this.roleType = role;
     }
-
 }

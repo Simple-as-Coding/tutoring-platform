@@ -1,5 +1,9 @@
 package pl.simpleascoding.tutoringplatform.service.user;
 
+import pl.simpleascoding.tutoringplatform.dto.CreateUserDTO;
+
 public interface UserService {
-    //todo
+
+    String createUser(CreateUserDTO dto);
+
 }

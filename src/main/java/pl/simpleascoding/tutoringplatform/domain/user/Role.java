@@ -1,21 +1,30 @@
 package pl.simpleascoding.tutoringplatform.domain.user;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+
 
 @Data
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "app_role")
 public class Role {
+    public static final String USER = "USER";
+    public static final String ADMIN = "ADMIN";
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+
+    @ManyToOne
+    private User user;
+
+    public Role(String name) {
+        this.name = name;
+    }
+
 }
+

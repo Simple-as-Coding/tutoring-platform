@@ -32,7 +32,7 @@ public class User {
     @JoinColumn(name = "user_id")
     private List<Role> roles = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     @JoinColumn(name = "user_id")
     private UserDetailsImpl userDetails;
 

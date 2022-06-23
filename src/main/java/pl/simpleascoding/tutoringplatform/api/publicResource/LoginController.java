@@ -1,6 +1,8 @@
 package pl.simpleascoding.tutoringplatform.api.publicResource;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,8 +21,8 @@ public class LoginController {
     private final SecurityService service;
 
     @PostMapping
-    public Map<String, String> login(@RequestBody CredentialsDTO dto, HttpServletRequest request) {
-        return service.login(dto, request.getRequestURI());
+    public ResponseEntity<Map<String, String>> login(@RequestBody CredentialsDTO dto, HttpServletRequest request) {
+        return new ResponseEntity<>(service.login(dto, request.getRequestURL().toString()), HttpStatus.OK);
     }
 
 }

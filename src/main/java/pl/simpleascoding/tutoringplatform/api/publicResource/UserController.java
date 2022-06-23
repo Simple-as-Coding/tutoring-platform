@@ -1,6 +1,8 @@
 package pl.simpleascoding.tutoringplatform.api.publicResource;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,8 +18,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    String createUser(@RequestBody CreateUserDTO dto) {
-        return userService.createUser(dto);
+    ResponseEntity<String> createUser(@RequestBody CreateUserDTO dto) {
+        return new ResponseEntity<>(userService.createUser(dto), HttpStatus.OK);
     }
 
 }

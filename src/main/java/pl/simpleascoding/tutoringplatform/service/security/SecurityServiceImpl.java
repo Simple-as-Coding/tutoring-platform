@@ -40,7 +40,7 @@ public class SecurityServiceImpl implements SecurityService {
     public Map<String, String> refresh(String auth, String issuer) {
         if (auth == null || !auth.startsWith(TOKEN_PREFIX)) throw new MissingRefreshTokenException();
 
-        DecodedJWT jwt = jwtService.verifyAndReturnDecodedToken(auth.replace(TOKEN_PREFIX, ""));
+        DecodedJWT jwt = jwtService.verifyAndReturnDecodedToken(auth.substring(TOKEN_PREFIX.length()));
 
         if (!REFRESH.equals(jwt.getClaim(TYPE).asString())) throw new InvalidTokenException();
 

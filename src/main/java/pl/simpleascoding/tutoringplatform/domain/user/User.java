@@ -18,10 +18,6 @@ public class User {
     private Long id;
     private String username;
     private String password;
-
-    @OneToMany
-    @JoinColumn(name = "user_id")
-    private List<Role> roles;
     private String name;
     private String surname;
 
@@ -36,7 +32,7 @@ public class User {
     @JoinColumn(name = "user_id")
     private List<Role> roles = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     @JoinColumn(name = "user_id")
     private UserDetailsImpl userDetails;
 

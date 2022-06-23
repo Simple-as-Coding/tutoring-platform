@@ -5,13 +5,10 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import pl.simpleascoding.tutoringplatform.domain.user.Role;
 import pl.simpleascoding.tutoringplatform.domain.user.User;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Data
 @Entity
@@ -23,12 +20,11 @@ public class UserDetailsImpl implements UserDetails {
     private Long userId;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
+    @MapsId
     private User user;
 
     public UserDetailsImpl(User user) {
         this.user = user;
-        this.userId = user.getId();
     }
 
     private boolean isAccountNonExpired = true;
@@ -38,13 +34,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-
-        for (Role role : user.getRoles()) {
-            authorities.add(new SimpleGrantedAuthority(role.getName()));
-        }
-
-        return authorities;
+        return user.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).toList();
     }
 
     public User getUser() {

@@ -10,14 +10,18 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "app_user")
 @NoArgsConstructor
+@Table(name = "app_user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
     private String password;
+
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private List<Role> roles;
     private String name;
     private String surname;
 

@@ -18,10 +18,6 @@ public class User {
     private Long id;
     private String username;
     private String password;
-
-    @OneToMany
-    @JoinColumn(name = "user_id")
-    private List<Role> roles;
     private String name;
     private String surname;
 

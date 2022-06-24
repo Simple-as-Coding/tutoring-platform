@@ -19,7 +19,7 @@ import pl.simpleascoding.tutoringplatform.filter.JwtAuthenticationFilter;
 @EnableWebSecurity
 @Configuration
 @RequiredArgsConstructor
-public class WebSecurityConfig {
+class WebSecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthorizationFilter;
 

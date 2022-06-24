@@ -16,7 +16,7 @@ import static pl.simpleascoding.tutoringplatform.common.SecurityFinals.AUTHORIZA
 @RestController
 @RequestMapping("api/v1/refresh")
 @RequiredArgsConstructor
-public class RefreshController {
+class RefreshController {
 
     private final SecurityService service;
 

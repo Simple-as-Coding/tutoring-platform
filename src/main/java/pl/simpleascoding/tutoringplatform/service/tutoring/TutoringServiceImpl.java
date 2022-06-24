@@ -1,5 +1,8 @@
 package pl.simpleascoding.tutoringplatform.service.tutoring;
 
-public class TutoringServiceImpl implements TutoringService {
+import org.springframework.stereotype.Service;
+
+@Service
+class TutoringServiceImpl implements TutoringService {
     //todo
 }

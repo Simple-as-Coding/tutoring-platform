@@ -16,7 +16,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("api/v1/login")
 @RequiredArgsConstructor
-public class LoginController {
+class LoginController {
 
     private final SecurityService service;
 

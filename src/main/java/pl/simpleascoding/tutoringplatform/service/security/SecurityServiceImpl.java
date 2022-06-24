@@ -19,7 +19,7 @@ import static pl.simpleascoding.tutoringplatform.common.SecurityFinals.*;
 
 @Service
 @RequiredArgsConstructor
-public class SecurityServiceImpl implements SecurityService {
+class SecurityServiceImpl implements SecurityService {
 
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;

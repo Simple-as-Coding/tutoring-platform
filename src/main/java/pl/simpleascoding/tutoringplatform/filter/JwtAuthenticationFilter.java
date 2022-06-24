@@ -17,6 +17,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static pl.simpleascoding.tutoringplatform.common.SecurityFinals.*;
 
@@ -53,4 +55,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
     }
 
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        List<String> excludedUrls = new ArrayList<>();
+        excludedUrls.add("/api/v1/login");
+        excludedUrls.add("/api/v1/refresh");
+        excludedUrls.add("/api/v1/users");
+
+        return excludedUrls.contains(request.getServletPath());
+    }
 }

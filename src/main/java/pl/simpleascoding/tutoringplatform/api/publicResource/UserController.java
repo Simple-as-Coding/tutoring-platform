@@ -8,18 +8,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.simpleascoding.tutoringplatform.dto.CreateUserDTO;
-import pl.simpleascoding.tutoringplatform.service.user.UserService;
+import pl.simpleascoding.tutoringplatform.service.user.UserFacade;
 
 @RestController
 @RequestMapping("api/v1/users")
 @RequiredArgsConstructor
-public class UserController {
+class UserController {
 
-    private final UserService userService;
+    private final UserFacade userFacade;
 
     @PostMapping
     ResponseEntity<String> createUser(@RequestBody CreateUserDTO dto) {
-        return new ResponseEntity<>(userService.createUser(dto), HttpStatus.OK);
+        return new ResponseEntity<>(userFacade.createUser(dto), HttpStatus.OK);
     }
 
 }

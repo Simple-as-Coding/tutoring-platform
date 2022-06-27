@@ -1,8 +1,10 @@
 package pl.simpleascoding.tutoringplatform.service.user;
 
+import org.springframework.stereotype.Service;
 import pl.simpleascoding.tutoringplatform.dto.CreateUserDTO;
 
-public interface UserService {
+@Service
+interface UserService {
 
     String createUser(CreateUserDTO dto);
 

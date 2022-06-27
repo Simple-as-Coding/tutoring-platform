@@ -1,5 +1,8 @@
 package pl.simpleascoding.tutoringplatform.service.tutoring;
 
-public interface TutoringService {
+import org.springframework.stereotype.Service;
+
+@Service
+interface TutoringService {
     //todo
 }

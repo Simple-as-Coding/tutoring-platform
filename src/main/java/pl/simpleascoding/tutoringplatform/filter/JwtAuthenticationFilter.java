@@ -49,7 +49,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext()
                     .setAuthentication(new UsernamePasswordAuthenticationToken(jwt.getSubject(), null, userDetails.getAuthorities()));
             filterChain.doFilter(request, response);
-        } catch (Exception ex) {
+        } catch (RuntimeException ex) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.getWriter().write(ex.getMessage());
         }

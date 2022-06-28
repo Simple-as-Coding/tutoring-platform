@@ -9,13 +9,15 @@ import pl.simpleascoding.tutoringplatform.repository.UserRepository;
 
 @RequiredArgsConstructor
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
+class UserDetailsServiceImpl implements UserDetailsService {
+
+    private static final String error = "User with username \"%s\" not found";
 
     private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User with username \"" + username + "\" not found"));
+        return userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(String.format(error, username)));
     }
 
 }

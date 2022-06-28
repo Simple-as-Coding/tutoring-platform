@@ -11,6 +11,6 @@ interface UserService {
 
     String createUser(CreateUserDTO dto);
 
-    ResponseEntity<String> changeUserPassword(ChangeUserPasswordDTO dto);
+    String changeUserPassword(ChangeUserPasswordDTO dto);
 
 }

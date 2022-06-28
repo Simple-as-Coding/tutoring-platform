@@ -18,7 +18,7 @@ public class UserFacade {
 
     }
 
-    public ResponseEntity<String> changeUserPassword(ChangeUserPasswordDTO dto){
+    public String changeUserPassword(ChangeUserPasswordDTO dto){
 
         return userServiceImpl.changeUserPassword(dto);
 

@@ -26,7 +26,7 @@ class UserController {
     @PostMapping("/change-password")
     ResponseEntity<String> changeUserPassword(@RequestBody ChangeUserPasswordDTO dto) {
 
-        return userFacade.changeUserPassword(dto);
+        return new ResponseEntity<>(userFacade.changeUserPassword(dto), HttpStatus.OK);
 
     }
 

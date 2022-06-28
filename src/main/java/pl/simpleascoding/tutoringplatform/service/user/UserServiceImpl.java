@@ -35,12 +35,12 @@ class UserServiceImpl implements UserService {
         user.getRoles().add(new Role(RoleType.USER));
         userRepository.save(user);
 
-        return "OK";
+        return HttpStatus.OK.getReasonPhrase();
 
     }
 
     @Override
-    public ResponseEntity<String> changeUserPassword(ChangeUserPasswordDTO dto) {
+    public String changeUserPassword(ChangeUserPasswordDTO dto) {
         User user = userRepository.findByUsername(dto.username())
                 .orElseThrow(() -> new UsernameNotFoundException(dto.username()));
 
@@ -48,11 +48,11 @@ class UserServiceImpl implements UserService {
 
             user.setPassword(passwordEncoder.encode(dto.newPassword()));
 
-            return new ResponseEntity<String>(HttpStatus.OK.getReasonPhrase(), HttpStatus.OK);
+            return HttpStatus.OK.getReasonPhrase();
 
         } else {
 
-            return new ResponseEntity<String>(HttpStatus.UNAUTHORIZED.getReasonPhrase(), HttpStatus.UNAUTHORIZED);
+            return HttpStatus.UNAUTHORIZED.getReasonPhrase();
 
         }
 

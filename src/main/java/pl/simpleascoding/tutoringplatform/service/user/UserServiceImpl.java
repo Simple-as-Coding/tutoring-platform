@@ -35,7 +35,7 @@ class UserServiceImpl implements UserService {
         user.getRoles().add(new Role(RoleType.USER));
         userRepository.save(user);
 
-        return HttpStatus.OK.getReasonPhrase();
+        return "OK";
 
     }
 

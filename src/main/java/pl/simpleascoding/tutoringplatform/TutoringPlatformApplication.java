@@ -11,12 +11,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class TutoringPlatformApplication {
 
 
-    private static final Logger logger = LogManager.getLogger(TutoringPlatformApplication.class);
+    private static final Logger LOGGER = LogManager.getLogger(TutoringPlatformApplication.class);
 
     private static final Marker APP_MARKER = MarkerManager.getMarker("application");
 
     public static void main(String[] args) {
-        logger.info(APP_MARKER, "APPLICATION_STARTED");
+        LOGGER.info(APP_MARKER, "APPLICATION_STARTED");
         SpringApplication.run(TutoringPlatformApplication.class, args);
     }
 

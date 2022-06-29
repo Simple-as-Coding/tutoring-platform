@@ -35,6 +35,7 @@ class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public String changeUserPassword(ChangeUserPasswordDTO dto, String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));

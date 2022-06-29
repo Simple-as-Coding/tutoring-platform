@@ -8,7 +8,6 @@ import pl.simpleascoding.tutoringplatform.dto.CreateUserDTO;
 interface UserService {
 
     String createUser(CreateUserDTO dto);
-
     String changeUserPassword(ChangeUserPasswordDTO dto);
 
 }

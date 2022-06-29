@@ -35,11 +35,11 @@ class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String changeUserPassword(ChangeUserPasswordDTO dto) {
-        User user = userRepository.findByUsername(dto.username())
-                .orElseThrow(() -> new UsernameNotFoundException(dto.username()));
+    public String changeUserPassword(ChangeUserPasswordDTO dto, String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username));
 
-        if (passwordEncoder.matches(dto.oldPassword(), user.getPassword())) {
+        if (isConditionToChangePasswordMet(dto, user)) {
 
             user.setPassword(passwordEncoder.encode(dto.newPassword()));
 
@@ -50,6 +50,12 @@ class UserServiceImpl implements UserService {
             return HttpStatus.UNAUTHORIZED.getReasonPhrase();
 
         }
+
+    }
+
+    private boolean isConditionToChangePasswordMet(ChangeUserPasswordDTO dto, User user) {
+
+        return passwordEncoder.matches(dto.oldPassword(), user.getPassword()) & dto.newPasswordReturn().equals(dto.newPassword());
 
     }
 

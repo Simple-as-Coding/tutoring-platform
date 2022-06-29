@@ -17,9 +17,9 @@ public class UserFacade {
 
     }
 
-    public String changeUserPassword(ChangeUserPasswordDTO dto) {
+    public String changeUserPassword(ChangeUserPasswordDTO dto, String username) {
 
-        return userServiceImpl.changeUserPassword(dto);
+        return userServiceImpl.changeUserPassword(dto, username);
 
     }
 

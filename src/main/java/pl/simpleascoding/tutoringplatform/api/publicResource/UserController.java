@@ -11,6 +11,8 @@ import pl.simpleascoding.tutoringplatform.dto.ChangeUserPasswordDTO;
 import pl.simpleascoding.tutoringplatform.dto.CreateUserDTO;
 import pl.simpleascoding.tutoringplatform.service.user.UserFacade;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("api/v1/users")
 @RequiredArgsConstructor
@@ -24,9 +26,9 @@ class UserController {
     }
 
     @PostMapping("/change-password")
-    ResponseEntity<String> changeUserPassword(@RequestBody ChangeUserPasswordDTO dto) {
+    ResponseEntity<String> changeUserPassword(@RequestBody ChangeUserPasswordDTO dto, Principal loggedInUser) {
 
-        return new ResponseEntity<>(userFacade.changeUserPassword(dto), HttpStatus.OK);
+        return new ResponseEntity<>(userFacade.changeUserPassword(dto, loggedInUser.getName()), HttpStatus.OK);
 
     }
 

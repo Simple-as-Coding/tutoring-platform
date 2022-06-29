@@ -16,10 +16,9 @@
 | ALL    | When all events should be logged                                                        |
 
 ### We mainly have 3 components to work with Log4j
-
 **Logger**: It is used to log the messages.  
 **Appender**: It is used to publish the logging information to the destination like the file, database, console etc.  
-**Layout**: It is used to format logging information in different styles.
+**Layout**: It is used to format logging information in different styles.  
 
 ### Create a Log Directory
 

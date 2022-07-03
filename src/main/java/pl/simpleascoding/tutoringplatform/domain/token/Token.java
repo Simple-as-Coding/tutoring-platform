@@ -6,6 +6,7 @@ import pl.simpleascoding.tutoringplatform.domain.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -19,20 +20,17 @@ public class Token {
 
     private TokenType type;
 
-    private String value;
+    private String value = UUID.randomUUID().toString();
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private User user;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime expiresAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime expiresAt = createdAt.plusMinutes(15);
     private LocalDateTime confirmedAt;
 
-    public Token(String value, TokenType type) {
-        this.value = value;
+    public Token(TokenType type) {
         this.type = type;
-        this.createdAt = LocalDateTime.now();
-        this.expiresAt = createdAt.plusMinutes(15);
     }
 
     public void confirm() {

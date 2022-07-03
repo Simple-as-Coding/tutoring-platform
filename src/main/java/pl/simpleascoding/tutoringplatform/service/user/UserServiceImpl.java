@@ -17,8 +17,6 @@ import pl.simpleascoding.tutoringplatform.exception.*;
 import pl.simpleascoding.tutoringplatform.repository.TokenRepository;
 import pl.simpleascoding.tutoringplatform.repository.UserRepository;
 
-import java.util.UUID;
-
 @Service
 @RequiredArgsConstructor
 class UserServiceImpl implements UserService {
@@ -43,7 +41,7 @@ class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.getRoles().add(new Role(RoleType.USER));
 
-        Token token = new Token(UUID.randomUUID().toString(), TokenType.REGISTER);
+        Token token = new Token(TokenType.REGISTER);
         user.getTokens().add(token);
 
         userRepository.save(user);

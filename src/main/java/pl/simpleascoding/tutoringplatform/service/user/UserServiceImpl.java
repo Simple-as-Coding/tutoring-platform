@@ -34,9 +34,14 @@ class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public String createUser(CreateUserDTO dto, String rootUrl) {
-        userRepository.findByUsername(dto.username()).ifPresent(user -> {
+        userRepository.findUserByUsername(dto.username()).ifPresent(user -> {
             throw new UsernameTakenException(dto.username());
         });
+
+        userRepository.findUserByEmail(dto.email()).ifPresent(user -> {
+            throw new EmailTakenException(dto.email());
+        });
+
         User user = new User(dto.username(), dto.password(), dto.name(), dto.surname(), dto.email());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.getRoles().add(new Role(RoleType.USER));

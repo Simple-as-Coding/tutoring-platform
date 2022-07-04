@@ -30,7 +30,7 @@ public class User implements UserDetails {
     private boolean enabled = false;
     private boolean locked = false;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private List<Role> roles = new ArrayList<>();
 

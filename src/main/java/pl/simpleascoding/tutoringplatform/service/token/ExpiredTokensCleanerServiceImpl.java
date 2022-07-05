@@ -1,6 +1,7 @@
 package pl.simpleascoding.tutoringplatform.service.token;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import pl.simpleascoding.tutoringplatform.domain.token.Token;
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ExpiredTokensCleanerServiceImpl implements ExpiredTokensCleanerService {
 
     private final TokenRepository tokenRepository;
@@ -31,6 +33,8 @@ public class ExpiredTokensCleanerServiceImpl implements ExpiredTokensCleanerServ
                 .toList();
 
         tokenRepository.deleteAll(expiredTokens);
+        log.info("Deleted expired tokens from the database.");
         userRepository.deleteAll(inactiveUsers);
+        inactiveUsers.forEach(user -> log.info("Deleted user \"" + user.getUsername() + "\". Reason: Account has not been been activated."));
     }
 }

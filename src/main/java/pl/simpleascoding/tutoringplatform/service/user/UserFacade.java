@@ -2,6 +2,7 @@ package pl.simpleascoding.tutoringplatform.service.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.simpleascoding.tutoringplatform.dto.ChangeUserPasswordDTO;
 import pl.simpleascoding.tutoringplatform.dto.CreateUserDTO;
 
 @Service
@@ -19,6 +20,12 @@ public class UserFacade {
     public String confirmUserRegistration(String tokenValue) {
 
         return userService.confirmUserRegistration(tokenValue);
+
+    }
+
+    public String changeUserPassword(ChangeUserPasswordDTO dto, String username) {
+
+        return userService.changeUserPassword(dto, username);
 
     }
 

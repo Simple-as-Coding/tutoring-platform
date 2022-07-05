@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,7 @@ import pl.simpleascoding.tutoringplatform.domain.token.TokenType;
 import pl.simpleascoding.tutoringplatform.domain.user.Role;
 import pl.simpleascoding.tutoringplatform.domain.user.RoleType;
 import pl.simpleascoding.tutoringplatform.domain.user.User;
+import pl.simpleascoding.tutoringplatform.dto.ChangeUserPasswordDTO;
 import pl.simpleascoding.tutoringplatform.dto.CreateUserDTO;
 import pl.simpleascoding.tutoringplatform.exception.*;
 import pl.simpleascoding.tutoringplatform.repository.TokenRepository;
@@ -82,6 +84,32 @@ class UserServiceImpl implements UserService {
         token.confirm();
 
         return HttpStatus.OK.getReasonPhrase();
+    }
+
+    @Override
+    @Transactional
+    public String changeUserPassword(ChangeUserPasswordDTO dto, String username) {
+        User user = userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username));
+
+        if (isConditionToChangePasswordMet(dto, user)) {
+
+            user.setPassword(passwordEncoder.encode(dto.newPassword()));
+
+            return HttpStatus.OK.getReasonPhrase();
+
+        } else {
+
+            return HttpStatus.UNAUTHORIZED.getReasonPhrase();
+
+        }
+
+    }
+
+    private boolean isConditionToChangePasswordMet(ChangeUserPasswordDTO dto, User user) {
+
+        return passwordEncoder.matches(dto.oldPassword(), user.getPassword()) & dto.newPasswordReturn().equals(dto.newPassword());
+
     }
 
 }

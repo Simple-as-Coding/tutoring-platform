@@ -9,17 +9,23 @@ import pl.simpleascoding.tutoringplatform.dto.CreateUserDTO;
 @RequiredArgsConstructor
 public class UserFacade {
 
-    private final UserServiceImpl userServiceImpl;
+    private final UserService userService;
 
-    public String createUser(CreateUserDTO dto) {
+    public String createUser(CreateUserDTO dto, String rootUrl) {
 
-        return userServiceImpl.createUser(dto);
+        return userService.createUser(dto, rootUrl);
+
+    }
+
+    public String confirmUserRegistration(String tokenValue) {
+
+        return userService.confirmUserRegistration(tokenValue);
 
     }
 
     public String changeUserPassword(ChangeUserPasswordDTO dto, String username) {
 
-        return userServiceImpl.changeUserPassword(dto, username);
+        return userService.changeUserPassword(dto, username);
 
     }
 

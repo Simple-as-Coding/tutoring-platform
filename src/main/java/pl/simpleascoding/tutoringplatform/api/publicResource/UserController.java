@@ -3,7 +3,9 @@ package pl.simpleascoding.tutoringplatform.api.publicResource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import pl.simpleascoding.tutoringplatform.domain.user.User;
 import pl.simpleascoding.tutoringplatform.dto.ChangeUserPasswordDTO;
 import pl.simpleascoding.tutoringplatform.dto.CreateUserDTO;
 import pl.simpleascoding.tutoringplatform.service.user.UserFacade;
@@ -30,9 +32,9 @@ class UserController {
     }
 
     @PostMapping("/change-password")
-    ResponseEntity<String> changeUserPassword(@RequestBody ChangeUserPasswordDTO dto, Principal loggedInUser) {
+    ResponseEntity<String> changeUserPassword(@RequestBody ChangeUserPasswordDTO dto, @AuthenticationPrincipal User loggedInUser) {
 
-        return new ResponseEntity<>(userFacade.changeUserPassword(dto, loggedInUser.getName()), HttpStatus.OK);
+        return new ResponseEntity<>(userFacade.changeUserPassword(dto, loggedInUser), HttpStatus.OK);
 
     }
 

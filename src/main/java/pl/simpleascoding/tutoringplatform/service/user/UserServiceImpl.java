@@ -107,7 +107,7 @@ class UserServiceImpl implements UserService {
     }
 
     private boolean isChangeAllowed(String passwordFromEntity, ChangeUserPasswordDTO newData) {
-        boolean dataConfirmed = newData.newPassword().equals(newData.passwordConfirmed());
+        boolean dataConfirmed = newData.newPassword().equals(newData.confirmationPassword());
         boolean userVerified = passwordEncoder.matches(newData.oldPassword(), passwordFromEntity);
 
         return userVerified && dataConfirmed;

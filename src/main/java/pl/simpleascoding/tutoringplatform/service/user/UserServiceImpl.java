@@ -85,22 +85,32 @@ class UserServiceImpl implements UserService {
         return HttpStatus.OK.getReasonPhrase();
     }
 
+    /**
+     * Service method for changing the user's password.<br />
+     * The password is first checked for correctness of the entered data by the user.
+     * Then the currently specified password is checked against the one in storage.
+     *
+     * @param newPasswordsData  User-provided multiple password data
+     * @param userEntity    Users entity
+     * @return  The status of the operation
+     */
     @Override
     @Transactional
-    public String changeUserPassword(ChangeUserPasswordDTO dto, User user) {
-        if (isConditionToChangePasswordMet(dto, user)) {
-            user.setPassword(passwordEncoder.encode(dto.newPassword()));
+    public String changeUserPassword(ChangeUserPasswordDTO newPasswordsData, User userEntity) {
+        if (isChangeAllowed(userEntity.getPassword(), newPasswordsData)) {
+            userEntity.setPassword(passwordEncoder.encode(newPasswordsData.newPassword()));
 
             return HttpStatus.OK.getReasonPhrase();
         } else {
-
             return HttpStatus.UNAUTHORIZED.getReasonPhrase();
         }
     }
 
-    private boolean isConditionToChangePasswordMet(ChangeUserPasswordDTO dto, User user) {
+    private boolean isChangeAllowed(String passwordFromEntity, ChangeUserPasswordDTO newData) {
+        boolean dataConfirmed = newData.newPassword().equals(newData.confirmationPassword());
+        boolean userVerified = passwordEncoder.matches(newData.oldPassword(), passwordFromEntity);
 
-        return passwordEncoder.matches(dto.oldPassword(), user.getPassword()) & dto.newPasswordReturn().equals(dto.newPassword());
+        return userVerified && dataConfirmed;
     }
 
 }

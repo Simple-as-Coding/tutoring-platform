@@ -2,9 +2,7 @@
 
 Swagger is a suite of API developer tools from SmartBear Software and a former specification upon which the OpenAPI
 Specification is based.
-
 Swagger allows developer, to easily learn about available endpoints, in API which he uses in his front-end.
-
 
 ## Links
 

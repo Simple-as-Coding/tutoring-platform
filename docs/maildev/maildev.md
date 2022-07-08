@@ -1,7 +1,6 @@
 # MailDev
 
-MailDev is an SMTP server, that intercepts all e-mail messages sent through it, allowing for easy debugging of our
-application.  
+MailDev is an SMTP server, that intercepts all e-mail messages sent through it, allowing for easy debugging of our application.  
 For more information about the app, visit https://maildev.github.io/maildev/
 
 ## Installation and usage

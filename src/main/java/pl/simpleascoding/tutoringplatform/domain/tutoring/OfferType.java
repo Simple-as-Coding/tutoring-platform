@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum OfferType {
-    Proposition("Tutoring Proposition"),
-    Request("Tutoring Request");
+    PROPOSITION("Tutoring Proposition"),
+    REQUEST("Tutoring Request");
 
     private final String description;
 

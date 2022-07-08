@@ -3,13 +3,13 @@ package pl.simpleascoding.tutoringplatform.domain.tutoring;
 import lombok.Getter;
 
 @Getter
-public enum TutoringEnum {
+public enum OfferType {
     Proposition("Tutoring Proposition"),
     Request("Tutoring Request");
 
     private final String description;
 
-    TutoringEnum(String desc) {
+    OfferType(String desc) {
         this.description = desc;
     }
 }

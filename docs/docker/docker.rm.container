@@ -1,2 +1,3 @@
 #!/bin/bash
+
 ./docker.stop.container $1 && echo "docker rm <id:$1>" && sudo docker rm $1

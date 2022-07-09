@@ -1,3 +1,4 @@
 #!/bin/bash
+
 echo "docker run <container-name:$1>"
 sudo docker run $1

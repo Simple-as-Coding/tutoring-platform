@@ -1,19 +1,21 @@
 package pl.simpleascoding.tutoringplatform.service.user;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
 import pl.simpleascoding.tutoringplatform.dto.CreateUserDTO;
+import pl.simpleascoding.tutoringplatform.dto.GeneralDTO;
 
 @Service
 @RequiredArgsConstructor
 public class UserFacade {
 
-    private final UserServiceImpl userServiceImpl;
+	private final UserServiceImpl userServiceImpl;
 
-    public String createUser(CreateUserDTO dto){
+	public GeneralDTO createUser(CreateUserDTO dto) {
 
-        return userServiceImpl.createUser(dto);
+		return userServiceImpl.createUser(dto);
 
-    }
+	}
 
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -90,13 +91,16 @@ class UserServiceImpl implements UserService {
      * The password is first checked for correctness of the entered data by the user.
      * Then the currently specified password is checked against the one in storage.
      *
-     * @param newPasswordsData  User-provided multiple password data
-     * @param userEntity    Users entity
-     * @return  The status of the operation
+     * @param newPasswordsData User-provided multiple password data
+     * @param username         Username of the user
+     * @return The status of the operation
      */
     @Override
     @Transactional
-    public String changeUserPassword(ChangeUserPasswordDTO newPasswordsData, User userEntity) {
+    public String changeUserPassword(ChangeUserPasswordDTO newPasswordsData, String username) {
+        User userEntity = userRepository.findUserByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username));
+
         if (isChangeAllowed(userEntity.getPassword(), newPasswordsData)) {
             userEntity.setPassword(passwordEncoder.encode(newPasswordsData.newPassword()));
 

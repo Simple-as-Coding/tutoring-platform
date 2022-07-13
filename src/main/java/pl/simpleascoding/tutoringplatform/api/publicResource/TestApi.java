@@ -1,9 +1,9 @@
 package pl.simpleascoding.tutoringplatform.api.publicResource;
 
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.simpleascoding.tutoringplatform.domain.user.User;
+
+import java.security.Principal;
 
 @RestController
 class TestApi {
@@ -14,7 +14,7 @@ class TestApi {
     }
 
     @GetMapping("/testUser")
-    public String testUser(@AuthenticationPrincipal User user) {
-        return String.format("Hi %s %s, you are a USER", user.getName(), user.getSurname());
+    public String testUser(Principal principal) {
+        return String.format("Hello %s", principal.getName());
     }
 }

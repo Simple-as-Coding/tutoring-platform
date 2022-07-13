@@ -33,7 +33,7 @@ class WebSecurityConfig {
 
         httpSecurity.authorizeRequests().antMatchers("/testAdmin").hasAnyAuthority(RoleType.ADMIN.toString());
         httpSecurity.authorizeRequests().antMatchers("/testUser").hasAnyAuthority(RoleType.USER.toString());
-        httpSecurity.authorizeRequests().antMatchers("/change-password").hasAnyAuthority(RoleType.USER.toString());
+        httpSecurity.authorizeRequests().antMatchers("/api/v1/users/change-password").hasAnyAuthority(RoleType.USER.toString());
         httpSecurity.authorizeRequests().anyRequest().permitAll();
         return httpSecurity.build();
     }

@@ -1,3 +1,4 @@
 #!/bin/bash
+
 echo "docker kill <id>
 sudo docker kill $1

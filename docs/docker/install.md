@@ -41,5 +41,5 @@ logging driver such as the “local” logging driver that performs log rotation
 sends logs to a remote logging aggregator.
 
 ## Links
-
-* [Postgres image @ Docker](https://hub.docker.com/_/postgres)
+* [Install Docker Desktop](https://docs.docker.com/desktop/linux/install/)
+* [Docker](https://zetcode.com/springboot/docker/)

@@ -12,7 +12,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import pl.simpleascoding.tutoringplatform.domain.user.Role;
 import pl.simpleascoding.tutoringplatform.domain.user.RoleType;
 import pl.simpleascoding.tutoringplatform.filter.JwtAuthenticationFilter;
 
@@ -34,6 +33,7 @@ class WebSecurityConfig {
 
         httpSecurity.authorizeRequests().antMatchers("/testAdmin").hasAnyAuthority(RoleType.ADMIN.toString());
         httpSecurity.authorizeRequests().antMatchers("/testUser").hasAnyAuthority(RoleType.USER.toString());
+        httpSecurity.authorizeRequests().antMatchers("/change-password").hasAnyAuthority(RoleType.USER.toString());
         httpSecurity.authorizeRequests().anyRequest().permitAll();
         return httpSecurity.build();
     }

@@ -2,7 +2,6 @@ package pl.simpleascoding.tutoringplatform.service.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.simpleascoding.tutoringplatform.domain.user.User;
 import pl.simpleascoding.tutoringplatform.dto.ChangeUserPasswordDTO;
 import pl.simpleascoding.tutoringplatform.dto.CreateUserDTO;
 
@@ -24,9 +23,9 @@ public class UserFacade {
 
     }
 
-    public String changeUserPassword(ChangeUserPasswordDTO dto, User user) {
+    public String changeUserPassword(ChangeUserPasswordDTO dto, String username) {
 
-        return userService.changeUserPassword(dto, user);
+        return userService.changeUserPassword(dto, username);
 
     }
 

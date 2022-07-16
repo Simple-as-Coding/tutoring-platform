@@ -3,6 +3,7 @@ package pl.simpleascoding.tutoringplatform.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -34,6 +35,7 @@ class WebSecurityConfig {
         httpSecurity.authorizeRequests().antMatchers("/testAdmin").hasAnyAuthority(RoleType.ADMIN.toString());
         httpSecurity.authorizeRequests().antMatchers("/testUser").hasAnyAuthority(RoleType.USER.toString());
         httpSecurity.authorizeRequests().antMatchers("/api/v1/users/change-password").hasAnyAuthority(RoleType.USER.toString());
+        httpSecurity.authorizeRequests().antMatchers(HttpMethod.POST, "/api/v1/users/{id}/reviews/received").authenticated();
         httpSecurity.authorizeRequests().anyRequest().permitAll();
         return httpSecurity.build();
     }

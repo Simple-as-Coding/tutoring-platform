@@ -19,6 +19,8 @@ import pl.simpleascoding.tutoringplatform.exception.*;
 import pl.simpleascoding.tutoringplatform.repository.TokenRepository;
 import pl.simpleascoding.tutoringplatform.repository.UserRepository;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 class UserServiceImpl implements UserService {
@@ -32,6 +34,16 @@ class UserServiceImpl implements UserService {
     private static final String CONFIRM_REGISTER_MAIL_SUBJECT = "Confirm your email";
     private static final String CONFIRM_REGISTER_MAIL_TEXT = "Hi %s, please visit the link below to confirm your email address and activate your account: \n%s";
     private static final String CONFIRM_REGISTER_URL = "%s/confirm-registration?tokenValue=%s";
+
+    @Override
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    @Override
+    public Optional<User> getUserByUsername(String username) {
+        return userRepository.findUserByUsername(username);
+    }
 
     @Override
     @Transactional
@@ -108,6 +120,11 @@ class UserServiceImpl implements UserService {
         } else {
             return HttpStatus.UNAUTHORIZED.getReasonPhrase();
         }
+    }
+
+    @Override
+    public boolean checkUserExists(Long id) {
+        return userRepository.existsById(id);
     }
 
     private boolean isChangeAllowed(String passwordFromEntity, ChangeUserPasswordDTO newData) {

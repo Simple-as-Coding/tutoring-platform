@@ -1,14 +1,17 @@
 package pl.simpleascoding.tutoringplatform.api.publicResource;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.simpleascoding.tutoringplatform.dto.ChangeUserPasswordDTO;
-import pl.simpleascoding.tutoringplatform.dto.CreateUserDTO;
+import pl.simpleascoding.tutoringplatform.dto.*;
+import pl.simpleascoding.tutoringplatform.service.review.ReviewService;
 import pl.simpleascoding.tutoringplatform.service.user.UserFacade;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.security.Principal;
 
 @RestController
@@ -17,6 +20,7 @@ import java.security.Principal;
 class UserController {
 
     private final UserFacade userFacade;
+    private final ReviewService reviewService;
 
     @PostMapping
     ResponseEntity<String> createUser(@RequestBody CreateUserDTO dto, HttpServletRequest request) {
@@ -33,6 +37,16 @@ class UserController {
 
         return new ResponseEntity<>(userFacade.changeUserPassword(dto, principal.getName()), HttpStatus.OK);
 
+    }
+
+    @GetMapping("/{id}/reviews/received")
+    ResponseEntity<Page<ReviewDTO>> getReceivedReviewsForUser(@PathVariable Long id, Pageable pageable) {
+        return new ResponseEntity<>(reviewService.getReceivedReviewsForUser(id, pageable), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/reviews/posted")
+    ResponseEntity<Page<ReviewDTO>> getPostedReviewsForUser(@PathVariable Long id, Pageable pageable) {
+        return new ResponseEntity<>(reviewService.getPostedReviewsForUser(id, pageable), HttpStatus.OK);
     }
 
 }

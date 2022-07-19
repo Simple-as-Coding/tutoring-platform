@@ -10,11 +10,15 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.simpleascoding.tutoringplatform.common.ReviewDTOMapper;
 import pl.simpleascoding.tutoringplatform.domain.review.Review;
 import pl.simpleascoding.tutoringplatform.domain.user.User;
-import pl.simpleascoding.tutoringplatform.dto.CreateUpdateReviewDTO;
+import pl.simpleascoding.tutoringplatform.dto.CreateReviewDTO;
+import pl.simpleascoding.tutoringplatform.dto.UpdateReviewDTO;
 import pl.simpleascoding.tutoringplatform.dto.ReviewDTO;
+import pl.simpleascoding.tutoringplatform.exception.ReviewNotFoundException;
 import pl.simpleascoding.tutoringplatform.exception.UserNotFoundException;
 import pl.simpleascoding.tutoringplatform.repository.ReviewRepository;
 import pl.simpleascoding.tutoringplatform.service.user.UserService;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,8 +29,8 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
-    public String createReview(CreateUpdateReviewDTO dto, String authorUsername, Long receiverId) {
-        User receiver = userService.getUserById(receiverId).orElseThrow(() -> new UserNotFoundException(receiverId));
+    public String createReview(CreateReviewDTO dto, String authorUsername) {
+        User receiver = userService.getUserById(dto.receiverId()).orElseThrow(() -> new UserNotFoundException(dto.receiverId()));
         User author = userService.getUserByUsername(authorUsername).orElseThrow(() -> new UsernameNotFoundException(authorUsername));
 
         Review review = new Review(dto.content(), dto.stars());
@@ -53,6 +57,36 @@ public class ReviewServiceImpl implements ReviewService {
         }
 
         return reviewRepository.findReviewsByAuthorId(id, pageable).map(ReviewDTOMapper::map);
+    }
+
+    @Override
+    @Transactional
+    public String updateReview(UpdateReviewDTO dto, String username, Long reviewId) {
+        User author = userService.getUserByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
+        Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new ReviewNotFoundException(reviewId));
+
+        if(!review.getAuthor().equals(author)){
+            return HttpStatus.UNAUTHORIZED.getReasonPhrase();
+        }
+
+        review.setStars(dto.stars());
+        review.setContent(Optional.ofNullable(dto.content()).orElse(""));
+
+        return HttpStatus.OK.getReasonPhrase();
+    }
+
+    @Override
+    public String deleteReview(String username, Long reviewId) {
+        User author = userService.getUserByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
+        Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new ReviewNotFoundException(reviewId));
+
+        if(!review.getAuthor().equals(author)){
+            return HttpStatus.UNAUTHORIZED.getReasonPhrase();
+        }
+
+        reviewRepository.delete(review);
+
+        return HttpStatus.OK.getReasonPhrase();
     }
 
 }

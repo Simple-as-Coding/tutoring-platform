@@ -5,5 +5,5 @@ import org.hibernate.annotations.Immutable;
 import java.time.Instant;
 
 @Immutable
-public record ReviewDTO(Long id, String content, byte stars, UserDTO author, UserDTO receiver, Instant createdAt) {
+public record ReviewDTO(long id, String content, byte stars, UserDTO author, UserDTO receiver, Instant createdAt) {
 }

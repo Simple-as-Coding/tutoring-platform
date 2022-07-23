@@ -24,12 +24,12 @@ public class ReviewController {
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<String> updateReview(@RequestBody UpdateReviewDTO dto, @PathVariable Long id, Principal principal){
+    ResponseEntity<String> updateReview(@RequestBody UpdateReviewDTO dto, @PathVariable long id, Principal principal){
         return new ResponseEntity<>(reviewService.updateReview(dto, principal.getName(), id), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<String> deleteReview(@PathVariable Long id, Principal principal){
+    ResponseEntity<String> deleteReview(@PathVariable long id, Principal principal){
         return new ResponseEntity<>(reviewService.deleteReview(principal.getName(), id), HttpStatus.OK);
     }
 

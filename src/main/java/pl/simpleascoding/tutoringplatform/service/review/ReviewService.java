@@ -10,11 +10,11 @@ public interface ReviewService {
 
     String createReview(CreateReviewDTO dto, String authorUsername);
 
-    Page<ReviewDTO> getReceivedReviewsForUser(Long id, Pageable pageable);
+    Page<ReviewDTO> getReceivedReviewsForUser(long id, Pageable pageable);
 
-    Page<ReviewDTO> getPostedReviewsForUser(Long id, Pageable pageable);
+    Page<ReviewDTO> getPostedReviewsForUser(long id, Pageable pageable);
 
-    String updateReview(UpdateReviewDTO dto, String username, Long reviewId);
+    String updateReview(UpdateReviewDTO dto, String username, long reviewId);
 
-    String deleteReview(String username, Long reviewId);
+    String deleteReview(String username, long reviewId);
 }

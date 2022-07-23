@@ -35,7 +35,9 @@ class WebSecurityConfig {
         httpSecurity.authorizeRequests().antMatchers("/testAdmin").hasAnyAuthority(RoleType.ADMIN.toString());
         httpSecurity.authorizeRequests().antMatchers("/testUser").hasAnyAuthority(RoleType.USER.toString());
         httpSecurity.authorizeRequests().antMatchers("/api/v1/users/change-password").hasAnyAuthority(RoleType.USER.toString());
-        httpSecurity.authorizeRequests().antMatchers(HttpMethod.POST, "/api/v1/users/{id}/reviews/received").authenticated();
+        httpSecurity.authorizeRequests().antMatchers(HttpMethod.POST, "/api/v1/reviews").authenticated();
+        httpSecurity.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/v1/reviews/{id}").authenticated();
+        httpSecurity.authorizeRequests().antMatchers(HttpMethod.DELETE, "/api/v1/reviews/{id}").authenticated();
         httpSecurity.authorizeRequests().anyRequest().permitAll();
         return httpSecurity.build();
     }

@@ -40,12 +40,12 @@ class UserController {
     }
 
     @GetMapping("/{id}/reviews/received")
-    ResponseEntity<Page<ReviewDTO>> getReceivedReviewsForUser(@PathVariable Long id, Pageable pageable) {
+    ResponseEntity<Page<ReviewDTO>> getReceivedReviewsForUser(@PathVariable long id, Pageable pageable) {
         return new ResponseEntity<>(reviewService.getReceivedReviewsForUser(id, pageable), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/reviews/posted")
-    ResponseEntity<Page<ReviewDTO>> getPostedReviewsForUser(@PathVariable Long id, Pageable pageable) {
+    ResponseEntity<Page<ReviewDTO>> getPostedReviewsForUser(@PathVariable long id, Pageable pageable) {
         return new ResponseEntity<>(reviewService.getPostedReviewsForUser(id, pageable), HttpStatus.OK);
     }
 

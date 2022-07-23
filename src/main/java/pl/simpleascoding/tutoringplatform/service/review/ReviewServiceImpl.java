@@ -42,7 +42,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Page<ReviewDTO> getReceivedReviewsForUser(Long id, Pageable pageable) {
+    public Page<ReviewDTO> getReceivedReviewsForUser(long id, Pageable pageable) {
         if (!userService.checkUserExists(id)) {
             throw new UserNotFoundException(id);
         }
@@ -51,7 +51,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Page<ReviewDTO> getPostedReviewsForUser(Long id, Pageable pageable) {
+    public Page<ReviewDTO> getPostedReviewsForUser(long id, Pageable pageable) {
         if (!userService.checkUserExists(id)) {
             throw new UserNotFoundException(id);
         }
@@ -61,7 +61,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
-    public String updateReview(UpdateReviewDTO dto, String username, Long reviewId) {
+    public String updateReview(UpdateReviewDTO dto, String username, long reviewId) {
         User author = userService.getUserByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
         Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new ReviewNotFoundException(reviewId));
 
@@ -76,7 +76,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public String deleteReview(String username, Long reviewId) {
+    public String deleteReview(String username, long reviewId) {
         User author = userService.getUserByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
         Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new ReviewNotFoundException(reviewId));
 

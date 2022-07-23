@@ -35,6 +35,7 @@ public class ExpiredTokensCleanerServiceImpl implements ExpiredTokensCleanerServ
         tokenRepository.deleteAll(expiredTokens);
         log.info("Deleted expired tokens from the database.");
         userRepository.deleteAll(inactiveUsers);
-        inactiveUsers.forEach(user -> log.info("Deleted user \"" + user.getUsername() + "\". Reason: Account has not been been activated."));
+        String logMsg = "Deleted user {}. Reason: Account has not been been activated.";
+        inactiveUsers.forEach(user -> log.info(logMsg, user.getUsername()));
     }
 }

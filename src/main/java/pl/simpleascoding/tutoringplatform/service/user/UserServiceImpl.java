@@ -36,7 +36,7 @@ class UserServiceImpl implements UserService {
     private static final String CONFIRM_REGISTER_URL = "%s/confirm-registration?tokenValue=%s";
 
     @Override
-    public Optional<User> getUserById(Long id) {
+    public Optional<User> getUserById(long id) {
         return userRepository.findById(id);
     }
 
@@ -123,7 +123,7 @@ class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean checkUserExists(Long id) {
+    public boolean checkUserExists(long id) {
         return userRepository.existsById(id);
     }
 

@@ -11,7 +11,7 @@ import java.util.Optional;
 public
 interface UserService {
 
-    Optional<User> getUserById(Long id);
+    Optional<User> getUserById(long id);
 
     Optional<User> getUserByUsername(String username);
 
@@ -21,6 +21,6 @@ interface UserService {
 
     String changeUserPassword(ChangeUserPasswordDTO dto, String username);
 
-    boolean checkUserExists(Long id);
+    boolean checkUserExists(long id);
 
 }

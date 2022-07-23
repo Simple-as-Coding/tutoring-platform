@@ -36,7 +36,11 @@ public class Review {
     private Instant createdAt;
 
     public Review(String content, byte stars) {
-        this.setContent(Optional.ofNullable(content).orElse(""));
+        this.setContent(content);
         this.setStars(stars);
+    }
+
+    public void setContent(String content){
+        this.content = Optional.ofNullable(content).orElse("").trim();
     }
 }

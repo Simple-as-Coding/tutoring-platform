@@ -4,21 +4,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.simpleascoding.tutoringplatform.common.ReviewDTOMapper;
 import pl.simpleascoding.tutoringplatform.domain.review.Review;
 import pl.simpleascoding.tutoringplatform.domain.user.User;
 import pl.simpleascoding.tutoringplatform.dto.CreateReviewDTO;
-import pl.simpleascoding.tutoringplatform.dto.UpdateReviewDTO;
 import pl.simpleascoding.tutoringplatform.dto.ReviewDTO;
+import pl.simpleascoding.tutoringplatform.dto.UpdateReviewDTO;
 import pl.simpleascoding.tutoringplatform.exception.ReviewNotFoundException;
 import pl.simpleascoding.tutoringplatform.exception.UserNotFoundException;
 import pl.simpleascoding.tutoringplatform.repository.ReviewRepository;
 import pl.simpleascoding.tutoringplatform.service.user.UserService;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +28,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     public String createReview(CreateReviewDTO dto, String authorUsername) {
         User receiver = userService.getUserById(dto.receiverId()).orElseThrow(() -> new UserNotFoundException(dto.receiverId()));
-        User author = userService.getUserByUsername(authorUsername).orElseThrow(() -> new UsernameNotFoundException(authorUsername));
+        User author = userService.getUserByUsername(authorUsername).orElseThrow(() -> new UserNotFoundException(authorUsername));
 
         Review review = new Review(dto.content(), dto.stars());
 
@@ -62,25 +59,25 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     @Transactional
     public String updateReview(UpdateReviewDTO dto, String username, long reviewId) {
-        User author = userService.getUserByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
+        User author = userService.getUserByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
         Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new ReviewNotFoundException(reviewId));
 
-        if(!review.getAuthor().equals(author)){
+        if (!review.getAuthor().equals(author)) {
             return HttpStatus.UNAUTHORIZED.getReasonPhrase();
         }
 
         review.setStars(dto.stars());
-        review.setContent(Optional.ofNullable(dto.content()).orElse(""));
+        review.setContent(dto.content());
 
         return HttpStatus.OK.getReasonPhrase();
     }
 
     @Override
     public String deleteReview(String username, long reviewId) {
-        User author = userService.getUserByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
+        User author = userService.getUserByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
         Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new ReviewNotFoundException(reviewId));
 
-        if(!review.getAuthor().equals(author)){
+        if (!review.getAuthor().equals(author)) {
             return HttpStatus.UNAUTHORIZED.getReasonPhrase();
         }
 

@@ -19,12 +19,12 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping
-    ResponseEntity<String> reviewUser(@RequestBody @Valid CreateReviewDTO dto, Principal principal) {
+    ResponseEntity<String> createReview(@RequestBody @Valid CreateReviewDTO dto, Principal principal) {
         return new ResponseEntity<>(reviewService.createReview(dto, principal.getName()), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<String> updateReview(@RequestBody UpdateReviewDTO dto, @PathVariable long id, Principal principal){
+    ResponseEntity<String> updateReview(@RequestBody @Valid UpdateReviewDTO dto, @PathVariable long id, Principal principal){
         return new ResponseEntity<>(reviewService.updateReview(dto, principal.getName(), id), HttpStatus.OK);
     }
 

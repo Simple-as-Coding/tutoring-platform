@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo "docker stop <id:$1>"
+sudo docker stop $1

@@ -1,4 +1,4 @@
-package pl.simpleascoding.tutoringplatform.api.publicResource;
+package pl.simpleascoding.tutoringplatform.api;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

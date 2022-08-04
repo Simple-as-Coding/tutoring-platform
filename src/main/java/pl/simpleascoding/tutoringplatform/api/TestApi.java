@@ -1,4 +1,4 @@
-package pl.simpleascoding.tutoringplatform.api.publicResource;
+package pl.simpleascoding.tutoringplatform.api;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -7,6 +7,11 @@ import java.security.Principal;
 
 @RestController
 class TestApi {
+
+    @GetMapping("/testUnauthorized")
+    public String testUnauthorized(){
+        return "Default test endpoint to verify if you can reach our app";
+    }
 
     @GetMapping("/testAdmin")
     public String testAdmin() {

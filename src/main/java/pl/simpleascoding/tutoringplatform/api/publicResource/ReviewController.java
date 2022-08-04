@@ -33,6 +33,4 @@ public class ReviewController {
         return new ResponseEntity<>(reviewService.deleteReview(principal.getName(), id), HttpStatus.OK);
     }
 
-
-
 }

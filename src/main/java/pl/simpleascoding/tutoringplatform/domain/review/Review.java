@@ -8,6 +8,7 @@ import pl.simpleascoding.tutoringplatform.domain.user.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.Instant;
 import java.util.Optional;
 
@@ -18,18 +19,21 @@ import java.util.Optional;
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @NotNull
+    @Size(max = 400)
     private String content;
 
     @Range(min = 1, max = 5)
     private byte stars;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @NotNull
     private User author;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @NotNull
     private User receiver;
 
     @CreationTimestamp

@@ -6,12 +6,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.simpleascoding.tutoringplatform.dto.*;
+import pl.simpleascoding.tutoringplatform.dto.ChangeUserPasswordDTO;
+import pl.simpleascoding.tutoringplatform.dto.CreateUserDTO;
+import pl.simpleascoding.tutoringplatform.dto.ReviewDTO;
 import pl.simpleascoding.tutoringplatform.service.review.ReviewService;
 import pl.simpleascoding.tutoringplatform.service.user.UserFacade;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.security.Principal;
 
 @RestController

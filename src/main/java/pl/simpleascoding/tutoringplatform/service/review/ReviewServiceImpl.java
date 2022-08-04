@@ -6,7 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.simpleascoding.tutoringplatform.common.ReviewDTOMapper;
 import pl.simpleascoding.tutoringplatform.domain.review.Review;
 import pl.simpleascoding.tutoringplatform.domain.user.User;
 import pl.simpleascoding.tutoringplatform.dto.CreateReviewDTO;
@@ -14,6 +13,7 @@ import pl.simpleascoding.tutoringplatform.dto.ReviewDTO;
 import pl.simpleascoding.tutoringplatform.dto.UpdateReviewDTO;
 import pl.simpleascoding.tutoringplatform.exception.ReviewNotFoundException;
 import pl.simpleascoding.tutoringplatform.exception.UserNotFoundException;
+import pl.simpleascoding.tutoringplatform.mapper.ReviewModelMapper;
 import pl.simpleascoding.tutoringplatform.repository.ReviewRepository;
 import pl.simpleascoding.tutoringplatform.service.user.UserService;
 
@@ -24,16 +24,19 @@ public class ReviewServiceImpl implements ReviewService {
     private final UserService userService;
     private final ReviewRepository reviewRepository;
 
+    private final ReviewModelMapper reviewModelMapper;
+
     @Override
-    @Transactional
     public String createReview(CreateReviewDTO dto, String authorUsername) {
         User receiver = userService.getUserById(dto.receiverId()).orElseThrow(() -> new UserNotFoundException(dto.receiverId()));
         User author = userService.getUserByUsername(authorUsername).orElseThrow(() -> new UserNotFoundException(authorUsername));
 
         Review review = new Review(dto.content(), dto.stars());
 
-        author.getPostedReviews().add(review);
-        receiver.getReceivedReviews().add(review);
+        review.setAuthor(author);
+        review.setReceiver(receiver);
+
+        reviewRepository.save(review);
 
         return HttpStatus.CREATED.getReasonPhrase();
     }
@@ -44,7 +47,7 @@ public class ReviewServiceImpl implements ReviewService {
             throw new UserNotFoundException(id);
         }
 
-        return reviewRepository.findReviewsByReceiverId(id, pageable).map(ReviewDTOMapper::map);
+        return reviewRepository.findReviewsByReceiverId(id, pageable).map(reviewModelMapper::mapReviewToDto);
     }
 
     @Override
@@ -53,7 +56,7 @@ public class ReviewServiceImpl implements ReviewService {
             throw new UserNotFoundException(id);
         }
 
-        return reviewRepository.findReviewsByAuthorId(id, pageable).map(ReviewDTOMapper::map);
+        return reviewRepository.findReviewsByAuthorId(id, pageable).map(reviewModelMapper::mapReviewToDto);
     }
 
     @Override

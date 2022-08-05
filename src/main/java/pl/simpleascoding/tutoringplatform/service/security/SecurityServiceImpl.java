@@ -4,13 +4,13 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import pl.simpleascoding.tutoringplatform.dto.CredentialsDTO;
 import pl.simpleascoding.tutoringplatform.exception.InvalidTokenException;
 import pl.simpleascoding.tutoringplatform.exception.MissingParametersException;
 import pl.simpleascoding.tutoringplatform.exception.MissingRefreshTokenException;
 import pl.simpleascoding.tutoringplatform.service.jwt.JwtService;
+import pl.simpleascoding.tutoringplatform.service.user.UserService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +23,7 @@ class SecurityServiceImpl implements SecurityService {
 
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-    private final UserDetailsService userDetailsService;
+    private final UserService userService;
 
     public Map<String, String> login(CredentialsDTO dto, String issuer) {
         if (dto.username() == null || dto.password() == null) throw new MissingParametersException();
@@ -48,7 +48,7 @@ class SecurityServiceImpl implements SecurityService {
 
         //This line isn't required in the "login()" method, since authenticationManager automatically checks if the user exists
         //Here, however, we need to check if the refresh token, even if valid, corresponds to a registered user
-        userDetailsService.loadUserByUsername(username);
+        userService.loadUserByUsername(username);
 
         Map<String, String> tokens = new HashMap<>();
         tokens.put(ACCESS_TOKEN, jwtService.createAccessToken(username, issuer));

@@ -1,15 +1,14 @@
 package pl.simpleascoding.tutoringplatform.service.user;
 
-import org.springframework.stereotype.Service;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import pl.simpleascoding.tutoringplatform.domain.user.User;
 import pl.simpleascoding.tutoringplatform.dto.ChangeUserPasswordDTO;
 import pl.simpleascoding.tutoringplatform.dto.CreateUserDTO;
-
 import java.util.Optional;
 
-@Service
-public
-interface UserService {
+public interface UserService extends UserDetailsService {
 
     Optional<User> getUserById(long id);
 
@@ -22,5 +21,10 @@ interface UserService {
     String changeUserPassword(ChangeUserPasswordDTO dto, String username);
 
     boolean checkUserExists(long id);
+
+    @Override
+    default UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return null;
+    }
 
 }

@@ -1,6 +1,8 @@
 package pl.simpleascoding.tutoringplatform.service.user;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import pl.simpleascoding.tutoringplatform.dto.ChangeUserPasswordDTO;
 import pl.simpleascoding.tutoringplatform.dto.CreateUserDTO;
@@ -29,4 +31,7 @@ public class UserFacade {
 
     }
 
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userService.loadUserByUsername(username);
+    }
 }

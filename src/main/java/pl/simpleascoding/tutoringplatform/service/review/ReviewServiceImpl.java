@@ -29,8 +29,8 @@ class ReviewServiceImpl implements ReviewService {
 
     @Override
     public String createReview(CreateReviewDTO dto, String authorUsername) {
-        User receiver = userService.getUserById(dto.receiverId()).orElseThrow(() -> new UserNotFoundException(dto.receiverId()));
-        User author = userService.getUserByUsername(authorUsername).orElseThrow(() -> new UserNotFoundException(authorUsername));
+        User receiver = userService.getUserById(dto.receiverId());
+        User author = userService.getUserByUsername(authorUsername);
 
         Review review = new Review(dto.content(), dto.stars());
 
@@ -63,7 +63,7 @@ class ReviewServiceImpl implements ReviewService {
     @Override
     @Transactional
     public String updateReview(UpdateReviewDTO dto, String username, long reviewId) {
-        User author = userService.getUserByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
+        User author = userService.getUserByUsername(username);
         Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new ReviewNotFoundException(reviewId));
 
         if (!review.getAuthor().equals(author)) {
@@ -78,7 +78,7 @@ class ReviewServiceImpl implements ReviewService {
 
     @Override
     public String deleteReview(String username, long reviewId) {
-        User author = userService.getUserByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
+        User author = userService.getUserByUsername(username);
         Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new ReviewNotFoundException(reviewId));
 
         if (!review.getAuthor().equals(author)) {

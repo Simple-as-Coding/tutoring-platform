@@ -20,7 +20,6 @@ import pl.simpleascoding.tutoringplatform.dto.CreateUserDTO;
 import pl.simpleascoding.tutoringplatform.exception.*;
 import pl.simpleascoding.tutoringplatform.repository.TokenRepository;
 import pl.simpleascoding.tutoringplatform.repository.UserRepository;
-import java.util.Optional;
 
 @Service
 @Primary
@@ -33,20 +32,20 @@ class UserServiceImpl implements UserService {
 
     private final JavaMailSender mailSender;
 
-    private static final String CONFIRM_REGISTER_MAIL_SUBJECT = "Confirm your email";
-    private static final String CONFIRM_REGISTER_MAIL_TEXT = "Hi %s, please visit the link below to confirm your email address and activate your account: \n%s";
-    private static final String CONFIRM_REGISTER_URL = "%s/confirm-registration?tokenValue=%s";
+    private static final String REGISTRATION_MAIL_SUBJECT = "Confirm your email";
+    private static final String REGISTRATION_MAIL_TEXT = "Hi %s, please visit the link below to confirm your email address and activate your account: \n%s";
+    private static final String REGISTRATION_LINK = "%s/confirm-registration?tokenValue=%s";
 
     private static final String USER_NOT_FOUND_MSG = "User with \"%s\" username, has not been found";
 
     @Override
-    public Optional<User> getUserById(long id) {
-        return userRepository.findById(id);
+    public User getUserById(long id) {
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
     @Override
-    public Optional<User> getUserByUsername(String username) {
-        return userRepository.findUserByUsername(username);
+    public User getUserByUsername(String username) {
+        return userRepository.findUserByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
     }
 
     @Override
@@ -71,8 +70,8 @@ class UserServiceImpl implements UserService {
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(dto.email());
-        message.setSubject(CONFIRM_REGISTER_MAIL_SUBJECT);
-        message.setText(String.format(CONFIRM_REGISTER_MAIL_TEXT, dto.name(), String.format(CONFIRM_REGISTER_URL, rootUrl, token.getValue())));
+        message.setSubject(REGISTRATION_MAIL_SUBJECT);
+        message.setText(String.format(REGISTRATION_MAIL_TEXT, dto.name(), String.format(REGISTRATION_LINK, rootUrl, token.getValue())));
 
         mailSender.send(message);
 

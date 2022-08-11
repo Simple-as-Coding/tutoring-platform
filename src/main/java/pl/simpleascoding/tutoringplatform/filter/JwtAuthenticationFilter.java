@@ -10,7 +10,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import pl.simpleascoding.tutoringplatform.common.SecurityFinals;
 import pl.simpleascoding.tutoringplatform.exception.InvalidTokenException;
 import pl.simpleascoding.tutoringplatform.service.jwt.JwtService;
-import pl.simpleascoding.tutoringplatform.service.user.UserFacade;
+import pl.simpleascoding.tutoringplatform.service.user.UserService;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -27,7 +27,7 @@ import static pl.simpleascoding.tutoringplatform.common.SecurityFinals.*;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-    private final UserFacade userFacade;
+    private final UserService userService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -44,7 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (!SecurityFinals.ACCESS.equals(jwt.getClaim(TYPE).asString()))
                 throw new InvalidTokenException();
 
-            UserDetails userDetails = userFacade.loadUserByUsername(jwt.getSubject());
+            UserDetails userDetails = userService.loadUserByUsername(jwt.getSubject());
 
             SecurityContextHolder.getContext()
                     .setAuthentication(new UsernamePasswordAuthenticationToken(jwt.getSubject(), null, userDetails.getAuthorities()));

@@ -2,6 +2,7 @@ package pl.simpleascoding.tutoringplatform.service.token;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Primary;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import pl.simpleascoding.tutoringplatform.domain.token.Token;
@@ -15,9 +16,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Primary
 @RequiredArgsConstructor
 @Slf4j
-public class ExpiredTokensCleanerServiceImpl implements ExpiredTokensCleanerService {
+class ExpiredTokensCleanerServiceImpl implements ExpiredTokensCleanerService {
 
     private final TokenRepository tokenRepository;
     private final UserRepository userRepository;

@@ -1,6 +1,7 @@
 package pl.simpleascoding.tutoringplatform.service.review;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -13,13 +14,13 @@ import pl.simpleascoding.tutoringplatform.dto.ReviewDTO;
 import pl.simpleascoding.tutoringplatform.dto.UpdateReviewDTO;
 import pl.simpleascoding.tutoringplatform.exception.ReviewNotFoundException;
 import pl.simpleascoding.tutoringplatform.exception.UserNotFoundException;
-import pl.simpleascoding.tutoringplatform.mapper.ReviewModelMapper;
 import pl.simpleascoding.tutoringplatform.repository.ReviewRepository;
 import pl.simpleascoding.tutoringplatform.service.user.UserService;
 
 @Service
+@Primary
 @RequiredArgsConstructor
-public class ReviewServiceImpl implements ReviewService {
+class ReviewServiceImpl implements ReviewService {
 
     private final UserService userService;
     private final ReviewRepository reviewRepository;

@@ -10,7 +10,7 @@ import pl.simpleascoding.tutoringplatform.dto.ChangeUserPasswordDTO;
 import pl.simpleascoding.tutoringplatform.dto.CreateUserDTO;
 import pl.simpleascoding.tutoringplatform.dto.ReviewDTO;
 import pl.simpleascoding.tutoringplatform.service.review.ReviewService;
-import pl.simpleascoding.tutoringplatform.service.user.UserFacade;
+import pl.simpleascoding.tutoringplatform.service.user.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -20,23 +20,23 @@ import java.security.Principal;
 @RequiredArgsConstructor
 class UserController {
 
-    private final UserFacade userFacade;
+    private final UserService userService;
     private final ReviewService reviewService;
 
     @PostMapping
     ResponseEntity<String> createUser(@RequestBody CreateUserDTO dto, HttpServletRequest request) {
-        return new ResponseEntity<>(userFacade.createUser(dto, request.getRequestURL().toString()), HttpStatus.OK);
+        return new ResponseEntity<>(userService.createUser(dto, request.getRequestURL().toString()), HttpStatus.OK);
     }
 
     @GetMapping("/confirm-registration")
     ResponseEntity<String> confirmRegistration(@RequestParam String tokenValue) {
-        return new ResponseEntity<>(userFacade.confirmUserRegistration(tokenValue), HttpStatus.OK);
+        return new ResponseEntity<>(userService.confirmUserRegistration(tokenValue), HttpStatus.OK);
     }
 
     @PostMapping("/change-password")
     ResponseEntity<String> changeUserPassword(@RequestBody ChangeUserPasswordDTO dto, Principal principal) {
 
-        return new ResponseEntity<>(userFacade.changeUserPassword(dto, principal.getName()), HttpStatus.OK);
+        return new ResponseEntity<>(userService.changeUserPassword(dto, principal.getName()), HttpStatus.OK);
 
     }
 

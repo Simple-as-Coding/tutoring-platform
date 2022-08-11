@@ -31,7 +31,7 @@ public class User implements UserDetails {
     private boolean enabled = false;
     private boolean locked = false;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    @OneToMany(cascade = {CascadeType.ALL}, orphanRemoval = true)
     @JoinColumn(name = "user_id")
     private List<Role> roles = new ArrayList<>();
 
@@ -74,5 +74,7 @@ public class User implements UserDetails {
     public boolean isCredentialsNonExpired() {
         return true;
     }
+
+
 
 }

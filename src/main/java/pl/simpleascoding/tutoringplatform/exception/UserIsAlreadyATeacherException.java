@@ -5,7 +5,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.CONFLICT)
 public class UserIsAlreadyATeacherException extends IllegalArgumentException {
+
+    private static final String MESSAGE_USER_ALREADY_A_TEACHER = "User is already a teacher";
+
     public UserIsAlreadyATeacherException() {
-        super("This is already a teacher");
+        super(MESSAGE_USER_ALREADY_A_TEACHER);
     }
 }

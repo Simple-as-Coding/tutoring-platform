@@ -6,9 +6,10 @@ import pl.simpleascoding.tutoringplatform.domain.user.Role;
 import pl.simpleascoding.tutoringplatform.domain.user.RoleType;
 import pl.simpleascoding.tutoringplatform.domain.user.User;
 import pl.simpleascoding.tutoringplatform.dto.SignAsTeacherDTO;
-import pl.simpleascoding.tutoringplatform.dto.TeacherDTO;
+import pl.simpleascoding.tutoringplatform.dto.UserDTO;
 import pl.simpleascoding.tutoringplatform.exception.UserIsAlreadyATeacherException;
 import pl.simpleascoding.tutoringplatform.repository.RoleRepository;
+import pl.simpleascoding.tutoringplatform.service.user.UserModelMapper;
 import pl.simpleascoding.tutoringplatform.service.user.UserService;
 
 import javax.transaction.Transactional;
@@ -21,6 +22,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     private final RoleRepository roleRepository;
     private final UserService userService;
+    private final UserModelMapper userModelMapper;
 
     @Override
     @Transactional
@@ -31,13 +33,9 @@ public class TeacherServiceImpl implements TeacherService {
         addRoleToEntity(user, roleTeacher);
     }
 
-    private void addRoleToEntity(User user, Role roleTeacher) {
-        user.getRoles().add(roleTeacher);
-    }
-
     @Override
-    public List<TeacherDTO> findAllTeachers() {
-        List<TeacherDTO> teacherDTOList = new ArrayList<>();
+    public List<UserDTO> findAllTeachers() {
+        List<UserDTO> teacherDTOList = new ArrayList<>();
         completeTeacherDtoListWithDtoObjects(teacherDTOList);
 
         return teacherDTOList;
@@ -49,10 +47,14 @@ public class TeacherServiceImpl implements TeacherService {
         }
     }
 
-    private void completeTeacherDtoListWithDtoObjects(List<TeacherDTO> teacherDTOList) {
-        for (Role teacherRole : roleRepository.findRoleByRoleType(RoleType.TEACHER)) {
+    private void addRoleToEntity(User user, Role roleTeacher) {
+        user.getRoles().add(roleTeacher);
+    }
+
+    private void completeTeacherDtoListWithDtoObjects(List<UserDTO> teacherDTOList) {
+        for (Role teacherRole : roleRepository.findRolesByRoleType(RoleType.TEACHER)) {
             User teacher = teacherRole.getUser();
-            teacherDTOList.add(new TeacherDTO(teacher.getName(), teacher.getSurname(), teacher.getEmail()));
+            teacherDTOList.add(userModelMapper.mapUserEntityToUserDTO(teacher));
         }
     }
 

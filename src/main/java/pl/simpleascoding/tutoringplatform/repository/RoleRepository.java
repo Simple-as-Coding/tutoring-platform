@@ -7,5 +7,5 @@ import pl.simpleascoding.tutoringplatform.domain.user.RoleType;
 import java.util.List;
 
 public interface RoleRepository extends JpaRepository<Role, Long> {
-    List<Role> findRoleByRoleType(RoleType roleType);
+    List<Role> findRolesByRoleType(RoleType roleType);
 }

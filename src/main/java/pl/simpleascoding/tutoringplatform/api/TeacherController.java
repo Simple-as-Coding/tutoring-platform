@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.simpleascoding.tutoringplatform.dto.SignAsTeacherDTO;
-import pl.simpleascoding.tutoringplatform.dto.TeacherDTO;
+import pl.simpleascoding.tutoringplatform.dto.UserDTO;
 import pl.simpleascoding.tutoringplatform.service.teacher.TeacherService;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public class TeacherController {
     private final TeacherService teacherService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<TeacherDTO>> findAllTeachers() {
+    public ResponseEntity<List<UserDTO>> findAllTeachers() {
         return new ResponseEntity<>(teacherService.findAllTeachers(), HttpStatus.OK);
     }
 

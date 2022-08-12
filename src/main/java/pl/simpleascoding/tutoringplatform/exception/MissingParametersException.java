@@ -5,8 +5,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class MissingParametersException extends IllegalArgumentException {
+    private static final String MESSAGE_MISSING_PARAMETERS = "Missing parameters";
+
     public MissingParametersException() {
-        super("Missing parameters");
+        super(MESSAGE_MISSING_PARAMETERS);
     }
 
 }

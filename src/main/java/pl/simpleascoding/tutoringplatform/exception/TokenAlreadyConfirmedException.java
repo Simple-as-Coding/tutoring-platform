@@ -5,7 +5,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.CONFLICT)
 public class TokenAlreadyConfirmedException extends IllegalArgumentException {
+    private static final String MESSAGE_TOKEN_ALREADY_CONFIRMED = "Token already confirmed";
+
     public TokenAlreadyConfirmedException() {
-        super("Token already confirmed");
+        super(MESSAGE_TOKEN_ALREADY_CONFIRMED);
     }
 }

@@ -5,7 +5,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.CONFLICT)
 public class UserAlreadyEnabledException extends IllegalArgumentException {
+    private static final String MESSAGE_USER_IS_ALREADY_ENABLED = "User %s is already enabled";
+
     public UserAlreadyEnabledException(String username) {
-        super("User \"" + username + "\" is already enabled");
+        super(String.format(MESSAGE_USER_IS_ALREADY_ENABLED, username));
     }
 }

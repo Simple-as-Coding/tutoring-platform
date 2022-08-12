@@ -29,8 +29,11 @@ public class TeacherServiceImpl implements TeacherService {
     public void addTeacherRoleToUser(SignAsTeacherDTO requestDTO) {
         User user = userService.getUserByUsername(requestDTO.username());
         Role roleTeacher = createTeacherRoleEntity();
-        isUserAlreadyTeacher(user, roleTeacher);
-        addRoleToEntity(user, roleTeacher);
+        if (!isUserAlreadyTeacher(user, roleTeacher)) {
+            addRoleToEntity(user, roleTeacher);
+        } else {
+            throw new UserIsAlreadyATeacherException();
+        }
     }
 
     @Override
@@ -41,10 +44,8 @@ public class TeacherServiceImpl implements TeacherService {
         return teacherDTOList;
     }
 
-    private void isUserAlreadyTeacher(User user, Role roleTeacher) {
-        if (user.getRoles().contains(roleTeacher)) {
-            throw new UserIsAlreadyATeacherException();
-        }
+    private boolean isUserAlreadyTeacher(User user, Role roleTeacher) {
+        return user.getRoles().contains(roleTeacher);
     }
 
     private void addRoleToEntity(User user, Role roleTeacher) {

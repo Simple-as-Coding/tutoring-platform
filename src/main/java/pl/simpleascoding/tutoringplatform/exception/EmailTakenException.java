@@ -5,7 +5,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.CONFLICT)
 public class EmailTakenException extends IllegalArgumentException {
+    private static final String MESSAGE_EMAIL_IS_ALREADY_IN_USE = "Email %s is already in use";
+
     public EmailTakenException(String email) {
-        super("Email \"" + email + "\" is already in use");
+        super(String.format(MESSAGE_EMAIL_IS_ALREADY_IN_USE, email));
     }
 }

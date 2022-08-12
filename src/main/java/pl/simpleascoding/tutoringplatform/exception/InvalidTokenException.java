@@ -5,8 +5,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.UNAUTHORIZED)
 public class InvalidTokenException extends IllegalArgumentException {
+    private static final String MESSAGE_INVALID_TOKEN = "Invalid token";
+
     public InvalidTokenException() {
-        super("Invalid token");
+        super(MESSAGE_INVALID_TOKEN);
     }
 
 }

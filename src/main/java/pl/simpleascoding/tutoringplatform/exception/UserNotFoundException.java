@@ -1,6 +1,10 @@
 package pl.simpleascoding.tutoringplatform.exception;
 
-public class UserNotFoundException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.NOT_FOUND)
+public class UserNotFoundException extends IllegalArgumentException {
     private static final String MESSAGE_USER_WITH_ID_NOT_FOUND = "User with id %d not found";
     private static final String MESSAGE_USER_WITH_USERNAME_NOT_FOUND = "User %s not found";
 

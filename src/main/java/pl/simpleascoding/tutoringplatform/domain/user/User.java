@@ -9,9 +9,7 @@ import pl.simpleascoding.tutoringplatform.domain.review.Review;
 import pl.simpleascoding.tutoringplatform.domain.token.Token;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Data
 @Entity
@@ -32,7 +30,8 @@ public class User implements UserDetails {
     private boolean locked = false;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    private List<RoleType> roles = new ArrayList<>();
+    @Enumerated(EnumType.STRING)
+    private Set<RoleType> roles = new HashSet<>();
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "user_id")

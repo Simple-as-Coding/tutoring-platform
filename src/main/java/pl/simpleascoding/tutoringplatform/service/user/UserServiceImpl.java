@@ -120,7 +120,7 @@ class UserServiceImpl implements UserService {
 
         if (isChangeAllowed(userEntity.getPassword(), newPasswordsData)) {
 
-            Token token = new Token(TokenType.CONFIRMATION);
+            Token token = new Token(TokenType.CHANGE_EMAIL_CONFIRMATION);
             String password = newPasswordsData.newPassword();
             token.setData(passwordEncoder.encode(password));
             userEntity.getTokens().add(token);
@@ -143,7 +143,7 @@ class UserServiceImpl implements UserService {
     public String confirmChangeUserPassword(String tokenValue) {
         Token token = tokenRepository.findTokenByValue(tokenValue).orElseThrow(TokenNotFoundException::new);
 
-        if (token.getType() != TokenType.CONFIRMATION) {
+        if (token.getType() != TokenType.CHANGE_EMAIL_CONFIRMATION) {
             throw new InvalidTokenException();
         }
 

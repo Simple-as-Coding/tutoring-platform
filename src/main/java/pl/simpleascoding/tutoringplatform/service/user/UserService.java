@@ -16,7 +16,9 @@ public interface UserService extends UserDetailsService {
 
     String confirmUserRegistration(String token);
 
-    String changeUserPassword(ChangeUserPasswordDTO dto, String username);
+    String changeUserPassword(ChangeUserPasswordDTO dto, String username, String rootUrl);
+
+    String confirmChangeUserPassword(String token);
 
     boolean checkUserExists(long id);
 

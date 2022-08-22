@@ -30,9 +30,9 @@ class UserServiceImpl implements UserService {
     private static final String REGISTRATION_MAIL_TEXT = "Hi %s, please visit the link below to confirm your email address and activate your account: \n%s";
     private static final String REGISTRATION_LINK = "%s/confirm-registration?tokenValue=%s";
     private static final String USER_NOT_FOUND_MSG = "User with \"%s\" username, has not been found";
-    private static final String CONFIRMATION_MAIL_SUBJECT = "Confirm your password change";
-    private static final String CONFIRMATION_MAIL_TEXT = "Hi %s, please visit the link below to confirm your password change: \n%s";
-    private static final String CONFIRMATION_LINK = "%s/confirm-change-password?tokenValue=%s";
+    private static final String PASSWORD_CHANGE_CONFIRMATION_MAIL_SUBJECT = "Confirm your password change";
+    private static final String PASSWORD_CHANGE_CONFIRMATION_MAIL_TEXT = "Hi %s, please visit the link below to confirm your password change: \n%s";
+    private static final String PASSWORD_CHANGE_CONFIRMATION_LINK = "%s/confirm-change-password?tokenValue=%s";
 
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
@@ -127,8 +127,8 @@ class UserServiceImpl implements UserService {
 
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(userEntity.getEmail());
-            message.setSubject(CONFIRMATION_MAIL_SUBJECT);
-            message.setText(String.format(CONFIRMATION_MAIL_TEXT, userEntity.getName(), String.format(CONFIRMATION_LINK, rootUrl, token.getValue())));
+            message.setSubject(PASSWORD_CHANGE_CONFIRMATION_MAIL_SUBJECT);
+            message.setText(String.format(PASSWORD_CHANGE_CONFIRMATION_MAIL_TEXT, userEntity.getName(), String.format(PASSWORD_CHANGE_CONFIRMATION_LINK, rootUrl, token.getValue())));
 
             mailSender.send(message);
 

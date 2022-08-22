@@ -64,7 +64,7 @@ class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.getRoles().add(new Role(RoleType.USER));
 
-        Token token = new Token(TokenType.REGISTER);
+        Token token = new Token(TokenType.REGISTER_CONFIRMATION);
         user.getTokens().add(token);
 
         userRepository.save(user);
@@ -84,7 +84,7 @@ class UserServiceImpl implements UserService {
     public String confirmUserRegistration(String tokenValue) {
         Token token = tokenRepository.findTokenByValue(tokenValue).orElseThrow(TokenNotFoundException::new);
 
-        if (token.getType() != TokenType.REGISTER) {
+        if (token.getType() != TokenType.REGISTER_CONFIRMATION) {
             throw new InvalidTokenException();
         }
 

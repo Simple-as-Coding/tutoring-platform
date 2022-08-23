@@ -39,7 +39,7 @@ class UserController {
     }
 
     @PatchMapping
-    ResponseEntity<String> modifyUser(@RequestBody ModifyUserDTO dto, Principal principal){
+    ResponseEntity<RscpDTO<UserDTO>> modifyUser(@RequestBody ModifyUserDTO dto, Principal principal){
         return new ResponseEntity<>(userService.modifyUser(dto, principal.getName()), HttpStatus.OK);
     }
 

@@ -15,13 +15,11 @@ import pl.simpleascoding.tutoringplatform.domain.token.TokenType;
 import pl.simpleascoding.tutoringplatform.domain.user.Role;
 import pl.simpleascoding.tutoringplatform.domain.user.RoleType;
 import pl.simpleascoding.tutoringplatform.domain.user.User;
-import pl.simpleascoding.tutoringplatform.dto.ChangeUserPasswordDTO;
-import pl.simpleascoding.tutoringplatform.dto.CreateUserDTO;
-import pl.simpleascoding.tutoringplatform.dto.ModifyUserDTO;
-import pl.simpleascoding.tutoringplatform.dto.UserDTO;
+import pl.simpleascoding.tutoringplatform.dto.*;
 import pl.simpleascoding.tutoringplatform.exception.*;
 import pl.simpleascoding.tutoringplatform.repository.TokenRepository;
 import pl.simpleascoding.tutoringplatform.repository.UserRepository;
+import pl.simpleascoding.tutoringplatform.rscp.RscpStatus;
 
 @Service
 @Primary
@@ -34,6 +32,8 @@ class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     private final JavaMailSender mailSender;
+
+    private final UserModelMapper userModelMapper;
 
     private static final String REGISTRATION_MAIL_SUBJECT = "Confirm your email";
     private static final String REGISTRATION_MAIL_TEXT = "Hi %s, please visit the link below to confirm your email address and activate your account: \n%s";
@@ -130,7 +130,7 @@ class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public String modifyUser(ModifyUserDTO dto, String username) {
+    public RscpDTO<UserDTO> modifyUser(ModifyUserDTO dto, String username) {
         User userEntity = getUserByUsername(username);
         if(dto.name() != null && !dto.name().isEmpty()){
             userEntity.setName(dto.name());
@@ -138,7 +138,7 @@ class UserServiceImpl implements UserService {
         if(dto.surname() != null && !dto.surname().isEmpty()){
             userEntity.setSurname(dto.surname());
         }
-        return HttpStatus.OK.getReasonPhrase();
+        return new RscpDTO<>(RscpStatus.OK, "User modify successful", userModelMapper.mapUserEntityToUserDTO(userEntity));
     }
 
     @Override

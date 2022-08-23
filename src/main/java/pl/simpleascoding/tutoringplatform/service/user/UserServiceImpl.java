@@ -138,7 +138,7 @@ class UserServiceImpl implements UserService {
         if(dto.surname() != null && !dto.surname().isEmpty()){
             userEntity.setSurname(dto.surname());
         }
-        return new RscpDTO<>(RscpStatus.OK, "User modify successful", userModelMapper.mapUserEntityToUserDTO(userEntity));
+        return new RscpDTO<>(RscpStatus.OK, "User modification completed successfully.", userModelMapper.mapUserEntityToUserDTO(userEntity));
     }
 
     @Override

@@ -17,6 +17,8 @@ import pl.simpleascoding.tutoringplatform.domain.user.RoleType;
 import pl.simpleascoding.tutoringplatform.domain.user.User;
 import pl.simpleascoding.tutoringplatform.dto.ChangeUserPasswordDTO;
 import pl.simpleascoding.tutoringplatform.dto.CreateUserDTO;
+import pl.simpleascoding.tutoringplatform.dto.ModifyUserDTO;
+import pl.simpleascoding.tutoringplatform.dto.UserDTO;
 import pl.simpleascoding.tutoringplatform.exception.*;
 import pl.simpleascoding.tutoringplatform.repository.TokenRepository;
 import pl.simpleascoding.tutoringplatform.repository.UserRepository;
@@ -27,6 +29,7 @@ import pl.simpleascoding.tutoringplatform.repository.UserRepository;
 class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -123,6 +126,19 @@ class UserServiceImpl implements UserService {
         } else {
             return HttpStatus.UNAUTHORIZED.getReasonPhrase();
         }
+    }
+
+    @Override
+    @Transactional
+    public String modifyUser(ModifyUserDTO dto, String username) {
+        User userEntity = getUserByUsername(username);
+        if(dto.name() != null && !dto.name().isEmpty()){
+            userEntity.setName(dto.name());
+        }
+        if(dto.surname() != null && !dto.surname().isEmpty()){
+            userEntity.setSurname(dto.surname());
+        }
+        return HttpStatus.OK.getReasonPhrase();
     }
 
     @Override

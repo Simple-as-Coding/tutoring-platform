@@ -4,6 +4,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import pl.simpleascoding.tutoringplatform.domain.user.User;
 import pl.simpleascoding.tutoringplatform.dto.ChangeUserPasswordDTO;
 import pl.simpleascoding.tutoringplatform.dto.CreateUserDTO;
+import pl.simpleascoding.tutoringplatform.dto.ModifyUserDTO;
+import pl.simpleascoding.tutoringplatform.dto.UserDTO;
 
 
 public interface UserService extends UserDetailsService {
@@ -18,6 +20,7 @@ public interface UserService extends UserDetailsService {
 
     String changeUserPassword(ChangeUserPasswordDTO dto, String username);
 
-    boolean checkUserExists(long id);
+    String modifyUser(ModifyUserDTO dto, String username);
 
+    boolean checkUserExists(long id);
 }

@@ -18,6 +18,7 @@ public class Token {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     private TokenType type;
 
     private String value = UUID.randomUUID().toString();

@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.simpleascoding.tutoringplatform.domain.token.Token;
 import pl.simpleascoding.tutoringplatform.domain.token.TokenType;
-import pl.simpleascoding.tutoringplatform.domain.user.Role;
 import pl.simpleascoding.tutoringplatform.domain.user.RoleType;
 import pl.simpleascoding.tutoringplatform.domain.user.User;
 import pl.simpleascoding.tutoringplatform.dto.*;
@@ -64,7 +63,7 @@ class UserServiceImpl implements UserService {
 
         User user = new User(dto.username(), dto.password(), dto.name(), dto.surname(), dto.email());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.getRoles().add(new Role(RoleType.USER));
+        user.getRoles().add(RoleType.USER);
 
         Token token = new Token(TokenType.REGISTER);
         user.getTokens().add(token);

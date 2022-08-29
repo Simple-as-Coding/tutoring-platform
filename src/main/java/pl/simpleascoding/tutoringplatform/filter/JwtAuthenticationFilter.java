@@ -50,6 +50,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     .setAuthentication(new UsernamePasswordAuthenticationToken(jwt.getSubject(), null, userDetails.getAuthorities()));
             filterChain.doFilter(request, response);
         } catch (RuntimeException ex) {
+            ex.printStackTrace();
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.getWriter().write(ex.getMessage());
         }

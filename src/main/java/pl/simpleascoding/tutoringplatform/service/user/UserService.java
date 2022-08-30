@@ -2,8 +2,7 @@ package pl.simpleascoding.tutoringplatform.service.user;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 import pl.simpleascoding.tutoringplatform.domain.user.User;
-import pl.simpleascoding.tutoringplatform.dto.ChangeUserPasswordDTO;
-import pl.simpleascoding.tutoringplatform.dto.CreateUserDTO;
+import pl.simpleascoding.tutoringplatform.dto.*;
 
 
 public interface UserService extends UserDetailsService {
@@ -20,6 +19,7 @@ public interface UserService extends UserDetailsService {
 
     String confirmChangeUserPassword(String token);
 
-    boolean checkUserExists(long id);
+    RscpDTO<UserDTO> modifyUser(ModifyUserDTO dto, String username);
 
+    boolean checkUserExists(long id);
 }

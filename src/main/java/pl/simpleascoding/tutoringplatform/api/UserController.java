@@ -6,9 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.simpleascoding.tutoringplatform.dto.ChangeUserPasswordDTO;
-import pl.simpleascoding.tutoringplatform.dto.CreateUserDTO;
-import pl.simpleascoding.tutoringplatform.dto.ReviewDTO;
+import pl.simpleascoding.tutoringplatform.dto.*;
 import pl.simpleascoding.tutoringplatform.service.review.ReviewService;
 import pl.simpleascoding.tutoringplatform.service.user.UserService;
 
@@ -43,6 +41,10 @@ class UserController {
         return new ResponseEntity<>(userService.confirmChangeUserPassword(tokenValue), HttpStatus.OK);
     }
 
+    @PatchMapping
+    ResponseEntity<RscpDTO<UserDTO>> modifyUser(@RequestBody ModifyUserDTO dto, Principal principal){
+        return new ResponseEntity<>(userService.modifyUser(dto, principal.getName()), HttpStatus.OK);
+    }
 
     @GetMapping("/{id}/reviews/received")
     ResponseEntity<Page<ReviewDTO>> getReceivedReviewsForUser(@PathVariable long id, Pageable pageable) {

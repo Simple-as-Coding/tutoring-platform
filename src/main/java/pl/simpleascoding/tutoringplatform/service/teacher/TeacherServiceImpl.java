@@ -1,26 +1,25 @@
 package pl.simpleascoding.tutoringplatform.service.teacher;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import pl.simpleascoding.tutoringplatform.domain.user.Role;
 import pl.simpleascoding.tutoringplatform.domain.user.RoleType;
 import pl.simpleascoding.tutoringplatform.domain.user.User;
 import pl.simpleascoding.tutoringplatform.dto.SignAsTeacherDTO;
 import pl.simpleascoding.tutoringplatform.dto.UserDTO;
 import pl.simpleascoding.tutoringplatform.exception.UserIsAlreadyATeacherException;
-import pl.simpleascoding.tutoringplatform.repository.RoleRepository;
+import pl.simpleascoding.tutoringplatform.repository.UserRepository;
 import pl.simpleascoding.tutoringplatform.service.user.UserModelMapper;
 import pl.simpleascoding.tutoringplatform.service.user.UserService;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class TeacherServiceImpl implements TeacherService {
 
-    private final RoleRepository roleRepository;
+    private final UserRepository userRepository;
     private final UserService userService;
     private final UserModelMapper userModelMapper;
 
@@ -28,38 +27,27 @@ public class TeacherServiceImpl implements TeacherService {
     @Transactional
     public void addTeacherRoleToUser(SignAsTeacherDTO requestDTO) {
         User user = userService.getUserByUsername(requestDTO.username());
-        Role roleTeacher = createTeacherRoleEntity();
-        if (!isUserAlreadyTeacher(user, roleTeacher)) {
-            addRoleToEntity(user, roleTeacher);
+        if (!isUserAlreadyTeacher(user)) {
+            addRoleToEntity(user, RoleType.TEACHER);
         } else {
             throw new UserIsAlreadyATeacherException();
         }
     }
 
     @Override
-    public List<UserDTO> findAllTeachers() {
-        List<UserDTO> teacherDTOList = new ArrayList<>();
-        completeTeacherDtoListWithDtoObjects(teacherDTOList);
-
-        return teacherDTOList;
+    public Page<UserDTO> findAllTeachers(Pageable pageable) {
+        return createTeacherDtoPage(pageable);
     }
 
-    private boolean isUserAlreadyTeacher(User user, Role roleTeacher) {
-        return user.getRoles().contains(roleTeacher);
+    private boolean isUserAlreadyTeacher(User user) {
+        return user.getRoles().contains(RoleType.TEACHER);
     }
 
-    private void addRoleToEntity(User user, Role roleTeacher) {
-        user.getRoles().add(roleTeacher);
+    private void addRoleToEntity(User user, RoleType roleType) {
+        user.getRoles().add(roleType);
     }
 
-    private void completeTeacherDtoListWithDtoObjects(List<UserDTO> teacherDTOList) {
-        for (Role teacherRole : roleRepository.findRolesByRoleType(RoleType.TEACHER)) {
-            User teacher = teacherRole.getUser();
-            teacherDTOList.add(userModelMapper.mapUserEntityToUserDTO(teacher));
-        }
-    }
-
-    private Role createTeacherRoleEntity() {
-        return new Role(RoleType.TEACHER);
+    private Page<UserDTO> createTeacherDtoPage(Pageable pageable) {
+        return userRepository.findUsersByRolesContaining(RoleType.TEACHER, pageable).map(userModelMapper::mapUserEntityToUserDTO);
     }
 }

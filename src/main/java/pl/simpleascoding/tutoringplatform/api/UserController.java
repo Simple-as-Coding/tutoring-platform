@@ -32,10 +32,13 @@ class UserController {
     }
 
     @PostMapping("/change-password")
-    ResponseEntity<String> changeUserPassword(@RequestBody ChangeUserPasswordDTO dto, Principal principal) {
+    ResponseEntity<String> changeUserPassword(@RequestBody ChangeUserPasswordDTO dto, Principal principal, HttpServletRequest request) {
+        return new ResponseEntity<>(userService.changeUserPassword(dto, principal.getName(), request.getRequestURL().toString()), HttpStatus.OK);
+    }
 
-        return new ResponseEntity<>(userService.changeUserPassword(dto, principal.getName()), HttpStatus.OK);
-
+    @GetMapping("/confirm-change-password")
+    ResponseEntity<String> confirmChangeUserPassword(@RequestParam String tokenValue) {
+        return new ResponseEntity<>(userService.confirmChangeUserPassword(tokenValue), HttpStatus.OK);
     }
 
     @PatchMapping

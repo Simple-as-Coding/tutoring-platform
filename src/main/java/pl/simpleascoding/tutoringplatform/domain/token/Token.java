@@ -23,6 +23,8 @@ public class Token {
 
     private String value = UUID.randomUUID().toString();
 
+    private String data;
+
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private User user;
 

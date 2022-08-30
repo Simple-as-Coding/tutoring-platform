@@ -30,7 +30,7 @@ class ExpiredTokensCleanerServiceImpl implements ExpiredTokensCleanerService {
         List<Token> expiredTokens = tokenRepository.findTokensByExpiresAtBefore(LocalDateTime.now());
         List<User> inactiveUsers = expiredTokens
                 .stream()
-                .filter(token -> TokenType.REGISTER.equals(token.getType()) && Optional.ofNullable(token.getConfirmedAt()).isEmpty())
+                .filter(token -> TokenType.REGISTER_CONFIRMATION.equals(token.getType()) && Optional.ofNullable(token.getConfirmedAt()).isEmpty())
                 .map(Token::getUser)
                 .toList();
 

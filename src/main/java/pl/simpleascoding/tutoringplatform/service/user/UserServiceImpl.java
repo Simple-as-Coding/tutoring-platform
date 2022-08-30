@@ -25,6 +25,7 @@ import pl.simpleascoding.tutoringplatform.rscp.RscpStatus;
 @RequiredArgsConstructor
 class UserServiceImpl implements UserService {
 
+
     private final UserRepository userRepository;
 
     private final TokenRepository tokenRepository;
@@ -34,11 +35,19 @@ class UserServiceImpl implements UserService {
 
     private final UserModelMapper userModelMapper;
 
+
     private static final String REGISTRATION_MAIL_SUBJECT = "Confirm your email";
     private static final String REGISTRATION_MAIL_TEXT = "Hi %s, please visit the link below to confirm your email address and activate your account: \n%s";
     private static final String REGISTRATION_LINK = "%s/confirm-registration?tokenValue=%s";
-
     private static final String USER_NOT_FOUND_MSG = "User with \"%s\" username, has not been found";
+    private static final String PASSWORD_CHANGE_CONFIRMATION_MAIL_SUBJECT = "Confirm your password change";
+    private static final String PASSWORD_CHANGE_CONFIRMATION_MAIL_TEXT = "Hi %s, please visit the link below to confirm your password change: \n%s";
+    private static final String PASSWORD_CHANGE_CONFIRMATION_LINK = "%s/confirm-change-password?tokenValue=%s";
+
+    private final UserRepository userRepository;
+    private final TokenRepository tokenRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JavaMailSender mailSender;
 
     @Override
     public User getUserById(long id) {
@@ -65,7 +74,7 @@ class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.getRoles().add(RoleType.USER);
 
-        Token token = new Token(TokenType.REGISTER);
+        Token token = new Token(TokenType.REGISTER_CONFIRMATION);
         user.getTokens().add(token);
 
         userRepository.save(user);
@@ -85,7 +94,7 @@ class UserServiceImpl implements UserService {
     public String confirmUserRegistration(String tokenValue) {
         Token token = tokenRepository.findTokenByValue(tokenValue).orElseThrow(TokenNotFoundException::new);
 
-        if (token.getType() != TokenType.REGISTER) {
+        if (token.getType() != TokenType.REGISTER_CONFIRMATION) {
             throw new InvalidTokenException();
         }
 
@@ -112,14 +121,26 @@ class UserServiceImpl implements UserService {
      * @param username         Username of the user
      * @return The status of the operation
      */
+
     @Override
     @Transactional
-    public String changeUserPassword(ChangeUserPasswordDTO newPasswordsData, String username) {
+    public String changeUserPassword(ChangeUserPasswordDTO newPasswordsData, String username, String rootUrl) {
         User userEntity = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
 
         if (isChangeAllowed(userEntity.getPassword(), newPasswordsData)) {
-            userEntity.setPassword(passwordEncoder.encode(newPasswordsData.newPassword()));
+
+            Token token = new Token(TokenType.CHANGE_PASSWORD_CONFIRMATION);
+            String password = newPasswordsData.newPassword();
+            token.setData(passwordEncoder.encode(password));
+            userEntity.getTokens().add(token);
+
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(userEntity.getEmail());
+            message.setSubject(PASSWORD_CHANGE_CONFIRMATION_MAIL_SUBJECT);
+            message.setText(String.format(PASSWORD_CHANGE_CONFIRMATION_MAIL_TEXT, userEntity.getName(), String.format(PASSWORD_CHANGE_CONFIRMATION_LINK, rootUrl, token.getValue())));
+
+            mailSender.send(message);
 
             return HttpStatus.OK.getReasonPhrase();
         } else {
@@ -129,14 +150,34 @@ class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    public String confirmChangeUserPassword(String tokenValue) {
+        Token token = tokenRepository.findTokenByValue(tokenValue).orElseThrow(TokenNotFoundException::new);
+
+        if (token.getType() != TokenType.CHANGE_PASSWORD_CONFIRMATION) {
+            throw new InvalidTokenException();
+        }
+
+        if (token.getConfirmedAt() != null) {
+            throw new TokenAlreadyConfirmedException();
+        }
+        String password = token.getData();
+        token.getUser().setPassword(password);
+
+        token.confirm();
+
+        return HttpStatus.OK.getReasonPhrase();
+    }
+
     public RscpDTO<UserDTO> modifyUser(ModifyUserDTO dto, String username) {
         User userEntity = getUserByUsername(username);
+
         if(dto.name() != null && !dto.name().isEmpty()){
             userEntity.setName(dto.name());
         }
         if(dto.surname() != null && !dto.surname().isEmpty()){
             userEntity.setSurname(dto.surname());
         }
+
         return new RscpDTO<>(RscpStatus.OK, "User modification completed successfully.", userModelMapper.mapUserEntityToUserDTO(userEntity));
     }
 

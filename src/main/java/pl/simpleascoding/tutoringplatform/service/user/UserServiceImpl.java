@@ -27,12 +27,9 @@ class UserServiceImpl implements UserService {
 
 
     private final UserRepository userRepository;
-
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
-
     private final JavaMailSender mailSender;
-
     private final UserModelMapper userModelMapper;
 
 
@@ -44,10 +41,6 @@ class UserServiceImpl implements UserService {
     private static final String PASSWORD_CHANGE_CONFIRMATION_MAIL_TEXT = "Hi %s, please visit the link below to confirm your password change: \n%s";
     private static final String PASSWORD_CHANGE_CONFIRMATION_LINK = "%s/confirm-change-password?tokenValue=%s";
 
-    private final UserRepository userRepository;
-    private final TokenRepository tokenRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JavaMailSender mailSender;
 
     @Override
     public User getUserById(long id) {

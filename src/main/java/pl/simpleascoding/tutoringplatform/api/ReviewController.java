@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.simpleascoding.tutoringplatform.dto.CreateReviewDTO;
+import pl.simpleascoding.tutoringplatform.dto.ReviewDTO;
+import pl.simpleascoding.tutoringplatform.dto.RscpDTO;
 import pl.simpleascoding.tutoringplatform.dto.UpdateReviewDTO;
 import pl.simpleascoding.tutoringplatform.service.review.ReviewService;
 
@@ -24,12 +26,12 @@ public class ReviewController {
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<String> updateReview(@RequestBody @Valid UpdateReviewDTO dto, @PathVariable long id, Principal principal){
+    ResponseEntity<RscpDTO<ReviewDTO>> updateReview(@RequestBody @Valid UpdateReviewDTO dto, @PathVariable long id, Principal principal){
         return new ResponseEntity<>(reviewService.updateReview(dto, principal.getName(), id), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<String> deleteReview(@PathVariable long id, Principal principal){
+    ResponseEntity<RscpDTO<?>> deleteReview(@PathVariable long id, Principal principal){
         return new ResponseEntity<>(reviewService.deleteReview(principal.getName(), id), HttpStatus.OK);
     }
 

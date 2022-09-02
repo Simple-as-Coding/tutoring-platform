@@ -22,22 +22,22 @@ class UserController {
     private final ReviewService reviewService;
 
     @PostMapping
-    ResponseEntity<String> createUser(@RequestBody CreateUserDTO dto, HttpServletRequest request) {
+    ResponseEntity<RscpDTO<?>> createUser(@RequestBody CreateUserDTO dto, HttpServletRequest request) {
         return new ResponseEntity<>(userService.createUser(dto, request.getRequestURL().toString()), HttpStatus.OK);
     }
 
     @GetMapping("/confirm-registration")
-    ResponseEntity<String> confirmRegistration(@RequestParam String tokenValue) {
+    ResponseEntity<RscpDTO<?>> confirmRegistration(@RequestParam String tokenValue) {
         return new ResponseEntity<>(userService.confirmUserRegistration(tokenValue), HttpStatus.OK);
     }
 
     @PostMapping("/change-password")
-    ResponseEntity<String> changeUserPassword(@RequestBody ChangeUserPasswordDTO dto, Principal principal, HttpServletRequest request) {
+    ResponseEntity<RscpDTO<?>> changeUserPassword(@RequestBody ChangeUserPasswordDTO dto, Principal principal, HttpServletRequest request) {
         return new ResponseEntity<>(userService.changeUserPassword(dto, principal.getName(), request.getRequestURL().toString()), HttpStatus.OK);
     }
 
     @GetMapping("/confirm-change-password")
-    ResponseEntity<String> confirmChangeUserPassword(@RequestParam String tokenValue) {
+    ResponseEntity<RscpDTO<?>> confirmChangeUserPassword(@RequestParam String tokenValue) {
         return new ResponseEntity<>(userService.confirmChangeUserPassword(tokenValue), HttpStatus.OK);
     }
 

@@ -3,6 +3,7 @@ package pl.simpleascoding.tutoringplatform.service.review;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import pl.simpleascoding.tutoringplatform.dto.CreateReviewDTO;
+import pl.simpleascoding.tutoringplatform.dto.RscpDTO;
 import pl.simpleascoding.tutoringplatform.dto.UpdateReviewDTO;
 import pl.simpleascoding.tutoringplatform.dto.ReviewDTO;
 
@@ -14,7 +15,7 @@ public interface ReviewService {
 
     Page<ReviewDTO> getPostedReviewsForUser(long id, Pageable pageable);
 
-    String updateReview(UpdateReviewDTO dto, String username, long reviewId);
+    RscpDTO<ReviewDTO> updateReview(UpdateReviewDTO dto, String username, long reviewId);
 
-    String deleteReview(String username, long reviewId);
+    RscpDTO<?> deleteReview(String username, long reviewId);
 }

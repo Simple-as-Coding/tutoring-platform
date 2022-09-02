@@ -11,10 +11,12 @@ import pl.simpleascoding.tutoringplatform.domain.review.Review;
 import pl.simpleascoding.tutoringplatform.domain.user.User;
 import pl.simpleascoding.tutoringplatform.dto.CreateReviewDTO;
 import pl.simpleascoding.tutoringplatform.dto.ReviewDTO;
+import pl.simpleascoding.tutoringplatform.dto.RscpDTO;
 import pl.simpleascoding.tutoringplatform.dto.UpdateReviewDTO;
 import pl.simpleascoding.tutoringplatform.exception.ReviewNotFoundException;
 import pl.simpleascoding.tutoringplatform.exception.UserNotFoundException;
 import pl.simpleascoding.tutoringplatform.repository.ReviewRepository;
+import pl.simpleascoding.tutoringplatform.rscp.RscpStatus;
 import pl.simpleascoding.tutoringplatform.service.user.UserService;
 
 @Service
@@ -62,32 +64,34 @@ class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional
-    public String updateReview(UpdateReviewDTO dto, String username, long reviewId) {
+    public RscpDTO<ReviewDTO> updateReview(UpdateReviewDTO dto, String username, long reviewId) {
         User author = userService.getUserByUsername(username);
         Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new ReviewNotFoundException(reviewId));
 
         if (!review.getAuthor().equals(author)) {
-            return HttpStatus.UNAUTHORIZED.getReasonPhrase();
+            return new RscpDTO<>(RscpStatus.UNAUTHORIZED, null, null);
         }
 
         review.setStars(dto.stars());
         review.setContent(dto.content());
 
-        return HttpStatus.OK.getReasonPhrase();
+
+        return new RscpDTO<ReviewDTO>(RscpStatus.OK, "Review updated successfully",
+                reviewModelMapper.mapReviewToDto(review));
     }
 
     @Override
-    public String deleteReview(String username, long reviewId) {
+    public RscpDTO<?> deleteReview(String username, long reviewId) {
         User author = userService.getUserByUsername(username);
         Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new ReviewNotFoundException(reviewId));
 
         if (!review.getAuthor().equals(author)) {
-            return HttpStatus.UNAUTHORIZED.getReasonPhrase();
+            return new RscpDTO<>(RscpStatus.UNAUTHORIZED, null, null);
         }
 
         reviewRepository.delete(review);
 
-        return HttpStatus.OK.getReasonPhrase();
+        return new RscpDTO<>(RscpStatus.OK, "Review deleted successfully", null);
     }
 
 }

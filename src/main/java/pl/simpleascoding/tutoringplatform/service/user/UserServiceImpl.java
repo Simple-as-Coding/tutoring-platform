@@ -2,7 +2,6 @@ package pl.simpleascoding.tutoringplatform.service.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
-import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,13 +25,6 @@ import pl.simpleascoding.tutoringplatform.rscp.RscpStatus;
 class UserServiceImpl implements UserService {
 
 
-    private final UserRepository userRepository;
-    private final TokenRepository tokenRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JavaMailSender mailSender;
-    private final UserModelMapper userModelMapper;
-
-
     private static final String REGISTRATION_MAIL_SUBJECT = "Confirm your email";
     private static final String REGISTRATION_MAIL_TEXT = "Hi %s, please visit the link below to confirm your email address and activate your account: \n%s";
     private static final String REGISTRATION_LINK = "%s/confirm-registration?tokenValue=%s";
@@ -41,6 +33,12 @@ class UserServiceImpl implements UserService {
     private static final String PASSWORD_CHANGE_CONFIRMATION_MAIL_TEXT = "Hi %s, please visit the link below to confirm your password change: \n%s";
     private static final String PASSWORD_CHANGE_CONFIRMATION_LINK = "%s/confirm-change-password?tokenValue=%s";
 
+
+    private final UserRepository userRepository;
+    private final TokenRepository tokenRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JavaMailSender mailSender;
+    private final UserModelMapper userModelMapper;
 
     @Override
     public User getUserById(long id) {
@@ -54,7 +52,7 @@ class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public String createUser(CreateUserDTO dto, String rootUrl) {
+    public RscpDTO<?> createUser(CreateUserDTO dto, String rootUrl) {
         userRepository.findUserByUsername(dto.username()).ifPresent(user -> {
             throw new UsernameTakenException(dto.username());
         });
@@ -75,16 +73,18 @@ class UserServiceImpl implements UserService {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(dto.email());
         message.setSubject(REGISTRATION_MAIL_SUBJECT);
-        message.setText(String.format(REGISTRATION_MAIL_TEXT, dto.name(), String.format(REGISTRATION_LINK, rootUrl, token.getValue())));
+        message.setText(String.format(REGISTRATION_MAIL_TEXT, dto.name(),
+                String.format(REGISTRATION_LINK, rootUrl, token.getValue())));
 
         mailSender.send(message);
 
-        return HttpStatus.OK.getReasonPhrase();
+
+        return new RscpDTO<>(RscpStatus.OK, "User creation completed successfully", null);
     }
 
     @Override
     @Transactional
-    public String confirmUserRegistration(String tokenValue) {
+    public RscpDTO<?> confirmUserRegistration(String tokenValue) {
         Token token = tokenRepository.findTokenByValue(tokenValue).orElseThrow(TokenNotFoundException::new);
 
         if (token.getType() != TokenType.REGISTER_CONFIRMATION) {
@@ -102,7 +102,8 @@ class UserServiceImpl implements UserService {
         token.getUser().setEnabled(true);
         token.confirm();
 
-        return HttpStatus.OK.getReasonPhrase();
+
+        return new RscpDTO<>(RscpStatus.OK, "User registration confirmed.", null);
     }
 
     /**
@@ -117,7 +118,7 @@ class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public String changeUserPassword(ChangeUserPasswordDTO newPasswordsData, String username, String rootUrl) {
+    public RscpDTO<?> changeUserPassword(ChangeUserPasswordDTO newPasswordsData, String username, String rootUrl) {
         User userEntity = userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username));
 
@@ -131,19 +132,22 @@ class UserServiceImpl implements UserService {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(userEntity.getEmail());
             message.setSubject(PASSWORD_CHANGE_CONFIRMATION_MAIL_SUBJECT);
-            message.setText(String.format(PASSWORD_CHANGE_CONFIRMATION_MAIL_TEXT, userEntity.getName(), String.format(PASSWORD_CHANGE_CONFIRMATION_LINK, rootUrl, token.getValue())));
+            message.setText(String.format(PASSWORD_CHANGE_CONFIRMATION_MAIL_TEXT, userEntity.getName(),
+                    String.format(PASSWORD_CHANGE_CONFIRMATION_LINK, rootUrl, token.getValue())));
 
             mailSender.send(message);
 
-            return HttpStatus.OK.getReasonPhrase();
+
+            return new RscpDTO<>(RscpStatus.OK, "Email with confirmation was sent.", null);
         } else {
-            return HttpStatus.UNAUTHORIZED.getReasonPhrase();
+
+            return new RscpDTO<>(RscpStatus.UNAUTHORIZED, null, null);
         }
     }
 
     @Override
     @Transactional
-    public String confirmChangeUserPassword(String tokenValue) {
+    public RscpDTO<?> confirmChangeUserPassword(String tokenValue) {
         Token token = tokenRepository.findTokenByValue(tokenValue).orElseThrow(TokenNotFoundException::new);
 
         if (token.getType() != TokenType.CHANGE_PASSWORD_CONFIRMATION) {
@@ -158,16 +162,17 @@ class UserServiceImpl implements UserService {
 
         token.confirm();
 
-        return HttpStatus.OK.getReasonPhrase();
+
+        return new RscpDTO<>(RscpStatus.OK, "Password change completed successfully.", null);
     }
 
     public RscpDTO<UserDTO> modifyUser(ModifyUserDTO dto, String username) {
         User userEntity = getUserByUsername(username);
 
-        if(dto.name() != null && !dto.name().isEmpty()){
+        if (dto.name() != null && !dto.name().isEmpty()) {
             userEntity.setName(dto.name());
         }
-        if(dto.surname() != null && !dto.surname().isEmpty()){
+        if (dto.surname() != null && !dto.surname().isEmpty()) {
             userEntity.setSurname(dto.surname());
         }
 

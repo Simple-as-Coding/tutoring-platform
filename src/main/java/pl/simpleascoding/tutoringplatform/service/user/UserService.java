@@ -3,6 +3,7 @@ package pl.simpleascoding.tutoringplatform.service.user;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import pl.simpleascoding.tutoringplatform.domain.user.User;
 import pl.simpleascoding.tutoringplatform.dto.*;
+import pl.simpleascoding.tutoringplatform.rscp.RscpStatus;
 
 
 public interface UserService extends UserDetailsService {
@@ -11,13 +12,13 @@ public interface UserService extends UserDetailsService {
 
     User getUserByUsername(String username);
 
-    String createUser(CreateUserDTO dto, String rootUrl);
+    RscpDTO<?> createUser(CreateUserDTO dto, String rootUrl);
 
-    String confirmUserRegistration(String token);
+    RscpDTO<?> confirmUserRegistration(String token);
 
-    String changeUserPassword(ChangeUserPasswordDTO dto, String username, String rootUrl);
+    RscpDTO<?> changeUserPassword(ChangeUserPasswordDTO dto, String username, String rootUrl);
 
-    String confirmChangeUserPassword(String token);
+    RscpDTO<?> confirmChangeUserPassword(String token);
 
     RscpDTO<UserDTO> modifyUser(ModifyUserDTO dto, String username);
 

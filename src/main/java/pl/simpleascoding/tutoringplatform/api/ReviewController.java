@@ -1,6 +1,7 @@
 package pl.simpleascoding.tutoringplatform.api;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,13 +27,24 @@ public class ReviewController {
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<RscpDTO<ReviewDTO>> updateReview(@RequestBody @Valid UpdateReviewDTO dto, @PathVariable long id, Principal principal){
-        return new ResponseEntity<>(reviewService.updateReview(dto, principal.getName(), id), HttpStatus.OK);
+    ResponseEntity<ReviewDTO> updateReview(@RequestBody @Valid UpdateReviewDTO dto, @PathVariable long id,
+                                                    Principal principal){
+        RscpDTO<ReviewDTO> rscpDTO = reviewService.updateReview(dto, principal.getName(), id);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("message", rscpDTO.message());
+        HttpStatus httpStatus = HttpStatus.resolve(rscpDTO.status().value());
+
+        return new ResponseEntity<>(rscpDTO.body(), headers, httpStatus);
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<RscpDTO<?>> deleteReview(@PathVariable long id, Principal principal){
-        return new ResponseEntity<>(reviewService.deleteReview(principal.getName(), id), HttpStatus.OK);
+    ResponseEntity<?> deleteReview(@PathVariable long id, Principal principal){
+        RscpDTO<?> rscpDTO = reviewService.deleteReview(principal.getName(), id);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("message", rscpDTO.message());
+        HttpStatus httpStatus = HttpStatus.resolve(rscpDTO.status().value());
+
+        return new ResponseEntity<>(rscpDTO.body(), headers, httpStatus);
     }
 
 }

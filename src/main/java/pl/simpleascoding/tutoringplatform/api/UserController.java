@@ -29,7 +29,7 @@ class UserController {
         headers.add("message", rscpDTO.message());
         HttpStatus httpStatus = HttpStatus.resolve(rscpDTO.status().value());
 
-        return new ResponseEntity<>(rscpDTO.body(), headers, httpStatus);
+        return new ResponseEntity<>(headers, httpStatus);
     }
 
     @GetMapping("/confirm-registration")
@@ -39,18 +39,18 @@ class UserController {
         headers.add("message", rscpDTO.message());
         HttpStatus httpStatus = HttpStatus.resolve(rscpDTO.status().value());
 
-        return new ResponseEntity<>(rscpDTO.body(), headers, httpStatus);
+        return new ResponseEntity<>(headers, httpStatus);
     }
 
     @PostMapping("/change-password")
     ResponseEntity<?> changeUserPassword(@RequestBody ChangeUserPasswordDTO dto,
-                                                  Principal principal, HttpServletRequest request) {
+                                         Principal principal, HttpServletRequest request) {
         RscpDTO<?> rscpDTO = userService.changeUserPassword(dto, principal.getName(), request.getRequestURL().toString());
         HttpHeaders headers = new HttpHeaders();
         headers.add("message", rscpDTO.message());
         HttpStatus httpStatus = HttpStatus.resolve(rscpDTO.status().value());
 
-        return new ResponseEntity<>(rscpDTO.body(), headers, httpStatus);
+        return new ResponseEntity<>(headers, httpStatus);
     }
 
     @GetMapping("/confirm-change-password")
@@ -60,7 +60,7 @@ class UserController {
         headers.add("message", rscpDTO.message());
         HttpStatus httpStatus = HttpStatus.resolve(rscpDTO.status().value());
 
-        return new ResponseEntity<>(rscpDTO.body(), headers, httpStatus);
+        return new ResponseEntity<>(headers, httpStatus);
     }
 
     @PatchMapping
@@ -69,8 +69,9 @@ class UserController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("message", rscpDTO.message());
         HttpStatus httpStatus = HttpStatus.resolve(rscpDTO.status().value());
+        UserDTO body = rscpDTO.body();
 
-        return new ResponseEntity<>(rscpDTO.body(), headers, httpStatus);
+        return new ResponseEntity<>(body, headers, httpStatus);
     }
 
     @GetMapping("/{id}/reviews/received")

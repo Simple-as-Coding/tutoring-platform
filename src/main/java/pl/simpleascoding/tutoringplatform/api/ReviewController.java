@@ -33,8 +33,8 @@ public class ReviewController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("message", rscpDTO.message());
         HttpStatus httpStatus = HttpStatus.resolve(rscpDTO.status().value());
-
-        return new ResponseEntity<>(rscpDTO.body(), headers, httpStatus);
+        ReviewDTO body = rscpDTO.body();
+        return new ResponseEntity<>(body, headers, httpStatus);
     }
 
     @DeleteMapping("/{id}")
@@ -44,7 +44,7 @@ public class ReviewController {
         headers.add("message", rscpDTO.message());
         HttpStatus httpStatus = HttpStatus.resolve(rscpDTO.status().value());
 
-        return new ResponseEntity<>(rscpDTO.body(), headers, httpStatus);
+        return new ResponseEntity<>(headers, httpStatus);
     }
 
 }

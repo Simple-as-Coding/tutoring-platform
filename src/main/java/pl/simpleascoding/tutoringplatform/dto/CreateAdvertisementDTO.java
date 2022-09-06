@@ -1,5 +1,7 @@
 package pl.simpleascoding.tutoringplatform.dto;
 
-public record CreateAdvertisementDTO(String category, String author, String title, String description,
+import pl.simpleascoding.tutoringplatform.domain.advertisement.AdvertisementCategory;
+
+public record CreateAdvertisementDTO(AdvertisementCategory category, String author, String title, String description,
                                      int costPerHour) {
 }

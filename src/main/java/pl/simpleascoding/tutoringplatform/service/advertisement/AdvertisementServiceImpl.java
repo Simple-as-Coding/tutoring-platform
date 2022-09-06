@@ -28,7 +28,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
         isUserSignedAsTeacher(author);
         AdvertisementCategory category = getAdvertisementCategory(requestDTO);
         Advertisement advertisement = createAdvertisementEntity(requestDTO, author, category);
-        AdvertisementDTO advertisementDTO = new AdvertisementDTO(category.name(), author.getUsername(), requestDTO.title(), requestDTO.description(), requestDTO.costPerHour());
+        AdvertisementDTO advertisementDTO = advertisementModelMapper.mapAdvertisementEntityToAdvertisementDTO(advertisement);
         advertisementRepository.save(advertisement);
 
         return new RscpDTO<>(RscpStatus.CREATED, "Advertisement created", advertisementDTO);
@@ -45,7 +45,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     }
 
     private AdvertisementCategory getAdvertisementCategory(CreateAdvertisementDTO requestDTO) {
-        return AdvertisementCategory.valueOf(requestDTO.category().toUpperCase());
+        return requestDTO.category();
     }
 
     private User getAuthorEntity(CreateAdvertisementDTO requestDTO) {

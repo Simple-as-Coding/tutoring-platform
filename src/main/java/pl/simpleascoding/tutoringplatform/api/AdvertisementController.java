@@ -20,7 +20,8 @@ public class AdvertisementController {
     private final AdvertisementService advertisementService;
 
     @PostMapping("/add")
-    public ResponseEntity<RscpDTO<AdvertisementDTO>> createAdvertisement(@RequestBody CreateAdvertisementDTO requestDTO) {
-        return new ResponseEntity<>(advertisementService.createAdvertisement(requestDTO), HttpStatus.CREATED);
+    public ResponseEntity<AdvertisementDTO> createAdvertisement(@RequestBody CreateAdvertisementDTO requestDTO) {
+        RscpDTO<AdvertisementDTO> serviceResult = advertisementService.createAdvertisement(requestDTO);
+        return new ResponseEntity<>(serviceResult.body(), HttpStatus.resolve(serviceResult.status().value()));
     }
 }

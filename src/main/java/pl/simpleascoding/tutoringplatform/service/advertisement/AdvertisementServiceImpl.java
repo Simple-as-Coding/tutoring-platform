@@ -19,7 +19,9 @@ import pl.simpleascoding.tutoringplatform.service.user.UserService;
 public class AdvertisementServiceImpl implements AdvertisementService {
 
     private final AdvertisementRepository advertisementRepository;
+
     private final AdvertisementModelMapper advertisementModelMapper;
+
     private final UserService userService;
 
     @Override

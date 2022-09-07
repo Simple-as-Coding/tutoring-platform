@@ -7,6 +7,8 @@ import pl.simpleascoding.tutoringplatform.dto.AdvertisementDTO;
 
 @Mapper(componentModel = "spring")
 public interface AdvertisementModelMapper {
+
     @Mapping(source = "author.username", target = "authorUsername")
     AdvertisementDTO mapAdvertisementEntityToAdvertisementDTO(Advertisement entity);
+
 }

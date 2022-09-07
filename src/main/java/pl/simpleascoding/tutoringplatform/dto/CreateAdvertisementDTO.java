@@ -2,6 +2,11 @@ package pl.simpleascoding.tutoringplatform.dto;
 
 import pl.simpleascoding.tutoringplatform.domain.advertisement.AdvertisementCategory;
 
-public record CreateAdvertisementDTO(AdvertisementCategory category, String author, String title, String description,
-                                     int costPerHour) {
+import javax.validation.constraints.NotNull;
+
+public record CreateAdvertisementDTO(@NotNull(message = "Category could not be null") AdvertisementCategory category,
+                                     @NotNull(message = "Author could not be null") String author,
+                                     @NotNull(message = "Title could not be null") String title,
+                                     @NotNull(message = "Description could not be null") String description,
+                                     @NotNull(message = "Cost per hour could not be null") int costPerHour) {
 }

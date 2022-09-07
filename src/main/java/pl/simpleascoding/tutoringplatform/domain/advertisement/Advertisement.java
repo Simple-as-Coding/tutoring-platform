@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import pl.simpleascoding.tutoringplatform.domain.user.User;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -17,16 +19,21 @@ public class Advertisement {
     private Long id;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     private AdvertisementCategory category;
 
     @NotNull
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private User author;
 
-    @NotNull
+    @NotNull(message = "Title could not be empty")
+    @Min(value = 10)
+    @Max(value = 50)
     private String title;
 
-    @NotNull
+    @NotNull(message = "Description could not be empty")
+    @Min(value = 50)
+    @Max(value = 255)
     private String description;
 
     @NotNull

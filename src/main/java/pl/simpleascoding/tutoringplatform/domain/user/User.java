@@ -47,7 +47,7 @@ public class User implements UserDetails {
     private List<Review> postedReviews = new ArrayList<>();
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
-    @JoinColumn(name = "advertisement_id")
+    @JoinColumn(name = "author_id")
     private List<Advertisement> advertisements = new ArrayList<>();
 
     public User(String username, String password, String name, String surname, String email) {

@@ -1,6 +1,7 @@
 package pl.simpleascoding.tutoringplatform.api;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +22,16 @@ public class AdvertisementController {
 
     @PostMapping("/add")
     public ResponseEntity<AdvertisementDTO> createAdvertisement(@RequestBody CreateAdvertisementDTO requestDTO) {
-        RscpDTO<AdvertisementDTO> serviceResult = advertisementService.createAdvertisement(requestDTO);
-        return new ResponseEntity<>(serviceResult.body(), HttpStatus.resolve(serviceResult.status().value()));
+        RscpDTO<AdvertisementDTO> rscpDTO = advertisementService.createAdvertisement(requestDTO);
+        AdvertisementDTO advDTO = rscpDTO.body();
+
+        // Message
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("message", rscpDTO.message());
+
+        // Status
+        HttpStatus httpStatus = HttpStatus.resolve(rscpDTO.status().value());
+
+        return new ResponseEntity<>(advDTO, headers, httpStatus);
     }
 }

@@ -5,9 +5,8 @@ import lombok.NoArgsConstructor;
 import pl.simpleascoding.tutoringplatform.domain.user.User;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
+import java.math.BigDecimal;
 
 @Data
 @Entity
@@ -27,19 +26,18 @@ public class Advertisement {
     private User author;
 
     @NotNull(message = "Title could not be empty")
-    @Min(value = 10)
-    @Max(value = 50)
+    @Size(min = 10, max = 50, message = "Title has to be between 10 and 50 characters")
     private String title;
 
     @NotNull(message = "Description could not be empty")
-    @Min(value = 50)
-    @Max(value = 255)
+    @Size(min = 50, max = 255, message = "Description has to be between 50 and 255 characters")
     private String description;
 
     @NotNull
-    private int costPerHour;
+    @Positive
+    private BigDecimal costPerHour;
 
-    public Advertisement(AdvertisementCategory category, User author, String title, String description, int costPerHour) {
+    public Advertisement(AdvertisementCategory category, User author, String title, String description, BigDecimal costPerHour) {
         this.category = category;
         this.author = author;
         this.title = title;

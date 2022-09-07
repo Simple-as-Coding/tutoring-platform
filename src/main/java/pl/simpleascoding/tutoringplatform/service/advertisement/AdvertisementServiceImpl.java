@@ -14,8 +14,11 @@ import pl.simpleascoding.tutoringplatform.repository.AdvertisementRepository;
 import pl.simpleascoding.tutoringplatform.rscp.RscpStatus;
 import pl.simpleascoding.tutoringplatform.service.user.UserService;
 
+import javax.transaction.Transactional;
+
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AdvertisementServiceImpl implements AdvertisementService {
 
     private final AdvertisementRepository advertisementRepository;

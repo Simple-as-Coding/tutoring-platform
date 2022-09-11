@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import pl.simpleascoding.tutoringplatform.domain.advertisement.Advertisement;
 import pl.simpleascoding.tutoringplatform.domain.review.Review;
 import pl.simpleascoding.tutoringplatform.domain.token.Token;
 
@@ -44,6 +45,10 @@ public class User implements UserDetails {
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
     @JoinColumn(name = "author_id")
     private List<Review> postedReviews = new ArrayList<>();
+
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
+    @JoinColumn(name = "author_id")
+    private List<Advertisement> advertisements = new ArrayList<>();
 
     public User(String username, String password, String name, String surname, String email) {
         this.username = username;

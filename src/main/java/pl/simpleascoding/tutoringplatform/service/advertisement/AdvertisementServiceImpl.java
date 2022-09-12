@@ -1,6 +1,8 @@
 package pl.simpleascoding.tutoringplatform.service.advertisement;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.simpleascoding.tutoringplatform.domain.advertisement.Advertisement;
 import pl.simpleascoding.tutoringplatform.domain.advertisement.AdvertisementCategory;
@@ -37,6 +39,11 @@ public class AdvertisementServiceImpl implements AdvertisementService {
         advertisementRepository.save(advertisement);
 
         return new RscpDTO<>(RscpStatus.CREATED, "Advertisement created", advertisementDTO);
+    }
+
+    @Override
+    public RscpDTO<Page<AdvertisementDTO>> getUsersAdvertisements(String username, Pageable pageable) {
+        return new RscpDTO<>(RscpStatus.OK, "Advertisement history found", advertisementRepository.findAllByAuthor_Name(username, pageable).map(advertisementModelMapper::mapAdvertisementEntityToAdvertisementDTO));
     }
 
     private void isUserSignedAsTeacher(User author) {

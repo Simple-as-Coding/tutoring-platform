@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import pl.simpleascoding.tutoringplatform.domain.advertisement.Advertisement;
 
 public interface AdvertisementRepository extends JpaRepository<Advertisement, Long> {
-    Page<Advertisement> findAllByAuthor_Name(String username, Pageable pageable);
+    Page<Advertisement> findAllByAuthor_NameOrderByCreationDateDesc(String username, Pageable pageable);
 }

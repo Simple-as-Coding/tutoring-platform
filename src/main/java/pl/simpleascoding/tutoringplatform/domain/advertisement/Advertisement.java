@@ -5,8 +5,11 @@ import lombok.NoArgsConstructor;
 import pl.simpleascoding.tutoringplatform.domain.user.User;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.time.Instant;
 
 @Data
 @Entity
@@ -34,14 +37,18 @@ public class Advertisement {
     private String description;
 
     @NotNull
+    private Instant creationDate;
+
+    @NotNull
     @Positive
     private BigDecimal costPerHour;
 
-    public Advertisement(AdvertisementCategory category, User author, String title, String description, BigDecimal costPerHour) {
+    public Advertisement(AdvertisementCategory category, User author, String title, String description, Instant creationDate, BigDecimal costPerHour) {
         this.category = category;
         this.author = author;
         this.title = title;
         this.description = description;
         this.costPerHour = costPerHour;
+        this.creationDate = creationDate;
     }
 }

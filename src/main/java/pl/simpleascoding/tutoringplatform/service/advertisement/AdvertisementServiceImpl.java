@@ -17,6 +17,7 @@ import pl.simpleascoding.tutoringplatform.rscp.RscpStatus;
 import pl.simpleascoding.tutoringplatform.service.user.UserService;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +29,8 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     private final AdvertisementModelMapper advertisementModelMapper;
 
     private final UserService userService;
+
+    private final Date date = new Date();
 
     @Override
     public RscpDTO<AdvertisementDTO> createAdvertisement(CreateAdvertisementDTO requestDTO) {
@@ -43,7 +46,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 
     @Override
     public RscpDTO<Page<AdvertisementDTO>> getUsersAdvertisements(String username, Pageable pageable) {
-        return new RscpDTO<>(RscpStatus.OK, "Advertisement history found", advertisementRepository.findAllByAuthor_Name(username, pageable).map(advertisementModelMapper::mapAdvertisementEntityToAdvertisementDTO));
+        return new RscpDTO<>(RscpStatus.OK, "Advertisement history found", advertisementRepository.findAllByAuthor_NameOrderByCreationDateDesc(username, pageable).map(advertisementModelMapper::mapAdvertisementEntityToAdvertisementDTO));
     }
 
     private void isUserSignedAsTeacher(User author) {
@@ -53,7 +56,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     }
 
     private Advertisement createAdvertisementEntity(CreateAdvertisementDTO requestDTO, User author, AdvertisementCategory category) {
-        return new Advertisement(category, author, requestDTO.title(), requestDTO.description(), requestDTO.costPerHour());
+        return new Advertisement(category, author, requestDTO.title(), requestDTO.description(), date.toInstant(), requestDTO.costPerHour());
     }
 
     private AdvertisementCategory getAdvertisementCategory(CreateAdvertisementDTO requestDTO) {

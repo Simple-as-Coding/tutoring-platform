@@ -2,6 +2,7 @@ package pl.simpleascoding.tutoringplatform.domain.advertisement;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import pl.simpleascoding.tutoringplatform.domain.user.User;
 
 import javax.persistence.*;
@@ -36,19 +37,19 @@ public class Advertisement {
     @Size(min = 50, max = 255, message = "Description has to be between 50 and 255 characters")
     private String description;
 
-    @NotNull
+    @CreationTimestamp
+    @Column(name = "creationDate")
     private Instant creationDate;
 
     @NotNull
     @Positive
     private BigDecimal costPerHour;
 
-    public Advertisement(AdvertisementCategory category, User author, String title, String description, Instant creationDate, BigDecimal costPerHour) {
+    public Advertisement(AdvertisementCategory category, User author, String title, String description, BigDecimal costPerHour) {
         this.category = category;
         this.author = author;
         this.title = title;
         this.description = description;
         this.costPerHour = costPerHour;
-        this.creationDate = creationDate;
     }
 }

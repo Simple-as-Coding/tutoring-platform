@@ -30,14 +30,13 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 
     private final UserService userService;
 
-    private final Date date = new Date();
-
     @Override
     public RscpDTO<AdvertisementDTO> createAdvertisement(CreateAdvertisementDTO requestDTO) {
+        Date date = new Date();
         User author = getAuthorEntity(requestDTO);
         isUserSignedAsTeacher(author);
         AdvertisementCategory category = getAdvertisementCategory(requestDTO);
-        Advertisement advertisement = createAdvertisementEntity(requestDTO, author, category);
+        Advertisement advertisement = createAdvertisementEntity(requestDTO, author, category, date);
         AdvertisementDTO advertisementDTO = advertisementModelMapper.mapAdvertisementEntityToAdvertisementDTO(advertisement);
         advertisementRepository.save(advertisement);
 
@@ -55,7 +54,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
         }
     }
 
-    private Advertisement createAdvertisementEntity(CreateAdvertisementDTO requestDTO, User author, AdvertisementCategory category) {
+    private Advertisement createAdvertisementEntity(CreateAdvertisementDTO requestDTO, User author, AdvertisementCategory category, Date date) {
         return new Advertisement(category, author, requestDTO.title(), requestDTO.description(), date.toInstant(), requestDTO.costPerHour());
     }
 

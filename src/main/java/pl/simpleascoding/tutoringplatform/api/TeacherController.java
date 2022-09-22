@@ -33,10 +33,13 @@ public class TeacherController {
     }
 
     @PostMapping("/sign-as-teacher")
-    public ResponseEntity<String> addTeacherRoleToUser(@RequestBody SignAsTeacherDTO requestDTO) {
-        teacherService.addTeacherRoleToUser(requestDTO);
+    public ResponseEntity<?> addTeacherRoleToUser(@RequestBody SignAsTeacherDTO requestDTO) {
+        RscpDTO<?> rscpDTO = teacherService.addTeacherRoleToUser(requestDTO);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("message", rscpDTO.message());
+        HttpStatus httpStatus = HttpStatus.resolve(rscpDTO.status().value());
 
-        return new ResponseEntity<>(HttpStatus.OK.getReasonPhrase(), HttpStatus.OK);
+        return new ResponseEntity<>(headers, httpStatus);
     }
 
 }

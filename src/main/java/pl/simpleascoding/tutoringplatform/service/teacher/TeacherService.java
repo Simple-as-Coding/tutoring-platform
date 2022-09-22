@@ -7,7 +7,7 @@ import pl.simpleascoding.tutoringplatform.dto.SignAsTeacherDTO;
 import pl.simpleascoding.tutoringplatform.dto.UserDTO;
 
 public interface TeacherService {
-    void addTeacherRoleToUser(SignAsTeacherDTO requestDTO);
+    RscpDTO<?> addTeacherRoleToUser(SignAsTeacherDTO requestDTO);
 
     RscpDTO<Page<UserDTO>> findAllTeachers(Pageable pageable);
 }

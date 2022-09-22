@@ -27,10 +27,11 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     @Transactional
-    public void addTeacherRoleToUser(SignAsTeacherDTO requestDTO) {
+    public RscpDTO<?> addTeacherRoleToUser(SignAsTeacherDTO requestDTO) {
         User user = userService.getUserByUsername(requestDTO.username());
         if (!isUserAlreadyTeacher(user)) {
             addRoleToEntity(user, RoleType.TEACHER);
+            return new RscpDTO<>(RscpStatus.OK, "teacher role added to user", null);
         } else {
             throw new UserIsAlreadyATeacherException();
         }

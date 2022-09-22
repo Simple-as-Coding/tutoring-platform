@@ -54,12 +54,13 @@ class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Page<ReviewDTO> getPostedReviewsForUser(long id, Pageable pageable) {
+    public RscpDTO<Page<ReviewDTO>> getPostedReviewsForUser(long id, Pageable pageable) {
         if (!userService.checkUserExists(id)) {
             throw new UserNotFoundException(id);
         }
+        Page<ReviewDTO> reviewPage = reviewRepository.findReviewsByAuthorId(id, pageable).map(reviewModelMapper::mapReviewToDto);
 
-        return reviewRepository.findReviewsByAuthorId(id, pageable).map(reviewModelMapper::mapReviewToDto);
+        return new RscpDTO<>(RscpStatus.OK, "reviews returned", reviewPage);
     }
 
     @Override

@@ -13,7 +13,7 @@ public interface ReviewService {
 
     Page<ReviewDTO> getReceivedReviewsForUser(long id, Pageable pageable);
 
-    Page<ReviewDTO> getPostedReviewsForUser(long id, Pageable pageable);
+    RscpDTO<Page<ReviewDTO>> getPostedReviewsForUser(long id, Pageable pageable);
 
     RscpDTO<ReviewDTO> updateReview(UpdateReviewDTO dto, String username, long reviewId);
 

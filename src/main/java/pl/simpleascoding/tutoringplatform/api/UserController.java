@@ -76,7 +76,13 @@ class UserController {
 
     @GetMapping("/{id}/reviews/received")
     ResponseEntity<Page<ReviewDTO>> getReceivedReviewsForUser(@PathVariable long id, Pageable pageable) {
-        return new ResponseEntity<>(reviewService.getReceivedReviewsForUser(id, pageable), HttpStatus.OK);
+        RscpDTO<Page<ReviewDTO>> rscpDTO = reviewService.getReceivedReviewsForUser(id, pageable);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("message", rscpDTO.message());
+        HttpStatus httpStatus = HttpStatus.resolve(rscpDTO.status().value());
+        Page<ReviewDTO> body = rscpDTO.body();
+
+        return new ResponseEntity<>(body, headers, httpStatus);
     }
 
     @GetMapping("/{id}/reviews/posted")

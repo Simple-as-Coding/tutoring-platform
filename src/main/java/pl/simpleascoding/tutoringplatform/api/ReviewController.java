@@ -22,13 +22,19 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping
-    ResponseEntity<String> createReview(@RequestBody @Valid CreateReviewDTO dto, Principal principal) {
-        return new ResponseEntity<>(reviewService.createReview(dto, principal.getName()), HttpStatus.CREATED);
+    ResponseEntity<?> createReview(@RequestBody @Valid CreateReviewDTO dto, Principal principal) {
+        RscpDTO<?> rscpDTO = reviewService.createReview(dto, principal.getName());
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("message", rscpDTO.message());
+        HttpStatus httpStatus = HttpStatus.resolve(rscpDTO.status().value());
+
+        return new ResponseEntity<>(headers, httpStatus);
+
     }
 
     @PutMapping("/{id}")
     ResponseEntity<ReviewDTO> updateReview(@RequestBody @Valid UpdateReviewDTO dto, @PathVariable long id,
-                                                    Principal principal){
+                                           Principal principal) {
         RscpDTO<ReviewDTO> rscpDTO = reviewService.updateReview(dto, principal.getName(), id);
         HttpHeaders headers = new HttpHeaders();
         headers.add("message", rscpDTO.message());
@@ -38,7 +44,7 @@ public class ReviewController {
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<?> deleteReview(@PathVariable long id, Principal principal){
+    ResponseEntity<?> deleteReview(@PathVariable long id, Principal principal) {
         RscpDTO<?> rscpDTO = reviewService.deleteReview(principal.getName(), id);
         HttpHeaders headers = new HttpHeaders();
         headers.add("message", rscpDTO.message());

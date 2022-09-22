@@ -3,9 +3,12 @@ package pl.simpleascoding.tutoringplatform.api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.simpleascoding.tutoringplatform.dto.ReviewDTO;
+import pl.simpleascoding.tutoringplatform.dto.RscpDTO;
 import pl.simpleascoding.tutoringplatform.dto.SignAsTeacherDTO;
 import pl.simpleascoding.tutoringplatform.dto.UserDTO;
 import pl.simpleascoding.tutoringplatform.service.teacher.TeacherService;
@@ -19,7 +22,14 @@ public class TeacherController {
 
     @GetMapping("/all")
     public ResponseEntity<Page<UserDTO>> findAllTeachers(Pageable pageable) {
-        return new ResponseEntity<>(teacherService.findAllTeachers(pageable), HttpStatus.OK);
+
+        RscpDTO<Page<UserDTO>> rscpDTO = teacherService.findAllTeachers(pageable);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("message", rscpDTO.message());
+        HttpStatus httpStatus = HttpStatus.resolve(rscpDTO.status().value());
+        Page<UserDTO> body = rscpDTO.body();
+
+        return new ResponseEntity<>(body, headers, httpStatus);
     }
 
     @PostMapping("/sign-as-teacher")

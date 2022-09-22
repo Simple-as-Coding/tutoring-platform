@@ -6,10 +6,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.simpleascoding.tutoringplatform.domain.user.RoleType;
 import pl.simpleascoding.tutoringplatform.domain.user.User;
+import pl.simpleascoding.tutoringplatform.dto.RscpDTO;
 import pl.simpleascoding.tutoringplatform.dto.SignAsTeacherDTO;
 import pl.simpleascoding.tutoringplatform.dto.UserDTO;
 import pl.simpleascoding.tutoringplatform.exception.UserIsAlreadyATeacherException;
 import pl.simpleascoding.tutoringplatform.repository.UserRepository;
+import pl.simpleascoding.tutoringplatform.rscp.RscpStatus;
 import pl.simpleascoding.tutoringplatform.service.user.UserModelMapper;
 import pl.simpleascoding.tutoringplatform.service.user.UserService;
 
@@ -35,7 +37,7 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public Page<UserDTO> findAllTeachers(Pageable pageable) {
+    public RscpDTO<Page<UserDTO>> findAllTeachers(Pageable pageable) {
         return createTeacherDtoPage(pageable);
     }
 
@@ -47,7 +49,10 @@ public class TeacherServiceImpl implements TeacherService {
         user.getRoles().add(roleType);
     }
 
-    private Page<UserDTO> createTeacherDtoPage(Pageable pageable) {
-        return userRepository.findUsersByRolesContaining(RoleType.TEACHER, pageable).map(userModelMapper::mapUserEntityToUserDTO);
+    private RscpDTO<Page<UserDTO>> createTeacherDtoPage(Pageable pageable) {
+        Page<UserDTO> userPage = userRepository.findUsersByRolesContaining(RoleType.TEACHER, pageable)
+                .map(userModelMapper::mapUserEntityToUserDTO);
+
+        return new RscpDTO<Page<UserDTO>>(RscpStatus.OK, null, userPage);
     }
 }

@@ -54,6 +54,6 @@ public class TeacherServiceImpl implements TeacherService {
         Page<UserDTO> userPage = userRepository.findUsersByRolesContaining(RoleType.TEACHER, pageable)
                 .map(userModelMapper::mapUserEntityToUserDTO);
 
-        return new RscpDTO<Page<UserDTO>>(RscpStatus.OK, "Page returned.", userPage);
+        return new RscpDTO<>(RscpStatus.OK, "Page returned.", userPage);
     }
 }

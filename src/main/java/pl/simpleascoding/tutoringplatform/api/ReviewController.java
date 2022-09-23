@@ -36,10 +36,10 @@ public class ReviewController {
     ResponseEntity<ReviewDTO> updateReview(@RequestBody @Valid UpdateReviewDTO dto, @PathVariable long id,
                                            Principal principal) {
         RscpDTO<ReviewDTO> rscpDTO = reviewService.updateReview(dto, principal.getName(), id);
+        ReviewDTO body = rscpDTO.body();
         HttpHeaders headers = new HttpHeaders();
         headers.add("message", rscpDTO.message());
         HttpStatus httpStatus = HttpStatus.resolve(rscpDTO.status().value());
-        ReviewDTO body = rscpDTO.body();
         return new ResponseEntity<>(body, headers, httpStatus);
     }
 

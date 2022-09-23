@@ -55,7 +55,7 @@ class ReviewServiceImpl implements ReviewService {
         Page<ReviewDTO> reviewPage = reviewRepository.findReviewsByReceiverId(id, pageable)
                 .map(reviewModelMapper::mapReviewToDto);
 
-        return new RscpDTO<>(RscpStatus.OK, "reviews returned", reviewPage);
+        return new RscpDTO<>(RscpStatus.OK, "Reviews returned.", reviewPage);
     }
 
     @Override
@@ -66,7 +66,7 @@ class ReviewServiceImpl implements ReviewService {
         Page<ReviewDTO> reviewPage = reviewRepository.findReviewsByAuthorId(id, pageable)
                 .map(reviewModelMapper::mapReviewToDto);
 
-        return new RscpDTO<>(RscpStatus.OK, "reviews returned", reviewPage);
+        return new RscpDTO<>(RscpStatus.OK, "Reviews returned.", reviewPage);
     }
 
     @Override

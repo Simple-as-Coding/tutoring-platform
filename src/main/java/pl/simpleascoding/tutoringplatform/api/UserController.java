@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.simpleascoding.tutoringplatform.dto.*;
 import pl.simpleascoding.tutoringplatform.service.review.ReviewService;
 import pl.simpleascoding.tutoringplatform.service.user.UserService;
+import pl.simpleascoding.tutoringplatform.util.ControllerUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -25,76 +26,51 @@ class UserController {
     @PostMapping
     ResponseEntity<UserDTO> createUser(@RequestBody CreateUserDTO dto, HttpServletRequest request) {
         RscpDTO<UserDTO> rscpDTO = userService.createUser(dto, request.getRequestURL().toString());
-        UserDTO body = rscpDTO.body();
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("message", rscpDTO.message());
-        HttpStatus httpStatus = HttpStatus.resolve(rscpDTO.status().value());
 
-        return new ResponseEntity<>(body, headers, httpStatus);
+        return ControllerUtils.transformRscpDTOToResponseEntity(rscpDTO);
     }
 
     @GetMapping("/confirm-registration")
     ResponseEntity<?> confirmRegistration(@RequestParam String tokenValue) {
         RscpDTO<?> rscpDTO = userService.confirmUserRegistration(tokenValue);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("message", rscpDTO.message());
-        HttpStatus httpStatus = HttpStatus.resolve(rscpDTO.status().value());
 
-        return new ResponseEntity<>(headers, httpStatus);
+        return ControllerUtils.transformRscpDTOToResponseEntity(rscpDTO);
     }
 
     @PostMapping("/change-password")
     ResponseEntity<?> changeUserPassword(@RequestBody ChangeUserPasswordDTO dto,
                                          Principal principal, HttpServletRequest request) {
         RscpDTO<?> rscpDTO = userService.changeUserPassword(dto, principal.getName(), request.getRequestURL().toString());
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("message", rscpDTO.message());
-        HttpStatus httpStatus = HttpStatus.resolve(rscpDTO.status().value());
 
-        return new ResponseEntity<>(headers, httpStatus);
+        return ControllerUtils.transformRscpDTOToResponseEntity(rscpDTO);
     }
 
     @GetMapping("/confirm-change-password")
     ResponseEntity<?> confirmChangeUserPassword(@RequestParam String tokenValue) {
         RscpDTO<?> rscpDTO = userService.confirmChangeUserPassword(tokenValue);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("message", rscpDTO.message());
-        HttpStatus httpStatus = HttpStatus.resolve(rscpDTO.status().value());
 
-        return new ResponseEntity<>(headers, httpStatus);
+        return ControllerUtils.transformRscpDTOToResponseEntity(rscpDTO);
     }
 
     @PatchMapping
     ResponseEntity<UserDTO> modifyUser(@RequestBody ModifyUserDTO dto, Principal principal) {
         RscpDTO<UserDTO> rscpDTO = userService.modifyUser(dto, principal.getName());
-        UserDTO body = rscpDTO.body();
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("message", rscpDTO.message());
-        HttpStatus httpStatus = HttpStatus.resolve(rscpDTO.status().value());
 
-        return new ResponseEntity<>(body, headers, httpStatus);
+        return ControllerUtils.transformRscpDTOToResponseEntity(rscpDTO);
     }
 
     @GetMapping("/{id}/reviews/received")
     ResponseEntity<Page<ReviewDTO>> getReceivedReviewsForUser(@PathVariable long id, Pageable pageable) {
         RscpDTO<Page<ReviewDTO>> rscpDTO = reviewService.getReceivedReviewsForUser(id, pageable);
-        Page<ReviewDTO> body = rscpDTO.body();
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("message", rscpDTO.message());
-        HttpStatus httpStatus = HttpStatus.resolve(rscpDTO.status().value());
 
-        return new ResponseEntity<>(body, headers, httpStatus);
+        return ControllerUtils.transformRscpDTOToResponseEntity(rscpDTO);
     }
 
     @GetMapping("/{id}/reviews/posted")
     ResponseEntity<Page<ReviewDTO>> getPostedReviewsForUser(@PathVariable long id, Pageable pageable) {
         RscpDTO<Page<ReviewDTO>> rscpDTO = reviewService.getPostedReviewsForUser(id, pageable);
-        Page<ReviewDTO> body = rscpDTO.body();
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("message", rscpDTO.message());
-        HttpStatus httpStatus = HttpStatus.resolve(rscpDTO.status().value());
 
-        return new ResponseEntity<>(body, headers, httpStatus);
+        return ControllerUtils.transformRscpDTOToResponseEntity(rscpDTO);
     }
 
 }

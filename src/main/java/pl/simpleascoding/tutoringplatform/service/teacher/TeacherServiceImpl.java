@@ -31,7 +31,7 @@ public class TeacherServiceImpl implements TeacherService {
         User user = userService.getUserByUsername(requestDTO.username());
         if (!isUserAlreadyTeacher(user)) {
             addRoleToEntity(user, RoleType.TEACHER);
-            return new RscpDTO<>(RscpStatus.OK, "teacher role added to user", null);
+            return new RscpDTO<>(RscpStatus.OK, "Teacher role added to user.", null);
         } else {
             throw new UserIsAlreadyATeacherException();
         }
@@ -54,6 +54,6 @@ public class TeacherServiceImpl implements TeacherService {
         Page<UserDTO> userPage = userRepository.findUsersByRolesContaining(RoleType.TEACHER, pageable)
                 .map(userModelMapper::mapUserEntityToUserDTO);
 
-        return new RscpDTO<Page<UserDTO>>(RscpStatus.OK, null, userPage);
+        return new RscpDTO<Page<UserDTO>>(RscpStatus.OK, "Page returned.", userPage);
     }
 }

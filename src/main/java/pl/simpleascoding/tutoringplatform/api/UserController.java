@@ -66,10 +66,10 @@ class UserController {
     @PatchMapping
     ResponseEntity<UserDTO> modifyUser(@RequestBody ModifyUserDTO dto, Principal principal) {
         RscpDTO<UserDTO> rscpDTO = userService.modifyUser(dto, principal.getName());
+        UserDTO body = rscpDTO.body();
         HttpHeaders headers = new HttpHeaders();
         headers.add("message", rscpDTO.message());
         HttpStatus httpStatus = HttpStatus.resolve(rscpDTO.status().value());
-        UserDTO body = rscpDTO.body();
 
         return new ResponseEntity<>(body, headers, httpStatus);
     }
@@ -77,10 +77,10 @@ class UserController {
     @GetMapping("/{id}/reviews/received")
     ResponseEntity<Page<ReviewDTO>> getReceivedReviewsForUser(@PathVariable long id, Pageable pageable) {
         RscpDTO<Page<ReviewDTO>> rscpDTO = reviewService.getReceivedReviewsForUser(id, pageable);
+        Page<ReviewDTO> body = rscpDTO.body();
         HttpHeaders headers = new HttpHeaders();
         headers.add("message", rscpDTO.message());
         HttpStatus httpStatus = HttpStatus.resolve(rscpDTO.status().value());
-        Page<ReviewDTO> body = rscpDTO.body();
 
         return new ResponseEntity<>(body, headers, httpStatus);
     }
@@ -88,10 +88,10 @@ class UserController {
     @GetMapping("/{id}/reviews/posted")
     ResponseEntity<Page<ReviewDTO>> getPostedReviewsForUser(@PathVariable long id, Pageable pageable) {
         RscpDTO<Page<ReviewDTO>> rscpDTO = reviewService.getPostedReviewsForUser(id, pageable);
+        Page<ReviewDTO> body = rscpDTO.body();
         HttpHeaders headers = new HttpHeaders();
         headers.add("message", rscpDTO.message());
         HttpStatus httpStatus = HttpStatus.resolve(rscpDTO.status().value());
-        Page<ReviewDTO> body = rscpDTO.body();
 
         return new ResponseEntity<>(body, headers, httpStatus);
     }

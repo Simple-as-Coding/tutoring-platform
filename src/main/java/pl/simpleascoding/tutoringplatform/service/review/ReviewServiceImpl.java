@@ -30,7 +30,7 @@ class ReviewServiceImpl implements ReviewService {
     private final ReviewModelMapper reviewModelMapper;
 
     @Override
-    public RscpDTO<?> createReview(CreateReviewDTO dto, String authorUsername) {
+    public RscpDTO<ReviewDTO> createReview(CreateReviewDTO dto, String authorUsername) {
         User receiver = userService.getUserById(dto.receiverId());
         User author = userService.getUserByUsername(authorUsername);
 
@@ -41,7 +41,9 @@ class ReviewServiceImpl implements ReviewService {
 
         reviewRepository.save(review);
 
-        return new RscpDTO<>(RscpStatus.CREATED, "review created", null);
+        ReviewDTO reviewDTO = reviewModelMapper.mapReviewToDto(review);
+
+        return new RscpDTO<>(RscpStatus.CREATED, "Review created.", reviewDTO);
     }
 
     @Override

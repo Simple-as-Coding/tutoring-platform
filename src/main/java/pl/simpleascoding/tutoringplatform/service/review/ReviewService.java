@@ -9,7 +9,7 @@ import pl.simpleascoding.tutoringplatform.dto.UpdateReviewDTO;
 
 public interface ReviewService {
 
-    RscpDTO<?> createReview(CreateReviewDTO dto, String authorUsername);
+    RscpDTO<ReviewDTO> createReview(CreateReviewDTO dto, String authorUsername);
 
     RscpDTO<Page<ReviewDTO>> getReceivedReviewsForUser(long id, Pageable pageable);
 

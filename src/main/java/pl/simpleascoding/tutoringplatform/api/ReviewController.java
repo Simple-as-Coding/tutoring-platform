@@ -23,12 +23,13 @@ public class ReviewController {
 
     @PostMapping
     ResponseEntity<?> createReview(@RequestBody @Valid CreateReviewDTO dto, Principal principal) {
-        RscpDTO<?> rscpDTO = reviewService.createReview(dto, principal.getName());
+        RscpDTO<ReviewDTO> rscpDTO = reviewService.createReview(dto, principal.getName());
+        ReviewDTO body = rscpDTO.body();
         HttpHeaders headers = new HttpHeaders();
         headers.add("message", rscpDTO.message());
         HttpStatus httpStatus = HttpStatus.resolve(rscpDTO.status().value());
 
-        return new ResponseEntity<>(headers, httpStatus);
+        return new ResponseEntity<>(body, headers, httpStatus);
 
     }
 

@@ -12,7 +12,7 @@ public interface UserService extends UserDetailsService {
 
     User getUserByUsername(String username);
 
-    RscpDTO<?> createUser(CreateUserDTO dto, String rootUrl);
+    RscpDTO<UserDTO> createUser(CreateUserDTO dto, String rootUrl);
 
     RscpDTO<?> confirmUserRegistration(String token);
 

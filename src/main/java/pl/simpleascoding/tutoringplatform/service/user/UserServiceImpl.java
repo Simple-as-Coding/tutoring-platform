@@ -52,7 +52,7 @@ class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public RscpDTO<?> createUser(CreateUserDTO dto, String rootUrl) {
+    public RscpDTO<UserDTO> createUser(CreateUserDTO dto, String rootUrl) {
         userRepository.findUserByUsername(dto.username()).ifPresent(user -> {
             throw new UsernameTakenException(dto.username());
         });
@@ -78,8 +78,9 @@ class UserServiceImpl implements UserService {
 
         mailSender.send(message);
 
+        UserDTO userDTO = userModelMapper.mapUserEntityToUserDTO(user);
 
-        return new RscpDTO<>(RscpStatus.OK, "User creation completed successfully", null);
+        return new RscpDTO<>(RscpStatus.OK, "User creation completed successfully", userDTO);
     }
 
     @Override

@@ -23,13 +23,14 @@ class UserController {
     private final ReviewService reviewService;
 
     @PostMapping
-    ResponseEntity<?> createUser(@RequestBody CreateUserDTO dto, HttpServletRequest request) {
-        RscpDTO<?> rscpDTO = userService.createUser(dto, request.getRequestURL().toString());
+    ResponseEntity<UserDTO> createUser(@RequestBody CreateUserDTO dto, HttpServletRequest request) {
+        RscpDTO<UserDTO> rscpDTO = userService.createUser(dto, request.getRequestURL().toString());
+        UserDTO body = rscpDTO.body();
         HttpHeaders headers = new HttpHeaders();
         headers.add("message", rscpDTO.message());
         HttpStatus httpStatus = HttpStatus.resolve(rscpDTO.status().value());
 
-        return new ResponseEntity<>(headers, httpStatus);
+        return new ResponseEntity<>(body, headers, httpStatus);
     }
 
     @GetMapping("/confirm-registration")

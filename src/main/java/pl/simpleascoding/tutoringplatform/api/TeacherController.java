@@ -24,10 +24,10 @@ public class TeacherController {
     public ResponseEntity<Page<UserDTO>> findAllTeachers(Pageable pageable) {
 
         RscpDTO<Page<UserDTO>> rscpDTO = teacherService.findAllTeachers(pageable);
+        Page<UserDTO> body = rscpDTO.body();
         HttpHeaders headers = new HttpHeaders();
         headers.add("message", rscpDTO.message());
         HttpStatus httpStatus = HttpStatus.resolve(rscpDTO.status().value());
-        Page<UserDTO> body = rscpDTO.body();
 
         return new ResponseEntity<>(body, headers, httpStatus);
     }

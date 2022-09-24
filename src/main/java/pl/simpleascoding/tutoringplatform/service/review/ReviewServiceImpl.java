@@ -30,7 +30,7 @@ class ReviewServiceImpl implements ReviewService {
     private final ReviewModelMapper reviewModelMapper;
 
     @Override
-    public String createReview(CreateReviewDTO dto, String authorUsername) {
+    public RscpDTO<ReviewDTO> createReview(CreateReviewDTO dto, String authorUsername) {
         User receiver = userService.getUserById(dto.receiverId());
         User author = userService.getUserByUsername(authorUsername);
 
@@ -41,25 +41,32 @@ class ReviewServiceImpl implements ReviewService {
 
         reviewRepository.save(review);
 
-        return HttpStatus.CREATED.getReasonPhrase();
+        ReviewDTO reviewDTO = reviewModelMapper.mapReviewToDto(review);
+
+        return new RscpDTO<>(RscpStatus.CREATED, "Review created.", reviewDTO);
     }
 
     @Override
-    public Page<ReviewDTO> getReceivedReviewsForUser(long id, Pageable pageable) {
+    public RscpDTO<Page<ReviewDTO>> getReceivedReviewsForUser(long id, Pageable pageable) {
         if (!userService.checkUserExists(id)) {
             throw new UserNotFoundException(id);
         }
 
-        return reviewRepository.findReviewsByReceiverId(id, pageable).map(reviewModelMapper::mapReviewToDto);
+        Page<ReviewDTO> reviewPage = reviewRepository.findReviewsByReceiverId(id, pageable)
+                .map(reviewModelMapper::mapReviewToDto);
+
+        return new RscpDTO<>(RscpStatus.OK, "Reviews returned.", reviewPage);
     }
 
     @Override
-    public Page<ReviewDTO> getPostedReviewsForUser(long id, Pageable pageable) {
+    public RscpDTO<Page<ReviewDTO>> getPostedReviewsForUser(long id, Pageable pageable) {
         if (!userService.checkUserExists(id)) {
             throw new UserNotFoundException(id);
         }
+        Page<ReviewDTO> reviewPage = reviewRepository.findReviewsByAuthorId(id, pageable)
+                .map(reviewModelMapper::mapReviewToDto);
 
-        return reviewRepository.findReviewsByAuthorId(id, pageable).map(reviewModelMapper::mapReviewToDto);
+        return new RscpDTO<>(RscpStatus.OK, "Reviews returned.", reviewPage);
     }
 
     @Override

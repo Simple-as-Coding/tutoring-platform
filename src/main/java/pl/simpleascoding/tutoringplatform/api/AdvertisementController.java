@@ -12,6 +12,7 @@ import pl.simpleascoding.tutoringplatform.dto.AdvertisementDTO;
 import pl.simpleascoding.tutoringplatform.dto.CreateAdvertisementDTO;
 import pl.simpleascoding.tutoringplatform.dto.RscpDTO;
 import pl.simpleascoding.tutoringplatform.service.advertisement.AdvertisementService;
+import pl.simpleascoding.tutoringplatform.util.ControllerUtils;
 
 @RestController
 @RequestMapping("api/v1/advertisement")
@@ -23,15 +24,7 @@ public class AdvertisementController {
     @PostMapping("/add")
     public ResponseEntity<AdvertisementDTO> createAdvertisement(@RequestBody CreateAdvertisementDTO requestDTO) {
         RscpDTO<AdvertisementDTO> rscpDTO = advertisementService.createAdvertisement(requestDTO);
-        AdvertisementDTO advDTO = rscpDTO.body();
 
-        // Message
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("message", rscpDTO.message());
-
-        // Status
-        HttpStatus httpStatus = HttpStatus.resolve(rscpDTO.status().value());
-
-        return new ResponseEntity<>(advDTO, headers, httpStatus);
+        return ControllerUtils.transformRscpDTOToResponseEntity(rscpDTO);
     }
 }

@@ -1,6 +1,8 @@
 package pl.simpleascoding.tutoringplatform.service.advertisement;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.simpleascoding.tutoringplatform.domain.advertisement.Advertisement;
 import pl.simpleascoding.tutoringplatform.domain.advertisement.AdvertisementCategory;
@@ -15,6 +17,7 @@ import pl.simpleascoding.tutoringplatform.rscp.RscpStatus;
 import pl.simpleascoding.tutoringplatform.service.user.UserService;
 
 import javax.transaction.Transactional;
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
@@ -33,10 +36,15 @@ public class AdvertisementServiceImpl implements AdvertisementService {
         isUserSignedAsTeacher(author);
         AdvertisementCategory category = getAdvertisementCategory(requestDTO);
         Advertisement advertisement = createAdvertisementEntity(requestDTO, author, category);
-        AdvertisementDTO advertisementDTO = advertisementModelMapper.mapAdvertisementEntityToAdvertisementDTO(advertisement);
         advertisementRepository.save(advertisement);
+        AdvertisementDTO advertisementDTO = advertisementModelMapper.mapAdvertisementEntityToAdvertisementDTO(advertisement);
 
         return new RscpDTO<>(RscpStatus.CREATED, "Advertisement created", advertisementDTO);
+    }
+
+    @Override
+    public RscpDTO<Page<AdvertisementDTO>> getUsersAdvertisements(String username, Pageable pageable) {
+        return new RscpDTO<>(RscpStatus.OK, "Advertisement history found", advertisementRepository.findAllByAuthor_NameOrderByCreationDateDesc(username, pageable).map(advertisementModelMapper::mapAdvertisementEntityToAdvertisementDTO));
     }
 
     private void isUserSignedAsTeacher(User author) {

@@ -2,11 +2,15 @@ package pl.simpleascoding.tutoringplatform.domain.advertisement;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import pl.simpleascoding.tutoringplatform.domain.user.User;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.time.Instant;
 
 @Data
 @Entity
@@ -32,6 +36,10 @@ public class Advertisement {
     @NotNull(message = "Description could not be empty")
     @Size(min = 50, max = 255, message = "Description has to be between 50 and 255 characters")
     private String description;
+
+    @CreationTimestamp
+    @Column(name = "creationDate")
+    private Instant creationDate;
 
     @NotNull
     @Positive

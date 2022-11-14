@@ -7,6 +7,5 @@ package pl.simpleascoding.tutoringplatform.dto;
  * @param newPassword          New user password
  * @param confirmationPassword Confirmation of the new user password
  */
-
 public record ChangeUserPasswordDTO(String oldPassword, String newPassword, String confirmationPassword) {
 }

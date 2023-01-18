@@ -17,6 +17,7 @@ import java.util.Optional;
 @Table(name = "review")
 @NoArgsConstructor
 public class Review {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

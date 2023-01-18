@@ -5,14 +5,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.simpleascoding.tutoringplatform.review.dto.ReviewDTO;
-import pl.simpleascoding.tutoringplatform.review.ReviewService;
-import pl.simpleascoding.tutoringplatform.util.rscp.RscpDTO;
+import pl.simpleascoding.tutoringplatform.review.ReviewServiceImpl;
+import pl.simpleascoding.tutoringplatform.review.dto.Review;
 import pl.simpleascoding.tutoringplatform.user.dto.ChangeUserPasswordDTO;
 import pl.simpleascoding.tutoringplatform.user.dto.CreateUserDTO;
 import pl.simpleascoding.tutoringplatform.user.dto.ModifyUserDTO;
 import pl.simpleascoding.tutoringplatform.user.dto.UserDTO;
 import pl.simpleascoding.tutoringplatform.util.ControllerUtils;
+import pl.simpleascoding.tutoringplatform.util.rscp.RscpDTO;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -23,7 +23,7 @@ import java.security.Principal;
 class UserController {
 
     private final UserService userService;
-    private final ReviewService reviewService;
+    private final ReviewServiceImpl reviewService;
 
     @PostMapping
     ResponseEntity<UserDTO> createUser(@RequestBody CreateUserDTO dto, HttpServletRequest request) {
@@ -62,15 +62,15 @@ class UserController {
     }
 
     @GetMapping("/{id}/reviews/received")
-    ResponseEntity<Page<ReviewDTO>> getReceivedReviewsForUser(@PathVariable long id, Pageable pageable) {
-        RscpDTO<Page<ReviewDTO>> rscpDTO = reviewService.getReceivedReviewsForUser(id, pageable);
+    ResponseEntity<Page<Review>> getReceivedReviewsForUser(@PathVariable long id, Pageable pageable) {
+        RscpDTO<Page<Review>> rscpDTO = reviewService.getReceivedReviewsForUser(id, pageable);
 
         return ControllerUtils.transformRscpDTOToResponseEntity(rscpDTO);
     }
 
     @GetMapping("/{id}/reviews/posted")
-    ResponseEntity<Page<ReviewDTO>> getPostedReviewsForUser(@PathVariable long id, Pageable pageable) {
-        RscpDTO<Page<ReviewDTO>> rscpDTO = reviewService.getPostedReviewsForUser(id, pageable);
+    ResponseEntity<Page<Review>> getPostedReviewsForUser(@PathVariable long id, Pageable pageable) {
+        RscpDTO<Page<Review>> rscpDTO = reviewService.getPostedReviewsForUser(id, pageable);
 
         return ControllerUtils.transformRscpDTOToResponseEntity(rscpDTO);
     }

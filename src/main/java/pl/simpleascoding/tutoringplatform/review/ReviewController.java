@@ -3,9 +3,9 @@ package pl.simpleascoding.tutoringplatform.review;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.simpleascoding.tutoringplatform.review.dto.CreateReviewDTO;
-import pl.simpleascoding.tutoringplatform.review.dto.ReviewDTO;
-import pl.simpleascoding.tutoringplatform.review.dto.UpdateReviewDTO;
+import pl.simpleascoding.tutoringplatform.review.dto.CreateReview;
+import pl.simpleascoding.tutoringplatform.review.dto.Review;
+import pl.simpleascoding.tutoringplatform.review.dto.UpdateReview;
 import pl.simpleascoding.tutoringplatform.util.rscp.RscpDTO;
 import pl.simpleascoding.tutoringplatform.util.ControllerUtils;
 
@@ -20,16 +20,16 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping
-    ResponseEntity<?> createReview(@RequestBody @Valid CreateReviewDTO dto, Principal principal) {
-        RscpDTO<ReviewDTO> rscpDTO = reviewService.createReview(dto, principal.getName());
+    ResponseEntity<?> createReview(@RequestBody @Valid CreateReview dto, Principal principal) {
+        RscpDTO<Review> rscpDTO = reviewService.createReview(dto, principal.getName());
 
         return ControllerUtils.transformRscpDTOToResponseEntity(rscpDTO);
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<ReviewDTO> updateReview(@RequestBody @Valid UpdateReviewDTO dto, @PathVariable long id,
-                                           Principal principal) {
-        RscpDTO<ReviewDTO> rscpDTO = reviewService.updateReview(dto, principal.getName(), id);
+    ResponseEntity<Review> updateReview(@RequestBody @Valid UpdateReview dto, @PathVariable long id,
+                                        Principal principal) {
+        RscpDTO<Review> rscpDTO = reviewService.updateReview(dto, principal.getName(), id);
 
         return ControllerUtils.transformRscpDTOToResponseEntity(rscpDTO);
     }

@@ -1,11 +1,11 @@
 package pl.simpleascoding.tutoringplatform.review;
 
 import org.mapstruct.Mapper;
-import pl.simpleascoding.tutoringplatform.review.dto.ReviewDTO;
+import pl.simpleascoding.tutoringplatform.review.dto.Review;
 
 @Mapper(componentModel = "spring")
 interface ReviewModelMapper {
 
-    ReviewDTO mapReviewToDto(Review review);
+    Review mapReviewToDto(pl.simpleascoding.tutoringplatform.review.Review review);
 
 }

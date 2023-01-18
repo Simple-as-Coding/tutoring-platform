@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 import pl.simpleascoding.tutoringplatform.user.teacher.dto.SignAsTeacherDTO;
 import pl.simpleascoding.tutoringplatform.user.RoleType;
 import pl.simpleascoding.tutoringplatform.user.User;
-import pl.simpleascoding.tutoringplatform.rscp.RscpDTO;
+import pl.simpleascoding.tutoringplatform.util.rscp.RscpDTO;
 import pl.simpleascoding.tutoringplatform.user.dto.UserDTO;
 import pl.simpleascoding.tutoringplatform.user.exception.UserIsAlreadyATeacherException;
 import pl.simpleascoding.tutoringplatform.user.UserRepository;
-import pl.simpleascoding.tutoringplatform.rscp.RscpStatus;
+import pl.simpleascoding.tutoringplatform.util.rscp.RscpStatus;
 import pl.simpleascoding.tutoringplatform.user.UserModelMapper;
 import pl.simpleascoding.tutoringplatform.user.UserService;
 

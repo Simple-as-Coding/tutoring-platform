@@ -17,6 +17,7 @@ import java.time.Instant;
 @Table(name = "advertisement")
 @NoArgsConstructor
 public class Advertisement {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -52,4 +53,5 @@ public class Advertisement {
         this.description = description;
         this.costPerHour = costPerHour;
     }
+
 }

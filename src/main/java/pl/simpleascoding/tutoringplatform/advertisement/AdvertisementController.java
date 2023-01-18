@@ -7,9 +7,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.simpleascoding.tutoringplatform.advertisement.dto.AdvertisementDTO;
-import pl.simpleascoding.tutoringplatform.advertisement.dto.CreateAdvertisementDTO;
-import pl.simpleascoding.tutoringplatform.rscp.RscpDTO;
+import pl.simpleascoding.tutoringplatform.advertisement.dto.Advertisement;
+import pl.simpleascoding.tutoringplatform.advertisement.dto.CreateAdvertisement;
+import pl.simpleascoding.tutoringplatform.util.rscp.RscpDTO;
 import pl.simpleascoding.tutoringplatform.util.ControllerUtils;
 
 @RestController
@@ -20,24 +20,21 @@ public class AdvertisementController {
     private final AdvertisementService advertisementService;
 
     @PostMapping("/add")
-    public ResponseEntity<AdvertisementDTO> createAdvertisement(@RequestBody CreateAdvertisementDTO requestDTO) {
-        RscpDTO<AdvertisementDTO> rscpDTO = advertisementService.createAdvertisement(requestDTO);
-
+    public ResponseEntity<Advertisement> createAdvertisement(@RequestBody CreateAdvertisement requestDTO) {
+        RscpDTO<Advertisement> rscpDTO = advertisementService.createAdvertisement(requestDTO);
         return ControllerUtils.transformRscpDTOToResponseEntity(rscpDTO);
     }
 
     @GetMapping("/history/{username}")
-    public ResponseEntity<Page<AdvertisementDTO>> getUsersAdvertisements(@PathVariable String username, Pageable pageable) {
-        RscpDTO<Page<AdvertisementDTO>> rscpDTO = advertisementService.getUsersAdvertisements(username, pageable);
-        Page<AdvertisementDTO> responseBody = rscpDTO.body();
-
+    public ResponseEntity<Page<Advertisement>> getUsersAdvertisements(@PathVariable String username, Pageable pageable) {
+        RscpDTO<Page<Advertisement>> rscpDTO = advertisementService.getUsersAdvertisements(username, pageable);
+        Page<Advertisement> responseBody = rscpDTO.body();
         //Message
         HttpHeaders headers = new HttpHeaders();
         headers.add("message", rscpDTO.message());
-
         //Status
         HttpStatus httpStatus = HttpStatus.resolve(rscpDTO.status().value());
-
         return new ResponseEntity<>(responseBody, headers, httpStatus);
     }
+
 }

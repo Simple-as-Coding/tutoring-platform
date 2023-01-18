@@ -11,9 +11,9 @@ import pl.simpleascoding.tutoringplatform.review.dto.ReviewDTO;
 import pl.simpleascoding.tutoringplatform.review.dto.UpdateReviewDTO;
 import pl.simpleascoding.tutoringplatform.review.exception.ReviewNotFoundException;
 import pl.simpleascoding.tutoringplatform.user.User;
-import pl.simpleascoding.tutoringplatform.rscp.RscpDTO;
+import pl.simpleascoding.tutoringplatform.util.rscp.RscpDTO;
 import pl.simpleascoding.tutoringplatform.user.exception.UserNotFoundException;
-import pl.simpleascoding.tutoringplatform.rscp.RscpStatus;
+import pl.simpleascoding.tutoringplatform.util.rscp.RscpStatus;
 import pl.simpleascoding.tutoringplatform.user.UserService;
 
 @Service

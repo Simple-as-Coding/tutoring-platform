@@ -1,8 +1,6 @@
-package pl.simpleascoding.tutoringplatform.rscp;
+package pl.simpleascoding.tutoringplatform.util.rscp;
 
 import org.springframework.lang.Nullable;
-import pl.simpleascoding.tutoringplatform.rscp.RscpStatus;
-
 
 /**
  * {@code RscpDTO} record used to transfer date between service and controller. Contain a status, message and

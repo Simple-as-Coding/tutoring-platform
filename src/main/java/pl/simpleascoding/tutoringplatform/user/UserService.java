@@ -1,8 +1,7 @@
 package pl.simpleascoding.tutoringplatform.user;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
-import pl.simpleascoding.tutoringplatform.rscp.RscpDTO;
-import pl.simpleascoding.tutoringplatform.user.User;
+import pl.simpleascoding.tutoringplatform.util.rscp.RscpDTO;
 import pl.simpleascoding.tutoringplatform.user.dto.ChangeUserPasswordDTO;
 import pl.simpleascoding.tutoringplatform.user.dto.CreateUserDTO;
 import pl.simpleascoding.tutoringplatform.user.dto.ModifyUserDTO;

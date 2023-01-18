@@ -1,4 +1,4 @@
-package pl.simpleascoding.tutoringplatform.test;
+package pl.simpleascoding.tutoringplatform.util.test;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

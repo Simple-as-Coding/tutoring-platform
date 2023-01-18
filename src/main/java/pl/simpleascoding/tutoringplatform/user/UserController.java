@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.simpleascoding.tutoringplatform.review.dto.ReviewDTO;
 import pl.simpleascoding.tutoringplatform.review.ReviewService;
-import pl.simpleascoding.tutoringplatform.rscp.RscpDTO;
+import pl.simpleascoding.tutoringplatform.util.rscp.RscpDTO;
 import pl.simpleascoding.tutoringplatform.user.dto.ChangeUserPasswordDTO;
 import pl.simpleascoding.tutoringplatform.user.dto.CreateUserDTO;
 import pl.simpleascoding.tutoringplatform.user.dto.ModifyUserDTO;

@@ -6,4 +6,4 @@
  * @author Dawid Bielecki dawciobiel
  * @version 1.0
  */
-package pl.simpleascoding.tutoringplatform.rscp;
+package pl.simpleascoding.tutoringplatform.util.rscp;

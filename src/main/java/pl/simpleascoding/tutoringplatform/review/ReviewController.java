@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.simpleascoding.tutoringplatform.review.dto.CreateReviewDTO;
 import pl.simpleascoding.tutoringplatform.review.dto.ReviewDTO;
 import pl.simpleascoding.tutoringplatform.review.dto.UpdateReviewDTO;
-import pl.simpleascoding.tutoringplatform.rscp.RscpDTO;
+import pl.simpleascoding.tutoringplatform.util.rscp.RscpDTO;
 import pl.simpleascoding.tutoringplatform.util.ControllerUtils;
 
 import javax.validation.Valid;

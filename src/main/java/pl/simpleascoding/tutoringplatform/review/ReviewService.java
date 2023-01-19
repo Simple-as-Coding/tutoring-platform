@@ -7,7 +7,7 @@ import pl.simpleascoding.tutoringplatform.review.dto.Review;
 import pl.simpleascoding.tutoringplatform.review.dto.UpdateReview;
 import pl.simpleascoding.tutoringplatform.util.rscp.RscpDTO;
 
-interface ReviewService {
+public interface ReviewService {
 
     RscpDTO<Review> createReview(CreateReview dto, String authorUsername);
 

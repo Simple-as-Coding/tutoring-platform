@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.simpleascoding.tutoringplatform.review.ReviewServiceImpl;
+import pl.simpleascoding.tutoringplatform.review.ReviewService;
 import pl.simpleascoding.tutoringplatform.review.dto.Review;
 import pl.simpleascoding.tutoringplatform.user.dto.ChangeUserPasswordDTO;
 import pl.simpleascoding.tutoringplatform.user.dto.CreateUserDTO;
@@ -23,7 +23,7 @@ import java.security.Principal;
 class UserController {
 
     private final UserService userService;
-    private final ReviewServiceImpl reviewService;
+    private final ReviewService reviewService;
 
     @PostMapping
     ResponseEntity<UserDTO> createUser(@RequestBody CreateUserDTO dto, HttpServletRequest request) {

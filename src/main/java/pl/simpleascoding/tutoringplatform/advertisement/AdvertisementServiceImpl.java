@@ -18,7 +18,7 @@ import javax.transaction.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class AdvertisementServiceImpl implements AdvertisementService {
+class AdvertisementServiceImpl implements AdvertisementService {
 
     private final AdvertisementRepository advertisementRepository;
 

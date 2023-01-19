@@ -6,7 +6,7 @@ import pl.simpleascoding.tutoringplatform.advertisement.dto.Advertisement;
 import pl.simpleascoding.tutoringplatform.advertisement.dto.CreateAdvertisement;
 import pl.simpleascoding.tutoringplatform.util.rscp.RscpDTO;
 
-interface AdvertisementService {
+public interface AdvertisementService {
 
     RscpDTO<Advertisement> createAdvertisement(CreateAdvertisement requestDTO);
 

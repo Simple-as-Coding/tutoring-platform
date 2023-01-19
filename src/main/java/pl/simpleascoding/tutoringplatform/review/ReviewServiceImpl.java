@@ -19,7 +19,7 @@ import pl.simpleascoding.tutoringplatform.user.UserService;
 @Service
 @Primary
 @RequiredArgsConstructor
-public class ReviewServiceImpl implements ReviewService {
+class ReviewServiceImpl implements ReviewService {
 
     private final UserService userService;
     private final ReviewRepository reviewRepository;

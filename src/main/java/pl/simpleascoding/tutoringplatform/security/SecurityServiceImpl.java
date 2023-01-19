@@ -2,6 +2,7 @@ package pl.simpleascoding.tutoringplatform.security;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.Map;
 import static pl.simpleascoding.tutoringplatform.security.SecurityFinals.*;
 
 @Service
+@Primary
 @RequiredArgsConstructor
 class SecurityServiceImpl implements SecurityService {
 

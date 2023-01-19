@@ -1,4 +1,4 @@
-package pl.simpleascoding.tutoringplatform.user.teacher;
+package pl.simpleascoding.tutoringplatform.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.simpleascoding.tutoringplatform.util.rscp.RscpDTO;
-import pl.simpleascoding.tutoringplatform.user.teacher.dto.SignAsTeacherDTO;
+import pl.simpleascoding.tutoringplatform.user.dto.SignAsTeacherDTO;
 import pl.simpleascoding.tutoringplatform.user.dto.UserDTO;
 import pl.simpleascoding.tutoringplatform.util.ControllerUtils;
 

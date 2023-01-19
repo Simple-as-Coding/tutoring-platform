@@ -1,25 +1,22 @@
-package pl.simpleascoding.tutoringplatform.user.teacher;
+package pl.simpleascoding.tutoringplatform.user;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import pl.simpleascoding.tutoringplatform.user.teacher.dto.SignAsTeacherDTO;
-import pl.simpleascoding.tutoringplatform.user.RoleType;
-import pl.simpleascoding.tutoringplatform.user.User;
+import pl.simpleascoding.tutoringplatform.user.dto.SignAsTeacherDTO;
 import pl.simpleascoding.tutoringplatform.util.rscp.RscpDTO;
 import pl.simpleascoding.tutoringplatform.user.dto.UserDTO;
 import pl.simpleascoding.tutoringplatform.user.exception.UserIsAlreadyATeacherException;
-import pl.simpleascoding.tutoringplatform.user.UserRepository;
 import pl.simpleascoding.tutoringplatform.util.rscp.RscpStatus;
-import pl.simpleascoding.tutoringplatform.user.UserModelMapper;
-import pl.simpleascoding.tutoringplatform.user.UserService;
 
 import javax.transaction.Transactional;
 
 @Service
+@Primary
 @RequiredArgsConstructor
-public class TeacherServiceImpl implements TeacherService {
+class TeacherServiceImpl implements TeacherService {
 
     private final UserRepository userRepository;
     private final UserService userService;

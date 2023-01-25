@@ -3,7 +3,7 @@ package pl.simpleascoding.tutoringplatform.util;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import pl.simpleascoding.tutoringplatform.dto.RscpDTO;
+import pl.simpleascoding.tutoringplatform.util.rscp.RscpDTO;
 
 public class ControllerUtils {
 

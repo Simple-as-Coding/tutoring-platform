@@ -69,6 +69,8 @@ sudo ./scripts/simple-as-coding-database/simple-as-coding-db-docker-linux.sh
 After creating the database we install the project from the tutorial-platform directory.
 Important! The project will not build without a database connection.
 
+**path:** `/tutoring-platform/...`
+
 2.1. installation
 ```shell
 mvn clean install -T 1C

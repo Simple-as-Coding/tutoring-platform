@@ -31,11 +31,54 @@ Platform for teachers &amp; students, to offer or search for tutoring.
 * Log4j 2
 * Git
 
-## Getting started
+## Installation and Setup
 To setup and run this project:
-1. Create local PostgreSQL database (name your database "simpleascoding").
-2. Overwrite database username and password in application.properties.
-3. Build project with maven.
+
+```shell
+git clone https://github.com/Simple-as-Coding/tutoring-platform
+```
+```shell
+cd tutoring-platform
+```
+
+### 1. Install PostgreSQL Database
+choose the appropriate version of the script depending on the operating system to run docker container.
+
+or install local PostgreSQL database (name your database "simpleascoding").
+
+#### 1.1. Windows: 
+```shell
+docker
+```
+```shell
+call scripts/simple-as-coding-database/simple-as-coding-db-docker-windows.cmd
+```
+#### 1.2. Linux:
+```shell
+sudo systemctl start docker
+```
+```shell
+chmod +x scripts/simple-as-coding-database/simple-as-coding-db-docker-linux.sh
+```
+```shell
+./scripts/simple-as-coding-database/simple-as-coding-db-docker-linux.sh
+```
+
+## 2. launching the project
+After creating the database we install the project from the tutorial-platform directory.
+Important! The project will not build without a database connection.
+
+2.1. installation
+```shell
+mvn clean install -T 1C
+```
+
+2.2. running
+
+```shell
+mvn spring-boot:run
+```
+after launching the project, the database should be supplemented with tables by hibernate
 
 ## Roadmap
 - [ ] Implement core functionalities

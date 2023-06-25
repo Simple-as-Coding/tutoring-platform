@@ -59,7 +59,7 @@ call scripts/simple-as-coding-database/simple-as-coding-db-docker-windows.cmd
 sudo systemctl start docker
 ```
 ```shell
-chmod +x scripts/simple-as-coding-database/simple-as-coding-db-docker-linux.sh
+sudo chmod +x scripts/simple-as-coding-database/simple-as-coding-db-docker-linux.sh
 ```
 ```shell
 sudo ./scripts/simple-as-coding-database/simple-as-coding-db-docker-linux.sh

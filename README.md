@@ -62,7 +62,7 @@ sudo systemctl start docker
 chmod +x scripts/simple-as-coding-database/simple-as-coding-db-docker-linux.sh
 ```
 ```shell
-./scripts/simple-as-coding-database/simple-as-coding-db-docker-linux.sh
+sudo ./scripts/simple-as-coding-database/simple-as-coding-db-docker-linux.sh
 ```
 
 ## 2. launching the project

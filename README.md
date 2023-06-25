@@ -50,6 +50,7 @@ or install local PostgreSQL database (name your database "simpleascoding").
 ```shell
 docker
 ```
+wait for docker daemon in docker desktop to start before running the script below
 ```shell
 call scripts/simple-as-coding-database/simple-as-coding-db-docker-windows.cmd
 ```

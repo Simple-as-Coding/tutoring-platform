@@ -3,30 +3,21 @@ echo "___________________________________"
 echo "*      DATABASE SETUP SCRIPT      *"
 echo "___________________________________"
 
-rem Check if the required environment variables are set
-IF "%TUTORING_PLATFORM_DB_USERNAME%"=="" || "%TUTORING_PLATFORM_DB_PASSWORD%"=="" || "%TUTORING_PLATFORM_DB_CONTAINER_NAME%"=="" (
-    echo Required environment variables are not set. Trying to load from variables.env ...
-
-    rem Load ..\..\variables.env
-    IF EXIST ..\..\variables.env (
-        for /f "usebackq tokens=1* delims== " %%A in (..\..\variables.env) do (
-            SET "%%A=%%B"
-        )
-        echo SUCCESS: variables.env is loaded.
-    ) else (
-        echo Error: variables.env file not found.
-        exit /b 1
+rem Load application.properties
+set "application_properties_dir=../../src/main/resources/application.properties"
+if exist "%application_properties_dir%" (
+    for /F "tokens=2 delims==" %%A in ('findstr "spring.datasource.url" "%application_properties_dir%"') do (
+        set "CONTAINER_NAME=%%A"
     )
-)
-
-rem Assigning environment variables to internal script variables
-SET "CONTAINER_NAME=%TUTORING_PLATFORM_DB_CONTAINER_NAME%"
-SET "USERNAME=%TUTORING_PLATFORM_DB_USERNAME%"
-SET "PASSWORD=%TUTORING_PLATFORM_DB_PASSWORD%"
-
-rem Check if the required environment variables are set
-IF "%TUTORING_PLATFORM_DB_USERNAME%"=="" (
-    echo Error: Required environment variables are not set.
+    for /F "tokens=2 delims==" %%B in ('findstr "spring.datasource.username" "%application_properties_dir%"') do (
+        set "USERNAME=%%B"
+    )
+    for /F "tokens=2 delims==" %%C in ('findstr "spring.datasource.password" "%application_properties_dir%"') do (
+        set "PASSWORD=%%C"
+    )
+    echo SUCCESS: variables from application.properties are loaded.
+) else (
+    echo Error: application.properties file not found.
     exit /b 1
 )
 
@@ -72,3 +63,4 @@ if "%output%" neq "" (
 )
 
 echo Created new container: %CONTAINER_NAME%.
+echo "___________________________________"

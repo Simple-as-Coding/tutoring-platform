@@ -4,38 +4,31 @@ echo "___________________________________"
 echo "*      DATABASE SETUP SCRIPT      *"
 echo "___________________________________"
 
-# Check if the required environment variables are set
-if [[ -z "${TUTORING_PLATFORM_DB_USERNAME}" || -z "${TUTORING_PLATFORM_DB_PASSWORD}" || -z "${TUTORING_PLATFORM_DB_CONTAINER_NAME}" ]]; then
-    echo "Required environment variables are not set. Trying to load from variables.env ..."
-
-    # Load ../../variables.env
-    if [ -f ../../variables.env ]; then
-        export $(cat ../../variables.env | xargs)
-        echo "SUCCESS: variables.env is loaded."
-    else
-        echo "Error: variables.env file not found."
-        exit 1
-    fi
+# Load application.properties
+application_properties_dir="../../src/main/resources/application.properties"
+if [ -f "$application_properties_dir" ]; then
+    CONTAINER_NAME=$(grep "spring.datasource.url" $application_properties_dir | cut -d'=' -f2 | awk -F/ '{print $NF}')
+    USERNAME=$(grep "spring.datasource.username" $application_properties_dir  | cut -d'=' -f2)
+    PASSWORD=$(grep "spring.datasource.password" $application_properties_dir  | cut -d'=' -f2)
+    echo "SUCCESS: variables from application.properties are loaded."
+else
+    echo "Error: application.properties file not found."
+    exit 1
 fi
-
-# Assigning environment variables to internal script variables
-CONTAINER_NAME=$TUTORING_PLATFORM_DB_CONTAINER_NAME
-USERNAME=$TUTORING_PLATFORM_DB_USERNAME
-PASSWORD=$TUTORING_PLATFORM_DB_PASSWORD
 
 # Check if the container already exists, if so, delete it
 if docker ps -a --format "{{.Names}}" | grep -q "^$CONTAINER_NAME$"; then
     echo "Deleting old container: $CONTAINER_NAME"
-    docker stop $CONTAINER_NAME > /dev/null 2>&1
-    docker rm $CONTAINER_NAME > /dev/null 2>&1
+    docker stop "$CONTAINER_NAME" > /dev/null 2>&1
+    docker rm "$CONTAINER_NAME" > /dev/null 2>&1
 fi
 
 # Starting a new container
 output=$(docker run -d \
---name $CONTAINER_NAME \
--e POSTGRES_USER=$USERNAME \
--e POSTGRES_PASSWORD=$PASSWORD \
--e POSTGRES_DB=$CONTAINER_NAME \
+--name "$CONTAINER_NAME" \
+-e POSTGRES_USER="$USERNAME" \
+-e POSTGRES_PASSWORD="$PASSWORD" \
+-e POSTGRES_DB="$CONTAINER_NAME" \
 -p 5432:5432 \
 postgres 2>&1)
 
@@ -55,3 +48,4 @@ if [ $exit_code -ne 0 ]; then
 fi
 
 echo "Created new container: $CONTAINER_NAME."
+echo "___________________________________"

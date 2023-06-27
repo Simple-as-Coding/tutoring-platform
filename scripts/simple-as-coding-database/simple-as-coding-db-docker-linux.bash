@@ -52,7 +52,7 @@ if [ $exit_code -ne 0 ]; then
     elif [[ $output == *"No such image"* ]]; then
         echo "Error: Image not found. The specified container image does not exist."
     elif [[ $output == *"Cannot connect to the Docker daemon "* ]]; then
-        echo "Error: Failed to connect to Docker daemon. Please check if Docker Desktop is running and accessible."
+        echo "Error: Docker daemon was running at the start of the script but is not responding at the moment."
     else
         echo "Error: Failed to create a new container: $CONTAINER_NAME, Unknown reason."
     fi

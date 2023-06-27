@@ -16,6 +16,16 @@ else
     exit 1
 fi
 
+# Checking if docker daemon is running
+if ! docker info > /dev/null 2>&1; then
+    echo "Error: Failed to connect to Docker daemon. Please check if Docker daemon is running and accessible."
+    echo "To solve this problem, try using the command depending on your system:"
+    echo "    -> sudo systemctl start docker"
+    echo "    -> sudo service docker start"
+    echo "and start script again."
+    exit 1
+fi
+
 # Check if the container already exists, if so, delete it
 if docker ps -a --format "{{.Names}}" | grep -q "^$CONTAINER_NAME$"; then
     echo "Deleting old container: $CONTAINER_NAME"
@@ -41,6 +51,8 @@ if [ $exit_code -ne 0 ]; then
         echo "Error: Container name conflict. Container with the same name already exists. Most likely the script encountered a problem with deleting an old container with the same name."
     elif [[ $output == *"No such image"* ]]; then
         echo "Error: Image not found. The specified container image does not exist."
+    elif [[ $output == *"Cannot connect to the Docker daemon "* ]]; then
+        echo "Error: Failed to connect to Docker daemon. Please check if Docker Desktop is running and accessible."
     else
         echo "Error: Failed to create a new container: $CONTAINER_NAME, Unknown reason."
     fi

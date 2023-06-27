@@ -9,8 +9,8 @@
 ## Table of contents
 * [About The Project](#about-the-project)
 * [Technologies](#technologies)
-* [How to build a project](#how to build a project)
-* [Launching the project](#launching the project)
+* [How to build](#how-to-build)
+* [Launching The Project](#launching-the-project)
 * [Roadmap](#roadmap)
 * [Contributing](#contributing)
 * [License](#license)
@@ -32,7 +32,7 @@ Platform for teachers &amp; students, to offer or search for tutoring.
 * Log4j 2
 * Git
 
-## How to build a project
+## How to build
 To setup and run this project:
 
 ```shell
@@ -86,18 +86,18 @@ sudo chmod +x scripts/simple-as-coding-database/simple-as-coding-db-docker-linux
 sudo ./scripts/simple-as-coding-database/simple-as-coding-db-docker-linux.bash
 ```
 
-## 2. Launching the project
+## Launching The Project
 After creating the database we install the project from the tutorial-platform directory.
 Important! The project will not build without a database connection.
 
 **path:** `/tutoring-platform/...`
 
-2.1. installation
+#### 2.1. installation
 ```shell
 mvn clean install -T 1C
 ```
 
-2.2. running
+#### 2.2. running
 
 ```shell
 mvn spring-boot:run

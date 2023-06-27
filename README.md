@@ -56,12 +56,29 @@ wait for docker daemon in docker desktop to start before running the script belo
 call scripts/simple-as-coding-database/simple-as-coding-db-docker-windows.cmd
 ```
 #### 1.2. Linux:
+The following command is valid for these operating system versions.
+* Ubuntu 15.04 and newer
+* Fedora
+* CentOS 7 and newer
+* Debian 8 and newer
+* Arch Linux
+* openSUSE 42.2 and newer
+* RHEL 7 and newer
+* SLES 12 and newer
 ```shell
 sudo systemctl start docker
 ```
+The following command is valid for these operating system versions.
+* Ubuntu prior to 15.04
+* Debian prior to 8
+* CentOS 6 and older
+* RHEL 6 and older
+* SLES 11 and older
 ```shell
-sudo chmod +x scripts/simple-as-coding-database/simple-as-coding-db-docker-linux.sh
+sudo service docker start 
 ```
+
+the following commands are not version dependent
 ```shell
 sudo chmod +x scripts/simple-as-coding-database/simple-as-coding-db-docker-linux.bash
 ```

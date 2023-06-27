@@ -21,6 +21,7 @@ if (Test-Path $application_properties_dir) {
     $output = (docker info 2>/dev/null)
     if ($output -like "*error during connect*") {
         Write-Host "Error: Failed to connect to Docker daemon. Please check if Docker Desktop is running and accessible."
+        Write-Host "___________________________________"
         exit 1
     }
 

@@ -9,7 +9,8 @@
 ## Table of contents
 * [About The Project](#about-the-project)
 * [Technologies](#technologies)
-* [Getting Started](#getting-started)
+* [How to build a project](#how to build a project)
+* [Launching the project](#launching the project)
 * [Roadmap](#roadmap)
 * [Contributing](#contributing)
 * [License](#license)
@@ -31,7 +32,7 @@ Platform for teachers &amp; students, to offer or search for tutoring.
 * Log4j 2
 * Git
 
-## Installation and Setup
+## How to build a project
 To setup and run this project:
 
 ```shell
@@ -42,7 +43,7 @@ cd tutoring-platform
 ```
 
 ### 1. Install PostgreSQL Database
-choose the appropriate version of the script depending on the operating system to run docker container.
+Choose the appropriate version of the script depending on the operating system to run docker container.
 
 or install local PostgreSQL database (name your database "simpleascoding").
 
@@ -62,10 +63,13 @@ sudo systemctl start docker
 sudo chmod +x scripts/simple-as-coding-database/simple-as-coding-db-docker-linux.sh
 ```
 ```shell
-sudo ./scripts/simple-as-coding-database/simple-as-coding-db-docker-linux.sh
+sudo chmod +x scripts/simple-as-coding-database/simple-as-coding-db-docker-linux.bash
+```
+```shell
+sudo ./scripts/simple-as-coding-database/simple-as-coding-db-docker-linux.bash
 ```
 
-## 2. launching the project
+## 2. Launching the project
 After creating the database we install the project from the tutorial-platform directory.
 Important! The project will not build without a database connection.
 

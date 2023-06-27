@@ -11,6 +11,7 @@ if (Test-Path $application_properties_dir) {
     $CONTAINER_NAME = (Select-String -Path $application_properties_dir -Pattern "spring.datasource.url" | ForEach-Object { $_.Line -split "=" })[1].Split("/")[-1]
     $USERNAME = (Select-String -Path $application_properties_dir -Pattern "spring.datasource.username" | ForEach-Object { $_.Line -split "=" })[1]
     $PASSWORD = (Select-String -Path $application_properties_dir -Pattern "spring.datasource.password" | ForEach-Object { $_.Line -split "=" })[1]
+    $PORT = (Select-String -Path $application_properties_dir -Pattern "spring.datasource.url" | ForEach-Object { $_.Line -split "/" })[2].Split(":")[1]
     Write-Host "SUCCESS: variables from application.properties are loaded."
 } else {
     Write-Host "Error: application.properties file not found."
@@ -36,8 +37,8 @@ if (Test-Path $application_properties_dir) {
         -e POSTGRES_USER=$USERNAME `
         -e POSTGRES_PASSWORD=$PASSWORD `
         -e POSTGRES_DB=$CONTAINER_NAME `
-        -p 5432:5432 `
-        postgres 2>&1
+        -p $PORT:5432 `
+         postgres 2>&1
 
 # Checking error codes and displaying the appropriate message based on it
 $exit_code = $LASTEXITCODE

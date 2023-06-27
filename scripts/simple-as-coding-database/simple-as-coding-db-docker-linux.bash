@@ -10,6 +10,7 @@ if [ -f "$application_properties_dir" ]; then
     CONTAINER_NAME=$(grep "spring.datasource.url" $application_properties_dir | cut -d'=' -f2 | awk -F/ '{print $NF}')
     USERNAME=$(grep "spring.datasource.username" $application_properties_dir  | cut -d'=' -f2)
     PASSWORD=$(grep "spring.datasource.password" $application_properties_dir  | cut -d'=' -f2)
+    PORT=$(grep "spring.datasource.url" $application_properties_dir | cut -d'/' -f3 | cut -d':' -f2)
     echo "SUCCESS: variables from application.properties are loaded."
 else
     echo "Error: application.properties file not found."
@@ -39,7 +40,7 @@ output=$(docker run -d \
 -e POSTGRES_USER="$USERNAME" \
 -e POSTGRES_PASSWORD="$PASSWORD" \
 -e POSTGRES_DB="$CONTAINER_NAME" \
--p 5432:5432 \
+-p "$PORT":5432 \
 postgres 2>&1)
 
 # Checking error codes and displaying the appropriate message based on it

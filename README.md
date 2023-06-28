@@ -43,18 +43,24 @@ cd tutoring-platform
 ```
 
 ### 1. Install PostgreSQL Database
-Choose the appropriate version of the script depending on the operating system to run docker container.
+Choose the appropriate version of the script depending on the operating system to run database in docker container.
+data for database configuration in Docker are taken from the src/main/resources/application.properties file.
 
-or install local PostgreSQL database (name your database "simpleascoding").
+or install local PostgreSQL database (name your database "simpleascoding") for the app to detect it.
 
-#### 1.1. Windows: 
+#### 1.1. Windows:
+and fire up docker desktop via command or GUI
 ```shell
 docker
 ```
-wait for docker daemon in docker desktop to start before running the script below
+Wait for docker daemon in docker desktop to start before running the script below
+in PowerShell
 ```shell
-call scripts/simple-as-coding-database/simple-as-coding-db-docker-windows.ps1
+.\scripts\database-launch-starter\database-launch-starter.ps1
 ```
+If you are getting an error related to the script execution policy, you can change it by running PowerShell as an administrator and typing:
+Set-ExecutionPolicy RemoteSigned
+
 #### 1.2. Linux:
 The following command is valid for these operating system versions.
 * Ubuntu 15.04 and newer
@@ -78,12 +84,14 @@ The following command is valid for these operating system versions.
 sudo service docker start 
 ```
 
-the following commands are not version dependent
+The following commands are not version dependent
+sometimes you need to give execute permissions to the script
 ```shell
-sudo chmod +x scripts/simple-as-coding-database/simple-as-coding-db-docker-linux.bash
+sudo chmod +x scripts/database-launch-starter/database-launch-starter.bash
 ```
+Run with root rights
 ```shell
-sudo ./scripts/simple-as-coding-database/simple-as-coding-db-docker-linux.bash
+sudo ./scripts/database-launch-starter/database-launch-starter.bash
 ```
 
 ## Launching The Project
@@ -102,7 +110,7 @@ mvn clean install -T 1C
 ```shell
 mvn spring-boot:run
 ```
-after launching the project, the database should be supplemented with tables by hibernate
+After launching the project, the database should be supplemented with tables by hibernate
 
 ## Roadmap
 - [ ] Implement core functionalities

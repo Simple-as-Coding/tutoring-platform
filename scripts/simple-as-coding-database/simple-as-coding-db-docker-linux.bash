@@ -48,12 +48,14 @@ exit_code=$?
 if [ $exit_code -ne 0 ]; then
     if [[ $output == *"out of memory"* ]]; then
         echo "Error: Out of memory. Insufficient memory available."
-    elif [[ $output == *"conflict"* ]]; then
+    elif [[ $output == *"name conflict"* ]]; then
         echo "Error: Container name conflict. Container with the same name already exists. Most likely the script encountered a problem with deleting an old container with the same name."
     elif [[ $output == *"No such image"* ]]; then
         echo "Error: Image not found. The specified container image does not exist."
     elif [[ $output == *"Cannot connect to the Docker daemon "* ]]; then
         echo "Error: Docker daemon was running at the start of the script but is not responding at the moment."
+    elif [[ $output == *"port is already allocated"* ]]; then
+        echo "Error: Port conflict. The specified port is already allocated by another container."
     else
         echo "Error: Failed to create a new container: $CONTAINER_NAME, Unknown reason."
     fi

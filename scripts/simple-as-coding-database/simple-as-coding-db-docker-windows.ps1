@@ -45,10 +45,12 @@ $exit_code = $LASTEXITCODE
 if ($exit_code -ne 0) {
     if ($output -like "*out of memory*") {
         Write-Host "Error: Out of memory. Insufficient memory available."
-    } elseif ($output -like "*conflict*") {
+    } elseif ($output -like "*name conflict*") {
         Write-Host "Error: Container name conflict. Container with the same name already exists. Most likely the script encountered a problem with deleting an old container with the same name."
     } elseif ($output -like "*No such image*") {
         Write-Host "Error: Image not found. The specified container image does not exist."
+    } elseif ($output -like "*port is already allocated*") {
+        Write-Host "Error: Port conflict. The specified port is already allocated by another container."
     } else {
         Write-Host "Error: Failed to create a new container: $CONTAINER_NAME, Unknown reason."
     }

@@ -8,6 +8,7 @@ class TutoringPlatformApplicationTests {
 
 	@Test
 	void contextLoads() {
+		//test
 	}
 
 }

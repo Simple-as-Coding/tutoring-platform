@@ -7,7 +7,6 @@ on:
       - develop
     paths-ignore:
       - 'docs/**'
-      - 'scripts/**'
       - 'LICENSE'
       - 'README.md'
       - '.gitignore'
@@ -18,7 +17,6 @@ on:
       - develop
     paths-ignore:
       - 'docs/**'
-      - 'scripts/**'
       - 'LICENSE'
       - 'README.md'
       - '.gitignore'
@@ -35,6 +33,16 @@ jobs:
         with:
           java-version: '17'
           distribution: 'adopt'
+
+      - name: Build and start database
+        run: |
+          cd scripts/database-launch-starter
+          chmod +x database-launch-starter.bash
+          ./database-launch-starter.bash
+
+      - name: Wait for database to start
+        run: |
+          while ! nc -z localhost 5432; do sleep 1; done
 
       - name: Build project
         run: |

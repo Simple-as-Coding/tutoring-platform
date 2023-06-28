@@ -112,6 +112,9 @@ mvn spring-boot:run
 ```
 After launching the project, the database should be supplemented with tables by hibernate
 
+http://localhost:8080/swagger-ui/index.html
+At the very end, we can enter the API documentation check by swagger or a tool with tools like POSTMAN for testing REST API
+
 ## Roadmap
 - [ ] Implement core functionalities
 - [ ] Expand database model

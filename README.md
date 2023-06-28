@@ -9,7 +9,8 @@
 ## Table of contents
 * [About The Project](#about-the-project)
 * [Technologies](#technologies)
-* [Getting Started](#getting-started)
+* [How to build](#how-to-build)
+* [Launching The Project](#launching-the-project)
 * [Roadmap](#roadmap)
 * [Contributing](#contributing)
 * [License](#license)
@@ -31,11 +32,85 @@ Platform for teachers &amp; students, to offer or search for tutoring.
 * Log4j 2
 * Git
 
-## Getting started
+## How to build
 To setup and run this project:
-1. Create local PostgreSQL database (name your database "simpleascoding").
-2. Overwrite database username and password in application.properties.
-3. Build project with maven.
+
+```shell
+git clone https://github.com/Simple-as-Coding/tutoring-platform
+```
+```shell
+cd tutoring-platform
+```
+
+### 1. Install PostgreSQL Database
+Choose the appropriate version of the script depending on the operating system to run database in docker container.
+data for database configuration in Docker are taken from the src/main/resources/application.properties file.
+
+or install local PostgreSQL database (name your database "simpleascoding") for the app to detect it.
+
+#### 1.1. Windows:
+and fire up docker desktop via command or GUI
+```shell
+docker
+```
+Wait for docker daemon in docker desktop to start before running the script below
+in PowerShell
+```shell
+.\scripts\database-launch-starter\database-launch-starter.ps1
+```
+If you are getting an error related to the script execution policy, you can change it by running PowerShell as an administrator and typing:
+Set-ExecutionPolicy RemoteSigned
+
+#### 1.2. Linux:
+The following command is valid for these operating system versions.
+* Ubuntu 15.04 and newer
+* Fedora
+* CentOS 7 and newer
+* Debian 8 and newer
+* Arch Linux
+* openSUSE 42.2 and newer
+* RHEL 7 and newer
+* SLES 12 and newer
+```shell
+sudo systemctl start docker
+```
+The following command is valid for these operating system versions.
+* Ubuntu prior to 15.04
+* Debian prior to 8
+* CentOS 6 and older
+* RHEL 6 and older
+* SLES 11 and older
+```shell
+sudo service docker start 
+```
+
+The following commands are not version dependent
+sometimes you need to give execute permissions to the script
+```shell
+sudo chmod +x scripts/database-launch-starter/database-launch-starter.bash
+```
+Run with root rights
+```shell
+sudo ./scripts/database-launch-starter/database-launch-starter.bash
+```
+
+## Launching The Project
+After creating the database we install the project from the tutorial-platform directory.
+Important! The project will not build without a database connection.
+
+**path:** `/tutoring-platform/...`
+
+#### 2.1. installation
+```shell
+mvn clean install -T 1C
+```
+
+#### 2.2. running
+
+```shell
+mvn spring-boot:run
+```
+After launching the project, the database should be supplemented with tables by hibernate
 
 ## Roadmap
 - [ ] Implement core functionalities

@@ -55,3 +55,22 @@ jobs:
           mvn deploy -Dmaven.deploy.skip=true -Dmaven.repo.local=$HOME/.m2/repository
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
+  merge-check:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check build status
+        run: |
+          if [[ -f target/site/surefire-report.html ]]; then
+            echo "Build successful"
+          else
+            echo "Build failed"
+            exit 1
+          fi
+
+      - name: Block pull request merge
+        run: |
+          pull_request_number=$(curl --request GET --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER" | jq -r '.number')
+          curl --request POST --header "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" --header "Content-Type: application/json" --data '{"labels": ["failed-build"]}' "https://api.github.com/repos/$GITHUB_REPOSITORY/issues/$pull_request_number/labels"
+          exit 1

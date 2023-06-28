@@ -62,7 +62,7 @@ jobs:
     steps:
       - name: Check build status
         run: |
-          if [[ -f target/site/surefire-report.html ]]; then
+          if [[ -f target/surefire-reports/pl.simpleascoding.tutoringplatform.TutoringPlatformApplicationTests.txt ]]; then
             echo "Build successful"
           else
             echo "Build failed"

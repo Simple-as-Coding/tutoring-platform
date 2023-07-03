@@ -12,7 +12,7 @@
 | edek z fabryki kredek vel Szwag |                |                 |           |        | 2023-             |
 | Franciszek                      |                |                 |           |        | 2023-             |
 | Grzegosław                      |                |                 |           |        | 2023-             |
-| McBlankenburg (Maciej)          |                |                 |           |        | 2023-             |
+| McBlankenburg (Maciej)          |                |                 |           |junior  | 2023-             |
 | wh15stl3r                       |                |                 |           |        | 2023-             |
 |                                 |                |                 |           |        | 2023-             |
 |                                 |                |                 |           |        | 2023-             |

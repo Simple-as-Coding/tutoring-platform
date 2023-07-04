@@ -102,7 +102,7 @@ Important! The project will not build without a database connection.
 
 #### 2.1. Building an Application
 ```shell
-mvn clean install -T 1C
+mvn clean install
 ```
 
 #### 2.2. Running application

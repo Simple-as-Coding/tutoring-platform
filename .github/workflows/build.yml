@@ -1,0 +1,65 @@
+name: Trigger check
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+    paths-ignore:
+      - 'docs/**'
+      - 'LICENSE'
+      - 'README.md'
+      - '.gitignore'
+
+  pull_request:
+    branches:
+      - main
+      - develop
+    paths-ignore:
+      - 'docs/**'
+      - 'LICENSE'
+      - 'README.md'
+      - '.gitignore'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+
+      - name: Build and start database
+        run: |
+          cd scripts/database-launch-starter
+          chmod +x database-launch-starter.bash
+          ./database-launch-starter.bash
+
+      - name: Wait for database to start
+        run: |
+          while ! nc -z localhost 5432; do sleep 1; done
+
+      - name: Build project
+        run: |
+          mvn clean install -T 1C
+
+      - name: Run unit tests
+        run: |
+          mvn test
+
+      - name: Check test results
+        run: |
+          mvn surefire-report:report-only
+          cat target/site/surefire-report.html
+
+      - name: Publish to GitHub Packages
+        run: |
+          echo "//maven.pkg.github.com/Simple-as-Coding/tutoring-platform/:registryToken=$GITHUB_TOKEN" > .npmrc
+          mvn deploy -Dmaven.deploy.skip=true -Dmaven.repo.local=$HOME/.m2/repository
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}

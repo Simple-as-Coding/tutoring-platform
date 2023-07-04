@@ -130,6 +130,9 @@ Run with root rights
 sudo ./scripts/mailserver-launch-starter/mailserver-launch-starter.bash
 ```
 
+http://localhost:8080/swagger-ui/index.html
+At the very end, we can enter the API documentation check by swagger or a tool with tools like POSTMAN for testing REST API
+
 ## Roadmap
 - [ ] Implement core functionalities
 - [ ] Expand database model

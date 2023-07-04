@@ -94,7 +94,7 @@ Run with root rights
 sudo ./scripts/database-launch-starter/database-launch-starter.bash
 ```
 
-### 2. Launching The Project
+### Launching The Project
 After creating the database we install the project from the tutorial-platform directory.
 Important! The project will not build without a database connection.
 

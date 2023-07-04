@@ -130,6 +130,11 @@ Run with root rights
 sudo ./scripts/mailserver-launch-starter/mailserver-launch-starter.bash
 ```
 
+Mailbox --> 
+http://localhost:1080/
+default credentials: hello, hello (if it doesn't work then check application.properties spring.mail.username, spring.mail.password)
+
+Swagger Documentation --> 
 http://localhost:8080/swagger-ui/index.html
 At the very end, we can enter the API documentation check by swagger or a tool with tools like POSTMAN for testing REST API
 

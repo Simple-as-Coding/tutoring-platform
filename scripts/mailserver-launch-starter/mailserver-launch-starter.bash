@@ -4,7 +4,7 @@ echo "___________________________________"
 echo "*    MAIL SERVER SETUP SCRIPT     *"
 echo "___________________________________"
 
-# Load application.properties
+# Load application.properties.
 application_properties_dir="../../src/main/resources/application.properties"
 if [ -f "$application_properties_dir" ]; then
     CONTAINER_NAME=$(grep "DOCKER.CONTAINER.NAME.MAILDEV" $application_properties_dir | cut -d'=' -f2)
@@ -20,24 +20,24 @@ else
     exit 1
 fi
 
-# Checking if docker daemon is running
+# Checking if docker daemon is running.
 if ! docker info > /dev/null 2>&1; then
     echo "Error: Failed to connect to Docker daemon. Please check if Docker daemon is running and accessible."
     echo "To solve this problem, try using the command depending on your system:"
-    echo "    -> sudo systemctl start docker"
-    echo "    -> sudo service docker start"
+    echo "    sudo systemctl start docker"
+    echo "    sudo service docker start"
     echo "and start script again."
     exit 1
 fi
 
-# Check if the container already exists, if so, delete it
+# Delete the container if it already exists.
 if docker ps -a --format "{{.Names}}" | grep -q "^$CONTAINER_NAME$"; then
     echo "Deleting old container: $CONTAINER_NAME"
     docker stop "$CONTAINER_NAME" > /dev/null 2>&1
     docker rm "$CONTAINER_NAME" > /dev/null 2>&1
 fi
 
-# Starting a new container
+# Starting a new container.
 output=$(docker run -d \
 --name "$CONTAINER_NAME" \
 -p "$MAILDEV_WEB_PORT":1080 \
@@ -46,7 +46,7 @@ output=$(docker run -d \
 -e MAILDEV_WEB_PASS="$PASSWORD" \
 maildev/maildev 2>&1)
 
-# Checking error codes and displaying the appropriate message based on it
+# Checking error codes and displaying the appropriate message.
 exit_code=$?
 if [ $exit_code -ne 0 ]; then
     if [[ $output == *"out of memory"* ]]; then

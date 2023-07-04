@@ -94,23 +94,41 @@ Run with root rights
 sudo ./scripts/database-launch-starter/database-launch-starter.bash
 ```
 
-## Launching The Project
+### 2. Launching The Project
 After creating the database we install the project from the tutorial-platform directory.
 Important! The project will not build without a database connection.
 
 **path:** `/tutoring-platform/...`
 
-#### 2.1. installation
+#### 2.1. Building an Application
 ```shell
 mvn clean install -T 1C
 ```
 
-#### 2.2. running
+#### 2.2. Running application
 
 ```shell
 mvn spring-boot:run
 ```
 After launching the project, the database should be supplemented with tables by hibernate
+
+### 3. Launch MailServer
+you need to run docker before running the script
+
+#### 3.1 Windows
+Run with root rights
+```shell
+.\scripts\mailserver-launch-starter\mailserver-launch-starter.ps1
+```
+
+#### 3.2 Linux
+```shell
+sudo chmod +x scripts/mailserver-launch-starter/mailserver-launch-starter.bash
+```
+Run with root rights
+```shell
+sudo ./scripts/mailserver-launch-starter/mailserver-launch-starter.bash
+```
 
 ## Roadmap
 - [ ] Implement core functionalities

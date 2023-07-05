@@ -64,6 +64,26 @@ class UserServiceImplTest {
         assertThat(exception.getMessage(), is(equalTo("User with id 1 not found")));
     }
 
+    @DisplayName("Should return user with given username")
+    @Test
+    void whenGetUserByUsername_thenCorrectUserShouldBeReturned() {
+        //given
+        User user = createUserEntity();
+        when(userRepository.findUserByUsername("TestUser")).thenReturn(Optional.of(user));
+
+        //when
+        User result = userServiceImpl.getUserByUsername("TestUser");
+
+        //then
+        assertThat(result, is(equalTo(user)));
+    }
+
+    @DisplayName("Should throw UserNotFoundException when user with given username does not exist")
+    @Test
+    void whenGetUserByUsername_thenUserNotFoundExceptionShouldBeThrown() {
+
+    }
+
     private User createUserEntity() {
         User user = new User();
         user.setId(ID_1L);

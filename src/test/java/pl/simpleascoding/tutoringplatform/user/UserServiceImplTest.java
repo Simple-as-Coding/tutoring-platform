@@ -19,6 +19,18 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
 
+    private static final long ID_1L = 1L;
+
+    private static final String USERNAME = "TestUser";
+
+    private static final String PASSWORD = "password";
+
+    private static final String NAME = "TestName";
+
+    private static final String SURNAME = "TestSurname";
+
+    private static final String EMAIL = "test@mail.com";
+
     @Mock
     private  UserRepository userRepository;
 
@@ -30,10 +42,10 @@ class UserServiceImplTest {
     void whenGetUserById_thenCorrectUserShouldBeReturned() {
         //given
         User user = createUserEntity();
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(userRepository.findById(ID_1L)).thenReturn(Optional.of(user));
 
         //when
-        User result = userServiceImpl.getUserById(1L);
+        User result = userServiceImpl.getUserById(ID_1L);
 
         //then
         assertThat(result, is(equalTo(user)));
@@ -43,23 +55,24 @@ class UserServiceImplTest {
     @Test
     void whenGetUserById_thenUserNotFoundExceptionShouldBeThrown() {
         //given
-        when(userRepository.findById(1L)).thenReturn(Optional.empty());
+        when(userRepository.findById(ID_1L)).thenReturn(Optional.empty());
 
         //when & then
         UserNotFoundException exception =
-                assertThrows(UserNotFoundException.class, () -> userServiceImpl.getUserById(1L));
+                assertThrows(UserNotFoundException.class, () -> userServiceImpl.getUserById(ID_1L));
 
         assertThat(exception.getMessage(), is(equalTo("User with id 1 not found")));
     }
 
     private User createUserEntity() {
         User user = new User();
-        user.setId(1L);
-        user.setUsername("TestUser");
-        user.setPassword("password");
-        user.setName("TestName");
-        user.setSurname("TestSurname");
-        user.setEmail("test@mail.com");
+        user.setId(ID_1L);
+        user.setUsername(USERNAME);
+        user.setPassword(PASSWORD);
+        user.setName(NAME);
+        user.setSurname(SURNAME);
+        user.setEmail(EMAIL);
+
         return user;
     }
 }

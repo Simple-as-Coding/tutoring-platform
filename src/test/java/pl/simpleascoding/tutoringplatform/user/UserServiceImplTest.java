@@ -23,7 +23,7 @@ class UserServiceImplTest {
 
     private static final String USERNAME = "TestUser";
 
-    private static final String PASSWORD = "password";
+    private static final String PASSWORD = "Password1!";
 
     private static final String NAME = "TestName";
 
@@ -32,7 +32,7 @@ class UserServiceImplTest {
     private static final String EMAIL = "test@mail.com";
 
     @Mock
-    private  UserRepository userRepository;
+    private UserRepository userRepository;
 
     @InjectMocks
     private UserServiceImpl userServiceImpl;
@@ -81,7 +81,11 @@ class UserServiceImplTest {
     @DisplayName("Should throw UserNotFoundException when user with given username does not exist")
     @Test
     void whenGetUserByUsername_thenUserNotFoundExceptionShouldBeThrown() {
+        //given
+        when(userRepository.findUserByUsername(USERNAME)).thenReturn(Optional.empty());
 
+        //when & then
+        assertThrows(UserNotFoundException.class, () -> userServiceImpl.getUserByUsername(USERNAME));
     }
 
     private User createUserEntity() {
@@ -95,4 +99,5 @@ class UserServiceImplTest {
 
         return user;
     }
+
 }

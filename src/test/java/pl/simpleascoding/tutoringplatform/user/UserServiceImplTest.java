@@ -6,12 +6,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import pl.simpleascoding.tutoringplatform.user.exception.UserNotFoundException;
 
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,6 +37,19 @@ class UserServiceImplTest {
 
         //then
         assertThat(result, is(equalTo(user)));
+    }
+
+    @DisplayName("Should throw UserNotFoundException when user with given id does not exist")
+    @Test
+    void whenGetUserById_thenUserNotFoundExceptionShouldBeThrown() {
+        //given
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
+
+        //when & then
+        UserNotFoundException exception =
+                assertThrows(UserNotFoundException.class, () -> userServiceImpl.getUserById(1L));
+
+        assertThat(exception.getMessage(), is(equalTo("User with id 1 not found")));
     }
 
     private User createUserEntity() {

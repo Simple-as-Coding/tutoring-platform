@@ -6,9 +6,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import pl.simpleascoding.tutoringplatform.user.dto.CreateUserDTO;
+import pl.simpleascoding.tutoringplatform.user.dto.UserDTO;
 import pl.simpleascoding.tutoringplatform.user.exception.UserNotFoundException;
+import pl.simpleascoding.tutoringplatform.util.rscp.RscpDTO;
+import pl.simpleascoding.tutoringplatform.util.rscp.RscpStatus;
 
 import java.util.Optional;
+import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -37,6 +44,14 @@ class UserServiceImplTest {
     @InjectMocks
     private UserServiceImpl userServiceImpl;
 
+    @Mock
+    PasswordEncoder passwordEncoder;
+    @Mock
+    JavaMailSender mailSender;
+    @Mock
+    UserModelMapper userModelMapper;
+
+
     @DisplayName("Should return user with given id")
     @Test
     void whenGetUserById_thenCorrectUserShouldBeReturned() {
@@ -58,8 +73,7 @@ class UserServiceImplTest {
         when(userRepository.findById(ID_1L)).thenReturn(Optional.empty());
 
         //when & then
-        UserNotFoundException exception =
-                assertThrows(UserNotFoundException.class, () -> userServiceImpl.getUserById(ID_1L));
+        UserNotFoundException exception = assertThrows(UserNotFoundException.class, () -> userServiceImpl.getUserById(ID_1L));
 
         assertThat(exception.getMessage(), is(equalTo("User with id 1 not found")));
     }
@@ -86,6 +100,25 @@ class UserServiceImplTest {
 
         //when & then
         assertThrows(UserNotFoundException.class, () -> userServiceImpl.getUserByUsername(USERNAME));
+    }
+
+    @DisplayName("Should return user with correct data")
+    @Test
+    void whenCreateUser_thenCorrectDataShouldBeReturned() {
+        //given
+        User user = createUserEntity();
+        CreateUserDTO userDTO = new CreateUserDTO(user.getUsername(), user.getPassword(), user.getName(), user.getSurname(), user.getEmail());
+        String rootUrl = "http://example.com";
+
+        //when
+        RscpDTO<UserDTO> resultUser = userServiceImpl.createUser(userDTO, rootUrl);
+
+        //then
+//        return new RscpDTO<>(RscpStatus.OK, "User creation completed successfully", userDTO);
+        UserDTO expectedUserDto = new UserDTO(user.getId(), user.getUsername(), user.getPassword(), user.getName(), user.getSurname(), Set.of(RoleType.USER));
+
+        RscpDTO<UserDTO> expectedUserRscpDTO = new RscpDTO<>(RscpStatus.OK, "User creation completed successfully", expectedUserDto);
+        assertThat(resultUser, is(equalTo(expectedUserRscpDTO)));
     }
 
     private User createUserEntity() {

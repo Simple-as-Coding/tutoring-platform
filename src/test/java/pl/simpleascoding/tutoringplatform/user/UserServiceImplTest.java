@@ -5,9 +5,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import pl.simpleascoding.tutoringplatform.security.jwt.TokenRepository;
 import pl.simpleascoding.tutoringplatform.user.dto.CreateUserDTO;
 import pl.simpleascoding.tutoringplatform.user.dto.UserDTO;
 import pl.simpleascoding.tutoringplatform.user.exception.UserNotFoundException;
@@ -21,7 +23,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
@@ -48,7 +51,7 @@ class UserServiceImplTest {
     PasswordEncoder passwordEncoder;
     @Mock
     JavaMailSender mailSender;
-    @Mock
+    @Spy
     UserModelMapper userModelMapper;
 
 
@@ -106,20 +109,50 @@ class UserServiceImplTest {
     @Test
     void whenCreateUser_thenCorrectDataShouldBeReturned() {
         //given
+
+        UserRepository userRepository1 = new UserRepositoryTestImpl();
+        TokenRepository tokenRepository = new TokenRepositoryTestImpl();
+        PasswordEncoder passwordEncoder1 = mock(PasswordEncoder.class);
+        JavaMailSender javaMailSender = mock(JavaMailSender.class);
+        UserModelMapper userModelMapper1 = new UserModelMapperTestImpl();
+        UserServiceImpl userService =
+                new UserServiceImpl(userRepository1, tokenRepository, passwordEncoder1, javaMailSender, userModelMapper1);
+
         User user = createUserEntity();
         CreateUserDTO userDTO = new CreateUserDTO(user.getUsername(), user.getPassword(), user.getName(), user.getSurname(), user.getEmail());
         String rootUrl = "http://example.com";
 
         //when
-        RscpDTO<UserDTO> resultUser = userServiceImpl.createUser(userDTO, rootUrl);
+        RscpDTO<UserDTO> resultUser = userService.createUser(userDTO, rootUrl);
 
         //then
-//        return new RscpDTO<>(RscpStatus.OK, "User creation completed successfully", userDTO);
-        UserDTO expectedUserDto = new UserDTO(user.getId(), user.getUsername(), user.getPassword(), user.getName(), user.getSurname(), Set.of(RoleType.USER));
+        UserDTO expectedUserDto = new UserDTO(user.getId(), user.getUsername(),
+                user.getName(), user.getSurname(), user.getEmail(), Set.of(RoleType.USER));
 
         RscpDTO<UserDTO> expectedUserRscpDTO = new RscpDTO<>(RscpStatus.OK, "User creation completed successfully", expectedUserDto);
         assertThat(resultUser, is(equalTo(expectedUserRscpDTO)));
     }
+
+//    @DisplayName("Should return user with correct data")
+//    @Test
+//    void whenCreateUser_thenCorrectDataShouldBeReturned() {
+//        //given
+//        UserRepository userRepository1 = new UserRepositoryTestImpl();
+//
+//        User user = createUserEntity();
+//        CreateUserDTO userDTO = new CreateUserDTO(user.getUsername(), user.getPassword(), user.getName(), user.getSurname(), user.getEmail());
+//        String rootUrl = "http://example.com";
+//
+//        //when
+//        RscpDTO<UserDTO> resultUser = userServiceImpl.createUser(userDTO, rootUrl);
+//
+//        //then
+////        return new RscpDTO<>(RscpStatus.OK, "User creation completed successfully", userDTO);
+//        UserDTO expectedUserDto = new UserDTO(user.getId(), user.getUsername(), user.getPassword(), user.getName(), user.getSurname(), Set.of(RoleType.USER));
+//
+//        RscpDTO<UserDTO> expectedUserRscpDTO = new RscpDTO<>(RscpStatus.OK, "User creation completed successfully", expectedUserDto);
+//        assertThat(resultUser, is(equalTo(expectedUserRscpDTO)));
+//    }
 
     private User createUserEntity() {
         User user = new User();

@@ -9,14 +9,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.simpleascoding.tutoringplatform.util.rscp.RscpDTO;
+import pl.simpleascoding.tutoringplatform.security.jwt.Token;
+import pl.simpleascoding.tutoringplatform.security.jwt.TokenRepository;
+import pl.simpleascoding.tutoringplatform.security.jwt.TokenType;
 import pl.simpleascoding.tutoringplatform.security.jwt.exception.InvalidTokenException;
 import pl.simpleascoding.tutoringplatform.security.jwt.exception.TokenAlreadyConfirmedException;
 import pl.simpleascoding.tutoringplatform.security.jwt.exception.TokenNotFoundException;
-import pl.simpleascoding.tutoringplatform.security.jwt.Token;
-import pl.simpleascoding.tutoringplatform.security.jwt.TokenType;
-import pl.simpleascoding.tutoringplatform.security.jwt.TokenRepository;
-import pl.simpleascoding.tutoringplatform.util.rscp.RscpStatus;
 import pl.simpleascoding.tutoringplatform.user.dto.ChangeUserPasswordDTO;
 import pl.simpleascoding.tutoringplatform.user.dto.CreateUserDTO;
 import pl.simpleascoding.tutoringplatform.user.dto.ModifyUserDTO;
@@ -25,6 +23,8 @@ import pl.simpleascoding.tutoringplatform.user.exception.EmailTakenException;
 import pl.simpleascoding.tutoringplatform.user.exception.UserAlreadyEnabledException;
 import pl.simpleascoding.tutoringplatform.user.exception.UserNotFoundException;
 import pl.simpleascoding.tutoringplatform.user.exception.UsernameTakenException;
+import pl.simpleascoding.tutoringplatform.util.rscp.RscpDTO;
+import pl.simpleascoding.tutoringplatform.util.rscp.RscpStatus;
 
 @Service
 @Primary

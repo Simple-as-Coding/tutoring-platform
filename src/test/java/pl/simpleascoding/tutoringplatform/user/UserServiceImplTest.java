@@ -7,17 +7,19 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import pl.simpleascoding.tutoringplatform.security.jwt.Token;
 import pl.simpleascoding.tutoringplatform.security.jwt.TokenRepository;
-import pl.simpleascoding.tutoringplatform.user.dto.CreateUserDTO;
-import pl.simpleascoding.tutoringplatform.user.dto.UserDTO;
+import pl.simpleascoding.tutoringplatform.security.jwt.TokenType;
+import pl.simpleascoding.tutoringplatform.security.jwt.exception.InvalidTokenException;
+import pl.simpleascoding.tutoringplatform.security.jwt.exception.TokenAlreadyConfirmedException;
+import pl.simpleascoding.tutoringplatform.security.jwt.exception.TokenNotFoundException;
+import pl.simpleascoding.tutoringplatform.user.exception.UserAlreadyEnabledException;
 import pl.simpleascoding.tutoringplatform.user.exception.UserNotFoundException;
 import pl.simpleascoding.tutoringplatform.util.rscp.RscpDTO;
 import pl.simpleascoding.tutoringplatform.util.rscp.RscpStatus;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -105,54 +107,82 @@ class UserServiceImplTest {
         assertThrows(UserNotFoundException.class, () -> userServiceImpl.getUserByUsername(USERNAME));
     }
 
-    @DisplayName("Should return user with correct data")
+    @DisplayName("Should return null and User registration confirmed.")
     @Test
-    void whenCreateUser_thenCorrectDataShouldBeReturned() {
+    void whenConfirmUserRegistration_thenUserRegistrationConfirmedShouldBeReturned() {
         //given
+        Token tokenEntity = createTokenEntity();
 
-        UserRepository userRepository1 = new UserRepositoryTestImpl();
-        TokenRepository tokenRepository = new TokenRepositoryTestImpl();
-        PasswordEncoder passwordEncoder1 = mock(PasswordEncoder.class);
-        JavaMailSender javaMailSender = mock(JavaMailSender.class);
-        UserModelMapper userModelMapper1 = new UserModelMapperTestImpl();
-        UserServiceImpl userService =
-                new UserServiceImpl(userRepository1, tokenRepository, passwordEncoder1, javaMailSender, userModelMapper1);
-
-        User user = createUserEntity();
-        CreateUserDTO userDTO = new CreateUserDTO(user.getUsername(), user.getPassword(), user.getName(), user.getSurname(), user.getEmail());
-        String rootUrl = "http://example.com";
-
+        when(tokenRepository.findTokenByValue(tokenEntity.getValue())).thenReturn(Optional.of(tokenEntity));
         //when
-        RscpDTO<UserDTO> resultUser = userService.createUser(userDTO, rootUrl);
+        RscpDTO<?> resultRscpDTO = userService.confirmUserRegistration(tokenEntity.getValue());
 
-        //then
-        UserDTO expectedUserDto = new UserDTO(user.getId(), user.getUsername(),
-                user.getName(), user.getSurname(), user.getEmail(), Set.of(RoleType.USER));
+        RscpDTO<Object> expectedRscpDTO = new RscpDTO<>(RscpStatus.OK, "User registration confirmed.", null);
 
-        RscpDTO<UserDTO> expectedUserRscpDTO = new RscpDTO<>(RscpStatus.OK, "User creation completed successfully", expectedUserDto);
-        assertThat(resultUser, is(equalTo(expectedUserRscpDTO)));
+        assertThat(resultRscpDTO, is(equalTo(expectedRscpDTO)));
     }
 
-//    @DisplayName("Should return user with correct data")
-//    @Test
-//    void whenCreateUser_thenCorrectDataShouldBeReturned() {
-//        //given
-//        UserRepository userRepository1 = new UserRepositoryTestImpl();
-//
-//        User user = createUserEntity();
-//        CreateUserDTO userDTO = new CreateUserDTO(user.getUsername(), user.getPassword(), user.getName(), user.getSurname(), user.getEmail());
-//        String rootUrl = "http://example.com";
-//
-//        //when
-//        RscpDTO<UserDTO> resultUser = userServiceImpl.createUser(userDTO, rootUrl);
-//
-//        //then
-////        return new RscpDTO<>(RscpStatus.OK, "User creation completed successfully", userDTO);
-//        UserDTO expectedUserDto = new UserDTO(user.getId(), user.getUsername(), user.getPassword(), user.getName(), user.getSurname(), Set.of(RoleType.USER));
-//
-//        RscpDTO<UserDTO> expectedUserRscpDTO = new RscpDTO<>(RscpStatus.OK, "User creation completed successfully", expectedUserDto);
-//        assertThat(resultUser, is(equalTo(expectedUserRscpDTO)));
-//    }
+    @DisplayName("Should throw TokenNotFoundException when token does not exist")
+    @Test
+    void whenConfirmUserRegistration_thenTokenNotFoundExceptionShouldBeThrown() {
+        //given
+        Token tokenEntity = createTokenEntity();
+
+        //when & then
+        when(tokenRepository.findTokenByValue(tokenEntity.getValue())).thenReturn(Optional.empty());
+
+        TokenNotFoundException exception = assertThrows(TokenNotFoundException.class,
+                () -> userService.confirmUserRegistration(tokenEntity.getValue()));
+
+        assertThat(exception.getMessage(), is(equalTo("Token not found")));
+    }
+
+    @DisplayName("Should throw InvalidTokenException when token is invalid")
+    @Test
+    void whenConfirmUserRegistration_thenInvalidTokenExceptionShouldBeThrown() {
+        //given
+        Token tokenEntity = createTokenEntity();
+        tokenEntity.setType(null);
+        //when & then
+        when(tokenRepository.findTokenByValue(tokenEntity.getValue())).thenReturn(Optional.of(tokenEntity));
+
+        InvalidTokenException exception = assertThrows(InvalidTokenException.class,
+                () -> userService.confirmUserRegistration(tokenEntity.getValue()));
+
+        assertThat(exception.getMessage(), is(equalTo("Invalid token")));
+    }
+
+    @DisplayName("Should throw TokenAlreadyConfirmedException when token is already confirmed")
+    @Test
+    void whenConfirmUserRegistration_thenTokenAlreadyConfirmedExceptionShouldBeThrown() {
+        //given
+        Token tokenEntity = createTokenEntity();
+        tokenEntity.setConfirmedAt(LocalDateTime.of(1, 1, 1, 1, 1));
+        //when & then
+        when(tokenRepository.findTokenByValue(tokenEntity.getValue())).thenReturn(Optional.of(tokenEntity));
+
+        TokenAlreadyConfirmedException exception = assertThrows(TokenAlreadyConfirmedException.class,
+                () -> userService.confirmUserRegistration(tokenEntity.getValue()));
+
+        assertThat(exception.getMessage(), is(equalTo("Token already confirmed")));
+    }
+
+    @DisplayName("Should throw UserAlreadyEnabledException when token is already registered")
+    @Test
+    void whenConfirmUserRegistration_thenUserAlreadyEnabledExceptionShouldBeThrown() {
+        //given
+        Token tokenEntity = createTokenEntity();
+        tokenEntity.getUser().setEnabled(true);
+        //when & then
+        when(tokenRepository.findTokenByValue(tokenEntity.getValue())).thenReturn(Optional.of(tokenEntity));
+
+        UserAlreadyEnabledException exception = assertThrows(UserAlreadyEnabledException.class,
+                () -> userService.confirmUserRegistration(tokenEntity.getValue()));
+
+        assertThat(exception.getMessage(), is(equalTo("User TestUser is already enabled")));
+    }
+
+
 
     private User createUserEntity() {
         User user = new User();
@@ -162,8 +192,14 @@ class UserServiceImplTest {
         user.setName(NAME);
         user.setSurname(SURNAME);
         user.setEmail(EMAIL);
-
         return user;
+    }
+
+    private Token createTokenEntity() {
+        Token token = new Token();
+        token.setType(TokenType.REGISTER_CONFIRMATION);
+        token.setUser(createUserEntity());
+        return token;
     }
 
 }

@@ -4,8 +4,8 @@
 
 | Discord                         | GitHub         | Name             | Role      | Skill  | Registration date |
 |---------------------------------|----------------|----------------- |-----------|--------|-------------------|
-| Legion                          | MateuszCiapala | Mateusz Ciapała  | BE leader |        | 2022-            |
-| dawciobel                       | dawciobiel     | Dawid Bielecki   | BE leader | senior | 2022-            |
+| Legion                          | MateuszCiapala | Mateusz Ciapała  | BE leader |        | 2022-since start |
+| dawciobel                       | dawciobiel     | Dawid Bielecki   | BE leader | senior | 2022-since start |
 | DawidS                          |                |                  |           |        | 2023-            |
 | Eukon                           |                |                  |           |        | 2023-            |
 | DevyMatthew                     |                |                  |           |        | 2023-            |

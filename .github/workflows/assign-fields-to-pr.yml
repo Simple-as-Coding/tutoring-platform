@@ -1,0 +1,35 @@
+name: assign-field-to-pr
+on:
+  pull_request:
+    types:
+      - opened
+
+jobs:
+  assign:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assign PR author
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = context.payload.pull_request;
+            const author = pr.user.login;
+            const issue_number = pr.number;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            const { data: assignees } = await github.issues.listAssignees({
+              owner,
+              repo,
+              issue_number,
+            });
+
+            if (!assignees.some((assignee) => assignee.login === author)) {
+              await github.issues.addAssignees({
+                owner,
+                repo,
+                issue_number,
+                assignees: [author],
+              });
+            }

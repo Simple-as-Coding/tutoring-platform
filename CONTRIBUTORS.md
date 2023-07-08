@@ -4,8 +4,8 @@
 
 | Discord                         | GitHub         | Name             | Role      | Skill  | Registration date |
 |---------------------------------|----------------|----------------- |-----------|--------|-------------------|
-| Legion                          | MateuszCiapala | Mateusz Ciapała  | BE leader |        | Since app start - Jun 21, 2022 |
-| dawciobel                       | dawciobiel     | Dawid Bielecki   | BE leader | senior | Since app start - Jun 21, 2022 |
+| Legion                          | MateuszCiapala | Mateusz Ciapała  | BE leader |        | Since the application was launched - Jun 21, 2022 |
+| dawciobel                       | dawciobiel     | Dawid Bielecki   | BE leader | senior | Since the application was launched - Jun 21, 2022 |
 | DawidS                          |                |                  |           |        | 2022-            |
 | Eukon                           |                |                  |           |        | 2022-            |
 | DevyMatthew                     |                |                  |           |        | 2022-            |

@@ -56,10 +56,3 @@ jobs:
         run: |
           mvn surefire-report:report-only
           cat target/site/surefire-report.html
-
-      - name: Publish to GitHub Packages
-        run: |
-          echo "//maven.pkg.github.com/Simple-as-Coding/tutoring-platform/:registryToken=$GITHUB_TOKEN" > .npmrc
-          mvn deploy -Dmaven.deploy.skip=true -Dmaven.repo.local=$HOME/.m2/repository
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}

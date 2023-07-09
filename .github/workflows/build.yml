@@ -3,7 +3,6 @@ name: Build check for develop
 on:
   push:
     branches:
-      - main
       - develop
     paths-ignore:
       - 'docs/**'
@@ -13,7 +12,6 @@ on:
 
   pull_request:
     branches:
-      - main
       - develop
     paths-ignore:
       - 'docs/**'

@@ -1,4 +1,4 @@
-name: Trigger check
+name: Build check for develop
 
 on:
   push:

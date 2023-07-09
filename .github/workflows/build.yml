@@ -9,6 +9,7 @@ on:
       - 'LICENSE'
       - 'README.md'
       - '.gitignore'
+      - 'CONTRIBUTORS.md'
 
   pull_request:
     branches:
@@ -18,6 +19,7 @@ on:
       - 'LICENSE'
       - 'README.md'
       - '.gitignore'
+      - 'CONTRIBUTORS.md'
 
 jobs:
   build:

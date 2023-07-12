@@ -9,7 +9,7 @@
 | DawidS                          | DawidStuzynski    | Dawid Stużyński        | BE/DEVOPS    |        | Since the application was launched - Jun 21, 2022 |
 | Eukon                           |                   |                        |              |        | 2022-                                             |
 | DevyMatthew                     | MateuszBednarczyk | Mateusz Bednarczyk     | BE developer | junior | Since the application was launched - Jun 21, 2022 |
-| edek z fabryki kredek vel Szwag |                   |                        |              |        | 2023-                                             |
+| edek z fabryki kredek vel Szwag | a-dubaj           | Andrzej Dubaj          | BE           |        | 2023-06-24                                        |
 | Franciszek                      |                   |                        |              |        | 2023-                                             |
 | Grzegosław                      | GrzegorzHolui     | Grzegorz Hołuj         |              | junior | 2023-06-24                                        |
 | McBlankenburg                   | McBlankenburg     | Maciej Blankenburg     | BE           | junior | 2023-                                             |

@@ -87,6 +87,37 @@ class UserServiceImplTest {
         //when & then
         assertThrows(UserNotFoundException.class, () -> userServiceImpl.getUserByUsername(USERNAME));
     }
+    //  Verify that the method returns true for an existing user ID.
+
+    @DisplayName("Should return true when user with given id exists")
+    @Test
+    void whenUserExistsById_thenTrueShouldBeReturned() {
+
+        //given
+        when(userRepository.existsById(ID_1L)).thenReturn(true);
+
+        //when
+        boolean result = userServiceImpl.checkUserExists(ID_1L);
+
+        //then
+        assertThat(result, is(true));
+    }
+
+
+    @DisplayName("Should return false when user with given id does not exist")
+    @Test
+    void whenUserExistsById_thenFalseShouldBeReturned() {
+
+        //given
+        when(userRepository.existsById(ID_1L)).thenReturn(false);
+
+        //when
+        boolean result = userServiceImpl.checkUserExists(ID_1L);
+
+        //then
+        assertThat(result, is(false));
+    }
+
 
     private User createUserEntity() {
         User user = new User();

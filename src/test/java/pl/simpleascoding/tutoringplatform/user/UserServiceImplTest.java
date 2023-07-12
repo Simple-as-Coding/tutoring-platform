@@ -6,6 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import pl.simpleascoding.tutoringplatform.user.exception.UserNotFoundException;
 
 import java.util.Optional;
@@ -86,6 +88,32 @@ class UserServiceImplTest {
 
         //when & then
         assertThrows(UserNotFoundException.class, () -> userServiceImpl.getUserByUsername(USERNAME));
+    }
+
+    @DisplayName("Should return user with given username")
+    @Test
+    void whenLoadUserByUsername_thenCorrectUserShouldBeReturned() {
+        //given
+        User user = createUserEntity();
+        when(userRepository.findUserByUsername(USERNAME)).thenReturn(Optional.of(user));
+
+        //when
+        UserDetails result = userServiceImpl.loadUserByUsername(USERNAME);
+
+        //then
+        assertThat(result, is(equalTo(user)));
+
+    }
+
+    @DisplayName("Should throw UsernameNotFoundException when user with given username does not exist")
+    @Test
+    void whenLoadUserByUsername_thenUsernameNotFoundExceptionShouldBeThrown() {
+        //given
+        when(userRepository.findUserByUsername(USERNAME)).thenReturn(Optional.empty());
+
+        //when & then
+        assertThrows(UsernameNotFoundException.class, () -> userServiceImpl.loadUserByUsername(USERNAME));
+
     }
 
     private User createUserEntity() {

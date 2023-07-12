@@ -23,7 +23,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest implements UserServiceMethodsForTests {
@@ -93,13 +93,14 @@ class UserServiceImplTest implements UserServiceMethodsForTests {
     void whenConfirmUserRegistration_thenUserRegistrationConfirmedShouldBeReturned() {
         //given
         Token tokenEntity = createTokenEntity();
-
-        when(tokenRepository.findTokenByValue(tokenEntity.getValue())).thenReturn(Optional.of(tokenEntity));
-        //when
-        RscpDTO<?> resultRscpDTO = userServiceImpl.confirmUserRegistration(tokenEntity.getValue());
-
         RscpDTO<Object> expectedRscpDTO = new RscpDTO<>(RscpStatus.OK, "User registration confirmed.", null);
 
+        //when
+        when(tokenRepository.findTokenByValue(tokenEntity.getValue())).thenReturn(Optional.of(tokenEntity));
+
+        //then
+        RscpDTO<?> resultRscpDTO = userServiceImpl.confirmUserRegistration(tokenEntity.getValue());
+        verify(tokenRepository, atLeastOnce()).findTokenByValue(tokenEntity.getValue());
         assertThat(resultRscpDTO, is(equalTo(expectedRscpDTO)));
     }
 
@@ -108,12 +109,15 @@ class UserServiceImplTest implements UserServiceMethodsForTests {
     void whenConfirmUserRegistration_thenTokenNotFoundExceptionShouldBeThrown() {
         //given
         Token tokenEntity = createTokenEntity();
-        //when & then
+
+        //when
         when(tokenRepository.findTokenByValue(tokenEntity.getValue())).thenReturn(Optional.empty());
 
         TokenNotFoundException exception = assertThrows(TokenNotFoundException.class,
                 () -> userServiceImpl.confirmUserRegistration(tokenEntity.getValue()));
 
+        //then
+        verify(tokenRepository, atLeastOnce()).findTokenByValue(tokenEntity.getValue());
         assertThat(exception.getMessage(), is(equalTo("Token not found")));
     }
 
@@ -123,12 +127,14 @@ class UserServiceImplTest implements UserServiceMethodsForTests {
         //given
         Token tokenEntity = createTokenEntity();
         tokenEntity.setType(null);
-        //when & then
+
+        //when
         when(tokenRepository.findTokenByValue(tokenEntity.getValue())).thenReturn(Optional.of(tokenEntity));
 
         InvalidTokenException exception = assertThrows(InvalidTokenException.class,
                 () -> userServiceImpl.confirmUserRegistration(tokenEntity.getValue()));
-
+        //then
+        verify(tokenRepository, atLeastOnce()).findTokenByValue(tokenEntity.getValue());
         assertThat(exception.getMessage(), is(equalTo("Invalid token")));
     }
 
@@ -139,12 +145,13 @@ class UserServiceImplTest implements UserServiceMethodsForTests {
         Token tokenEntity = createTokenEntity();
         tokenEntity.setConfirmedAt(LocalDateTime.of(1, 1, 1, 1, 1));
 
-        //when & then
+        //when
         when(tokenRepository.findTokenByValue(tokenEntity.getValue())).thenReturn(Optional.of(tokenEntity));
 
         TokenAlreadyConfirmedException exception = assertThrows(TokenAlreadyConfirmedException.class,
                 () -> userServiceImpl.confirmUserRegistration(tokenEntity.getValue()));
-
+//        then
+        verify(tokenRepository, atLeastOnce()).findTokenByValue(tokenEntity.getValue());
         assertThat(exception.getMessage(), is(equalTo("Token already confirmed")));
     }
 
@@ -154,12 +161,14 @@ class UserServiceImplTest implements UserServiceMethodsForTests {
         //given
         Token tokenEntity = createTokenEntity();
         tokenEntity.getUser().setEnabled(true);
-        //when & then
-        when(tokenRepository.findTokenByValue(tokenEntity.getValue())).thenReturn(Optional.of(tokenEntity));
 
+        //when
+        when(tokenRepository.findTokenByValue(tokenEntity.getValue())).thenReturn(Optional.of(tokenEntity));
         UserAlreadyEnabledException exception = assertThrows(UserAlreadyEnabledException.class,
                 () -> userServiceImpl.confirmUserRegistration(tokenEntity.getValue()));
 
+        //then
+        verify(tokenRepository, atLeastOnce()).findTokenByValue(tokenEntity.getValue());
         assertThat(exception.getMessage(), is(equalTo("User TestUser is already enabled")));
     }
 

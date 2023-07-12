@@ -89,7 +89,7 @@ class UserServiceImplTest {
         UserNotFoundException exception
                 = assertThrows(UserNotFoundException.class, () -> userServiceImpl.getUserByUsername(USERNAME));
 
-        assertThat(exception.getMessage(), is(equalTo("User with username " + USERNAME + " not found")));
+        assertThat(exception.getMessage(), is(equalTo("User "+ USERNAME + " not found")));
     }
 
     private User createUserEntity() {

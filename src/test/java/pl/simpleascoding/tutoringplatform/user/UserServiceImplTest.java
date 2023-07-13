@@ -16,6 +16,9 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 
+import static org.mockito.Mockito.when;
+
+
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
@@ -91,6 +94,34 @@ class UserServiceImplTest {
 
         assertThat(exception.getMessage(), is(equalTo("User "+ USERNAME + " not found")));
     }
+
+    @DisplayName("Should return true when user with given id exists")
+    @Test
+    void whenUserExistsById_thenTrueShouldBeReturned() {
+        //given
+        given(userRepository.existsById(ID_1L)).willReturn(true);
+
+        //when
+        boolean result = userServiceImpl.checkUserExists(ID_1L);
+
+        //then
+        assertThat(result, is(true));
+    }
+
+
+    @DisplayName("Should return false when user with given id does not exist")
+    @Test
+    void whenUserExistsById_thenFalseShouldBeReturned() {
+        //given
+        given(userRepository.existsById(ID_1L)).willReturn(false);
+
+        //when
+        boolean result = userServiceImpl.checkUserExists(ID_1L);
+
+        //then
+        assertThat(result, is(false));
+    }
+
 
     private User createUserEntity() {
         User user = new User();

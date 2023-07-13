@@ -15,7 +15,10 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
+
 import static org.mockito.Mockito.when;
+
+
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
@@ -43,7 +46,7 @@ class UserServiceImplTest {
     void whenGetUserById_thenCorrectUserShouldBeReturned() {
         //given
         User user = createUserEntity();
-        when(userRepository.findById(ID_1L)).thenReturn(Optional.of(user));
+        given(userRepository.findById(ID_1L)).willReturn(Optional.of(user));
 
         //when
         User result = userServiceImpl.getUserById(ID_1L);
@@ -56,13 +59,13 @@ class UserServiceImplTest {
     @Test
     void whenGetUserById_thenUserNotFoundExceptionShouldBeThrown() {
         //given
-        when(userRepository.findById(ID_1L)).thenReturn(Optional.empty());
+        given(userRepository.findById(ID_1L)).willReturn(Optional.empty());
 
         //when & then
-        UserNotFoundException exception =
-                assertThrows(UserNotFoundException.class, () -> userServiceImpl.getUserById(ID_1L));
+        UserNotFoundException exception
+                = assertThrows(UserNotFoundException.class, () -> userServiceImpl.getUserById(ID_1L));
 
-        assertThat(exception.getMessage(), is(equalTo("User with id 1 not found")));
+        assertThat(exception.getMessage(), is(equalTo("User with id " + ID_1L + " not found")));
     }
 
     @DisplayName("Should return user with given username")
@@ -70,10 +73,10 @@ class UserServiceImplTest {
     void whenGetUserByUsername_thenCorrectUserShouldBeReturned() {
         //given
         User user = createUserEntity();
-        when(userRepository.findUserByUsername("TestUser")).thenReturn(Optional.of(user));
+        given(userRepository.findUserByUsername(USERNAME)).willReturn(Optional.of(user));
 
         //when
-        User result = userServiceImpl.getUserByUsername("TestUser");
+        User result = userServiceImpl.getUserByUsername(USERNAME);
 
         //then
         assertThat(result, is(equalTo(user)));
@@ -83,10 +86,13 @@ class UserServiceImplTest {
     @Test
     void whenGetUserByUsername_thenUserNotFoundExceptionShouldBeThrown() {
         //given
-        when(userRepository.findUserByUsername(USERNAME)).thenReturn(Optional.empty());
+        given(userRepository.findUserByUsername(USERNAME)).willReturn(Optional.empty());
 
         //when & then
-        assertThrows(UserNotFoundException.class, () -> userServiceImpl.getUserByUsername(USERNAME));
+        UserNotFoundException exception
+                = assertThrows(UserNotFoundException.class, () -> userServiceImpl.getUserByUsername(USERNAME));
+
+        assertThat(exception.getMessage(), is(equalTo("User "+ USERNAME + " not found")));
     }
 
     @DisplayName("Should return true when user with given id exists")

@@ -6,6 +6,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 import pl.simpleascoding.tutoringplatform.security.jwt.Token;
 import pl.simpleascoding.tutoringplatform.security.jwt.TokenRepository;
 import pl.simpleascoding.tutoringplatform.security.jwt.TokenType;
@@ -216,6 +220,30 @@ class UserServiceImplTest {
         //then
         verify(tokenRepository, times(1)).findTokenByValue(tokenEntity.getValue());
         assertThat(exception.getMessage(), is(equalTo("User " + USERNAME + " is already enabled")));
+    }
+
+    @DisplayName("Should return user with given username")
+    @Test
+    void whenLoadUserByUsername_thenCorrectUserShouldBeReturned() {
+        //given
+        User user = createUserEntity();
+        given(userRepository.findUserByUsername(USERNAME)).willReturn(Optional.of(user));
+
+        //when
+        UserDetails result = userServiceImpl.loadUserByUsername(USERNAME);
+
+        //then
+        assertThat(result, is(equalTo(user)));
+    }
+
+    @DisplayName("Should throw UsernameNotFoundException when user with given username does not exist")
+    @Test
+    void whenLoadUserByUsername_thenUsernameNotFoundExceptionShouldBeThrown() {
+        //given
+        given(userRepository.findUserByUsername(USERNAME)).willReturn(Optional.empty());
+
+        //when & then
+        assertThrows(UsernameNotFoundException.class, () -> userServiceImpl.loadUserByUsername(USERNAME));
     }
 
     private User createUserEntity() {

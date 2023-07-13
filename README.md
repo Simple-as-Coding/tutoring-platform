@@ -43,9 +43,8 @@ cd tutoring-platform
 ```
 
 ### 1. Install PostgreSQL Database
-Choose the appropriate version of the script depending on the operating system to run database in docker container.
-data for database configuration in Docker are taken from the src/main/resources/application.properties file.
-
+Choose the appropriate version of the script depending on the operating system to run database in a docker container.
+Data for database configuration in Docker are taken from the src/main/resources/application.properties file 
 or install local PostgreSQL database (name your database "simpleascoding") for the app to detect it.
 
 #### 1.1. Windows:
@@ -62,7 +61,7 @@ If you are getting an error related to the script execution policy, you can chan
 Set-ExecutionPolicy RemoteSigned
 
 #### 1.2. Linux:
-The following command is valid for these operating system versions.
+The following command is valid for these operating system versions:
 * Ubuntu 15.04 and newer
 * Fedora
 * CentOS 7 and newer
@@ -74,7 +73,7 @@ The following command is valid for these operating system versions.
 ```shell
 sudo systemctl start docker
 ```
-The following command is valid for these operating system versions.
+The following command is valid for these operating system versions:
 * Ubuntu prior to 15.04
 * Debian prior to 8
 * CentOS 6 and older
@@ -110,10 +109,10 @@ mvn clean install
 ```shell
 mvn spring-boot:run
 ```
-After launching the project, the database should be supplemented with tables by hibernate
+After launching the project, the database should be supplemented with tables by Hibernate.
 
 ### 3. Launch MailServer
-you need to run docker before running the script
+You need to run docker before running the script.
 
 #### 3.1 Windows
 Run with root rights
@@ -136,7 +135,7 @@ default credentials: hello, hello (if it doesn't work then check application.pro
 
 Swagger Documentation --> 
 http://localhost:8080/swagger-ui/index.html
-At the very end, we can enter the API documentation check by swagger or a tool with tools like POSTMAN for testing REST API
+At the very end, we can enter the API documentation check by Swagger or a tool with tools like POSTMAN for testing REST API
 
 ## Roadmap
 - [ ] Implement core functionalities

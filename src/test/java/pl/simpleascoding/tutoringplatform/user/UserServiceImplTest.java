@@ -101,9 +101,9 @@ class UserServiceImplTest implements UserServiceMethodsForTests {
 
         //when
         given(tokenRepository.findTokenByValue(tokenEntity.getValue())).willReturn(Optional.of(tokenEntity));
+        RscpDTO<?> resultRscpDTO = userServiceImpl.confirmUserRegistration(tokenEntity.getValue());
 
         //then
-        RscpDTO<?> resultRscpDTO = userServiceImpl.confirmUserRegistration(tokenEntity.getValue());
         verify(tokenRepository, times(1)).findTokenByValue(tokenEntity.getValue());
         assertThat(resultRscpDTO, is(equalTo(expectedRscpDTO)));
     }

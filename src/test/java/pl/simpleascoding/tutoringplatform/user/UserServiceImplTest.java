@@ -6,17 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import pl.simpleascoding.tutoringplatform.security.jwt.Token;
-import pl.simpleascoding.tutoringplatform.security.jwt.TokenRepository;
-import pl.simpleascoding.tutoringplatform.security.jwt.exception.InvalidTokenException;
-import pl.simpleascoding.tutoringplatform.security.jwt.exception.TokenAlreadyConfirmedException;
-import pl.simpleascoding.tutoringplatform.security.jwt.exception.TokenNotFoundException;
-import pl.simpleascoding.tutoringplatform.user.exception.UserAlreadyEnabledException;
 import pl.simpleascoding.tutoringplatform.user.exception.UserNotFoundException;
-import pl.simpleascoding.tutoringplatform.util.rscp.RscpDTO;
-import pl.simpleascoding.tutoringplatform.util.rscp.RscpStatus;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -24,13 +15,26 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
+
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-
 @ExtendWith(MockitoExtension.class)
-class UserServiceImplTest implements UserServiceMethodsForTests {
+class UserServiceImplTest {
+
+    private static final long ID_1L = 1L;
+
+    private static final String USERNAME = "TestUser";
+
+    private static final String PASSWORD = "Password1!";
+
+    private static final String NAME = "TestName";
+
+    private static final String SURNAME = "TestSurname";
+
+    private static final String EMAIL = "test@mail.com";
 
     @Mock
     private UserRepository userRepository;
@@ -47,7 +51,7 @@ class UserServiceImplTest implements UserServiceMethodsForTests {
     void whenGetUserById_thenCorrectUserShouldBeReturned() {
         //given
         User user = createUserEntity();
-        when(userRepository.findById(ID_1L)).thenReturn(Optional.of(user));
+        given(userRepository.findById(ID_1L)).willReturn(Optional.of(user));
 
         //when
         User result = userServiceImpl.getUserById(ID_1L);
@@ -60,12 +64,13 @@ class UserServiceImplTest implements UserServiceMethodsForTests {
     @Test
     void whenGetUserById_thenUserNotFoundExceptionShouldBeThrown() {
         //given
-        when(userRepository.findById(ID_1L)).thenReturn(Optional.empty());
+        given(userRepository.findById(ID_1L)).willReturn(Optional.empty());
 
         //when & then
-        UserNotFoundException exception = assertThrows(UserNotFoundException.class, () -> userServiceImpl.getUserById(ID_1L));
+        UserNotFoundException exception
+                = assertThrows(UserNotFoundException.class, () -> userServiceImpl.getUserById(ID_1L));
 
-        assertThat(exception.getMessage(), is(equalTo("User with id 1 not found")));
+        assertThat(exception.getMessage(), is(equalTo("User with id " + ID_1L + " not found")));
     }
 
     @DisplayName("Should return user with given username")
@@ -73,10 +78,10 @@ class UserServiceImplTest implements UserServiceMethodsForTests {
     void whenGetUserByUsername_thenCorrectUserShouldBeReturned() {
         //given
         User user = createUserEntity();
-        when(userRepository.findUserByUsername("TestUser")).thenReturn(Optional.of(user));
+        given(userRepository.findUserByUsername(USERNAME)).willReturn(Optional.of(user));
 
         //when
-        User result = userServiceImpl.getUserByUsername("TestUser");
+        User result = userServiceImpl.getUserByUsername(USERNAME);
 
         //then
         assertThat(result, is(equalTo(user)));
@@ -86,11 +91,42 @@ class UserServiceImplTest implements UserServiceMethodsForTests {
     @Test
     void whenGetUserByUsername_thenUserNotFoundExceptionShouldBeThrown() {
         //given
-        when(userRepository.findUserByUsername(USERNAME)).thenReturn(Optional.empty());
+        given(userRepository.findUserByUsername(USERNAME)).willReturn(Optional.empty());
 
         //when & then
-        assertThrows(UserNotFoundException.class, () -> userServiceImpl.getUserByUsername(USERNAME));
+        UserNotFoundException exception
+                = assertThrows(UserNotFoundException.class, () -> userServiceImpl.getUserByUsername(USERNAME));
+
+        assertThat(exception.getMessage(), is(equalTo("User "+ USERNAME + " not found")));
     }
+
+    @DisplayName("Should return true when user with given id exists")
+    @Test
+    void whenUserExistsById_thenTrueShouldBeReturned() {
+        //given
+        given(userRepository.existsById(ID_1L)).willReturn(true);
+
+        //when
+        boolean result = userServiceImpl.checkUserExists(ID_1L);
+
+        //then
+        assertThat(result, is(true));
+    }
+
+
+    @DisplayName("Should return false when user with given id does not exist")
+    @Test
+    void whenUserExistsById_thenFalseShouldBeReturned() {
+        //given
+        given(userRepository.existsById(ID_1L)).willReturn(false);
+
+        //when
+        boolean result = userServiceImpl.checkUserExists(ID_1L);
+
+        //then
+        assertThat(result, is(false));
+    }
+
 
     @DisplayName("confirmUserRegistration")
     @Test
@@ -98,9 +134,9 @@ class UserServiceImplTest implements UserServiceMethodsForTests {
         //given
         Token tokenEntity = createTokenEntity();
         RscpDTO<Object> expectedRscpDTO = new RscpDTO<>(RscpStatus.OK, "User registration confirmed.", null);
+        given(tokenRepository.findTokenByValue(tokenEntity.getValue())).willReturn(Optional.of(tokenEntity));
 
         //when
-        given(tokenRepository.findTokenByValue(tokenEntity.getValue())).willReturn(Optional.of(tokenEntity));
         RscpDTO<?> resultRscpDTO = userServiceImpl.confirmUserRegistration(tokenEntity.getValue());
 
         //then
@@ -111,12 +147,11 @@ class UserServiceImplTest implements UserServiceMethodsForTests {
     @DisplayName("confirmUserRegistration")
     @Test
     void whenConfirmUserRegistration_thenTokenNotFoundExceptionShouldBeThrown() {
+        given(tokenRepository.findTokenByValue(tokenEntity.getValue())).willReturn(Optional.empty());
         //given
         Token tokenEntity = createTokenEntity();
 
         //when
-        given(tokenRepository.findTokenByValue(tokenEntity.getValue())).willReturn(Optional.empty());
-
         TokenNotFoundException exception = assertThrows(TokenNotFoundException.class,
                 () -> userServiceImpl.confirmUserRegistration(tokenEntity.getValue()));
 
@@ -131,9 +166,9 @@ class UserServiceImplTest implements UserServiceMethodsForTests {
         //given
         Token tokenEntity = createTokenEntity();
         tokenEntity.setType(null);
+        given(tokenRepository.findTokenByValue(tokenEntity.getValue())).willReturn(Optional.of(tokenEntity));
 
         //when
-        given(tokenRepository.findTokenByValue(tokenEntity.getValue())).willReturn(Optional.of(tokenEntity));
 
         InvalidTokenException exception = assertThrows(InvalidTokenException.class,
                 () -> userServiceImpl.confirmUserRegistration(tokenEntity.getValue()));
@@ -148,9 +183,9 @@ class UserServiceImplTest implements UserServiceMethodsForTests {
         //given
         Token tokenEntity = createTokenEntity();
         tokenEntity.setConfirmedAt(LocalDateTime.of(1, 1, 1, 1, 1));
+        given(tokenRepository.findTokenByValue(tokenEntity.getValue())).willReturn(Optional.of(tokenEntity));
 
         //when
-        given(tokenRepository.findTokenByValue(tokenEntity.getValue())).willReturn(Optional.of(tokenEntity));
 
         TokenAlreadyConfirmedException exception = assertThrows(TokenAlreadyConfirmedException.class,
                 () -> userServiceImpl.confirmUserRegistration(tokenEntity.getValue()));
@@ -165,15 +200,27 @@ class UserServiceImplTest implements UserServiceMethodsForTests {
         //given
         Token tokenEntity = createTokenEntity();
         tokenEntity.getUser().setEnabled(true);
+        given(tokenRepository.findTokenByValue(tokenEntity.getValue())).willReturn(Optional.of(tokenEntity));
 
         //when
-        given(tokenRepository.findTokenByValue(tokenEntity.getValue())).willReturn(Optional.of(tokenEntity));
         UserAlreadyEnabledException exception = assertThrows(UserAlreadyEnabledException.class,
                 () -> userServiceImpl.confirmUserRegistration(tokenEntity.getValue()));
 
         //then
         verify(tokenRepository, times(1)).findTokenByValue(tokenEntity.getValue());
         assertThat(exception.getMessage(), is(equalTo("User TestUser is already enabled")));
+    }
+
+    private User createUserEntity() {
+        User user = new User();
+        user.setId(ID_1L);
+        user.setUsername(USERNAME);
+        user.setPassword(PASSWORD);
+        user.setName(NAME);
+        user.setSurname(SURNAME);
+        user.setEmail(EMAIL);
+
+        return user;
     }
 
 }

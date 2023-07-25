@@ -1,7 +1,5 @@
 package pl.simpleascoding.tutoringplatform.user;
 
-import org.assertj.core.api.AssertionsForClassTypes;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,6 +36,7 @@ class TeacherServiceImplTest {
 
     @InjectMocks
     private TeacherServiceImpl teacherService;
+
     @Mock
     private UserService userService;
 
@@ -46,16 +45,16 @@ class TeacherServiceImplTest {
     void whenAddTeacherRoleToUser_thenShouldReturnThatUserIsNowATeacher() {
         //given
         User user = createUserEntity();
-        SignAsTeacherDTO signAsTeacherDTO = new SignAsTeacherDTO(USERNAME);
+        SignAsTeacherDTO teacherDTO = new SignAsTeacherDTO(USERNAME);
         given(userService.getUserByUsername(USERNAME)).willReturn(user);
-        RscpDTO expectedRscpDTO = new RscpDTO(RscpStatus.OK, "Teacher role added to user.", null);
+        RscpDTO expected = new RscpDTO(RscpStatus.OK, "Teacher role added to user.", null);
 
         //when
-        RscpDTO<?> resultRscpDTO = teacherService.addTeacherRoleToUser(signAsTeacherDTO);
+        RscpDTO<?> result = teacherService.addTeacherRoleToUser(teacherDTO);
 
         //then
         verify(userService, times(1)).getUserByUsername(USERNAME);
-        assertThat(resultRscpDTO).isEqualTo(expectedRscpDTO);
+        assertThat(result).isEqualTo(expected);
     }
 
     @Test
@@ -64,15 +63,15 @@ class TeacherServiceImplTest {
         //given
         User user = createUserEntity();
         user.setRoles(Set.of(RoleType.TEACHER));
-        SignAsTeacherDTO signAsTeacherDTO = new SignAsTeacherDTO(USERNAME);
+        SignAsTeacherDTO teacherDTO = new SignAsTeacherDTO(USERNAME);
         given(userService.getUserByUsername(USERNAME)).willReturn(user);
 
         //when
-        Throwable thrown = catchThrowable(() -> teacherService.addTeacherRoleToUser(signAsTeacherDTO));
+        Throwable thrown = catchThrowable(() -> teacherService.addTeacherRoleToUser(teacherDTO));
 
         //then
         verify(userService, times(1)).getUserByUsername(USERNAME);
-        AssertionsForClassTypes.assertThat(thrown)
+        assertThat(thrown)
                 .isInstanceOf(UserIsAlreadyATeacherException.class)
                 .hasMessage("User is already a teacher");
     }

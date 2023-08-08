@@ -1,20 +1,30 @@
 package pl.simpleascoding.tutoringplatform.user;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import pl.simpleascoding.tutoringplatform.user.dto.SignAsTeacherDTO;
+import pl.simpleascoding.tutoringplatform.user.dto.UserDTO;
 import pl.simpleascoding.tutoringplatform.user.exception.UserIsAlreadyATeacherException;
 import pl.simpleascoding.tutoringplatform.util.rscp.RscpDTO;
 import pl.simpleascoding.tutoringplatform.util.rscp.RscpStatus;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -39,6 +49,13 @@ class TeacherServiceImplTest {
 
     @Mock
     private UserService userService;
+
+    @Mock
+    UserRepository userRepository;
+
+    @Spy
+    UserModelMapperImpl userModelMapper;
+
 
     @Test
     @DisplayName("Should return RscpDTO with message that teacher role has been added to given user")
@@ -76,6 +93,32 @@ class TeacherServiceImplTest {
                 .hasMessage("User is already a teacher");
     }
 
+    @Test
+    @DisplayName("Should return RscpDTO with message that Page returned")
+    void whenFindAllTeachers_thenShouldReturnTeachers() {
+        //given
+        int page = 0;
+        int size = 5;
+        Pageable pageable = PageRequest.of(page, size);
+        List<User> listOfTeachers = createListOfTeachers(size);
+        Page<User> userPage = new PageImpl<>(listOfTeachers);
+        given(userRepository.findUsersByRolesContaining(RoleType.TEACHER, pageable)).willReturn(userPage);
+        List<UserDTO> expectedUserDto = convertUserToUserDto(listOfTeachers);
+
+        //when
+        RscpDTO<Page<UserDTO>> result = teacherService.findAllTeachers(pageable);
+
+        //then
+        verify(userRepository, times(1))
+                .findUsersByRolesContaining(RoleType.TEACHER, pageable);
+        assertAll(
+                () -> assertThat(result.body().getTotalElements()).isEqualTo(size),
+                () -> assertThat(result.status()).isEqualTo(RscpStatus.OK),
+                () -> assertThat(result.message()).isEqualTo("Page returned."),
+                () -> assertThat(result.body().getContent()).isEqualTo(expectedUserDto)
+        );
+    }
+
     private User createUserEntity() {
         User user = new User();
         user.setId(ID_1L);
@@ -87,4 +130,27 @@ class TeacherServiceImplTest {
 
         return user;
     }
+
+    private List<User> createListOfTeachers(int numberOfTeachers) {
+        List<User> teachers = new ArrayList<>();
+
+        for (int i = 1; i <= numberOfTeachers; i++) {
+            User teacher = new User();
+            teacher.setId((long) i);
+            teacher.setUsername(USERNAME + i);
+            teacher.setPassword(PASSWORD + i);
+            teacher.setName(NAME + i);
+            teacher.setSurname(SURNAME + i);
+            teacher.setEmail(i + EMAIL);
+            teacher.setRoles(Set.of(RoleType.TEACHER));
+            teachers.add(teacher);
+        }
+
+        return teachers;
+    }
+
+    private List<UserDTO> convertUserToUserDto(List<User> users) {
+        return users.stream().map(user -> new UserModelMapperImpl().mapUserEntityToUserDTO(user)).toList();
+    }
+
 }

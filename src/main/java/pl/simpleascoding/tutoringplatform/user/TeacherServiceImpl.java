@@ -18,9 +18,15 @@ import javax.transaction.Transactional;
 @RequiredArgsConstructor
 class TeacherServiceImpl implements TeacherService {
 
+    public static final String MESSAGE_TEACHER_ROLE_ADDED_TO_USER = "Teacher role added to user.";
+    public static final String MESSAGE_PAGE_RETURNED = "Page returned.";
+
     private final UserRepository userRepository;
+
     private final UserService userService;
+
     private final UserModelMapper userModelMapper;
+
 
     @Override
     @Transactional
@@ -28,7 +34,7 @@ class TeacherServiceImpl implements TeacherService {
         User user = userService.getUserByUsername(requestDTO.username());
         if (!isUserAlreadyTeacher(user)) {
             addRoleToEntity(user, RoleType.TEACHER);
-            return new RscpDTO<>(RscpStatus.OK, "Teacher role added to user.", null);
+            return new RscpDTO<>(RscpStatus.OK, MESSAGE_TEACHER_ROLE_ADDED_TO_USER, null);
         } else {
             throw new UserIsAlreadyATeacherException();
         }
@@ -51,6 +57,6 @@ class TeacherServiceImpl implements TeacherService {
         Page<UserDTO> userPage = userRepository.findUsersByRolesContaining(RoleType.TEACHER, pageable)
                 .map(userModelMapper::mapUserEntityToUserDTO);
 
-        return new RscpDTO<>(RscpStatus.OK, "Page returned.", userPage);
+        return new RscpDTO<>(RscpStatus.OK, MESSAGE_PAGE_RETURNED, userPage);
     }
 }

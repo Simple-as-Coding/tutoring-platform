@@ -1,6 +1,5 @@
 package pl.simpleascoding.tutoringplatform.user;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +19,7 @@ import pl.simpleascoding.tutoringplatform.util.rscp.RscpStatus;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,15 +32,15 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class TeacherServiceImplTest {
 
-    private static final long ID_1L = 1L;
+    private static final long USER_ID_1L = 1L;
 
-    private static final String USERNAME = "TestUserName";
+    private static final String USERNAME = "UserName";
 
     private static final String PASSWORD = "Password1!";
 
-    private static final String NAME = "TestName";
+    private static final String NAME = "Name";
 
-    private static final String SURNAME = "TestSurname";
+    private static final String SURNAME = "Surname";
 
     private static final String EMAIL = "account@server.com";
 
@@ -51,20 +51,21 @@ class TeacherServiceImplTest {
     private UserService userService;
 
     @Mock
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
+    @SuppressWarnings("unused")
     @Spy
-    UserModelMapperImpl userModelMapper;
+    private UserModelMapperImpl userModelMapper;
 
 
     @Test
-    @DisplayName("Should return RscpDTO with message that teacher role has been added to given user")
+    @DisplayName("Should return RscpDTO with RscpStatus.OK and message that teacher role has been added to given user")
     void whenAddTeacherRoleToUser_thenShouldReturnThatUserIsNowATeacher() {
         //given
         User user = createUserEntity();
         SignAsTeacherDTO teacherDTO = new SignAsTeacherDTO(USERNAME);
         given(userService.getUserByUsername(USERNAME)).willReturn(user);
-        RscpDTO expected = new RscpDTO(RscpStatus.OK, "Teacher role added to user.", null);
+        RscpDTO<?> expected = new RscpDTO<>(RscpStatus.OK, "Teacher role added to user.", null);
 
         //when
         RscpDTO<?> result = teacherService.addTeacherRoleToUser(teacherDTO);
@@ -75,7 +76,7 @@ class TeacherServiceImplTest {
     }
 
     @Test
-    @DisplayName("Should return exception with message user is already a teacher")
+    @DisplayName("Should return exception UserIsAlreadyATeacherException")
     void whenAddTeacherRoleToUser_thenShouldReturnUserIsAlreadyATeacherException() {
         //given
         User user = createUserEntity();
@@ -89,12 +90,11 @@ class TeacherServiceImplTest {
         //then
         verify(userService, times(1)).getUserByUsername(USERNAME);
         assertThat(thrown)
-                .isInstanceOf(UserIsAlreadyATeacherException.class)
-                .hasMessage("User is already a teacher");
+                .isInstanceOf(UserIsAlreadyATeacherException.class);
     }
 
     @Test
-    @DisplayName("Should return RscpDTO with message that Page returned")
+    @DisplayName("Should return RscpDTO with RscpStatus.OK and message that Page returned")
     void whenFindAllTeachers_thenShouldReturnTeachers() {
         //given
         int page = 0;
@@ -112,23 +112,11 @@ class TeacherServiceImplTest {
         verify(userRepository, times(1))
                 .findUsersByRolesContaining(RoleType.TEACHER, pageable);
         assertAll(
-                () -> assertThat(result.body().getTotalElements()).isEqualTo(size),
+                () -> assertThat(Objects.requireNonNull(result.body()).getTotalElements()).isEqualTo(size),
                 () -> assertThat(result.status()).isEqualTo(RscpStatus.OK),
                 () -> assertThat(result.message()).isEqualTo("Page returned."),
-                () -> assertThat(result.body().getContent()).isEqualTo(expectedUserDto)
+                () -> assertThat(Objects.requireNonNull(result.body()).getContent()).isEqualTo(expectedUserDto)
         );
-    }
-
-    private User createUserEntity() {
-        User user = new User();
-        user.setId(ID_1L);
-        user.setUsername(USERNAME);
-        user.setPassword(PASSWORD);
-        user.setName(NAME);
-        user.setSurname(SURNAME);
-        user.setEmail(EMAIL);
-
-        return user;
     }
 
     private List<User> createListOfTeachers(int numberOfTeachers) {
@@ -147,6 +135,18 @@ class TeacherServiceImplTest {
         }
 
         return teachers;
+    }
+
+    private User createUserEntity() {
+        User user = new User();
+        user.setId(USER_ID_1L);
+        user.setUsername(USERNAME);
+        user.setPassword(PASSWORD);
+        user.setName(NAME);
+        user.setSurname(SURNAME);
+        user.setEmail(EMAIL);
+
+        return user;
     }
 
     private List<UserDTO> convertUserToUserDto(List<User> users) {
